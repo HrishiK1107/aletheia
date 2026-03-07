@@ -5,10 +5,23 @@ from sqlalchemy.orm import Session
 
 
 def create_indicator(db: Session, indicator: IndicatorCreate) -> Indicator:
-    normalized_value = normalize_indicator(
-        indicator.value,
-        indicator.type,
+    """
+    Create indicator with normalization + deduplication.
+    """
+
+    normalized_value = normalize_indicator(indicator.value, indicator.type)
+
+    existing = (
+        db.query(Indicator)
+        .filter(
+            Indicator.value == normalized_value,
+            Indicator.type == indicator.type,
+        )
+        .first()
     )
+
+    if existing:
+        return existing
 
     db_indicator = Indicator(
         value=normalized_value,

@@ -1,5 +1,5 @@
 from app.db.base import Base
-from sqlalchemy import Column, DateTime, Integer, String
+from sqlalchemy import Column, DateTime, Integer, String, UniqueConstraint
 from sqlalchemy.sql import func
 
 
@@ -17,3 +17,5 @@ class Indicator(Base):
     confidence = Column(Integer, default=50)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+
+    __table_args__ = (UniqueConstraint("value", "type", name="uq_indicator_value_type"),)
