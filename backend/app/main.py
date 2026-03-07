@@ -1,4 +1,5 @@
 from app.core.logging import get_logger, setup_logging
+from app.db.neo4j import check_neo4j
 from app.db.postgres import engine
 from app.db.redis import check_redis
 from fastapi import FastAPI
@@ -33,3 +34,10 @@ def redis_status():
     if check_redis():
         return {"redis": "ok"}
     return {"redis": "unavailable"}
+
+
+@app.get("/neo4j/status")
+def neo4j_status():
+    if check_neo4j():
+        return {"neo4j": "ok"}
+    return {"neo4j": "unavailable"}
