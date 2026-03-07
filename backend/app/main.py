@@ -1,5 +1,6 @@
 from app.core.logging import get_logger, setup_logging
 from app.db.postgres import engine
+from app.db.redis import check_redis
 from fastapi import FastAPI
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -25,3 +26,10 @@ def db_status():
         return {"database": "ok"}
     except SQLAlchemyError:
         return {"database": "unavailable"}
+
+
+@app.get("/redis/status")
+def redis_status():
+    if check_redis():
+        return {"redis": "ok"}
+    return {"redis": "unavailable"}
