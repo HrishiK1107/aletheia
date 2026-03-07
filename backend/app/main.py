@@ -1,3 +1,4 @@
+from app.core.lifespan import lifespan
 from app.core.logging import get_logger, setup_logging
 from app.db.neo4j import check_neo4j
 from app.db.postgres import engine
@@ -10,7 +11,11 @@ setup_logging()
 
 logger = get_logger(__name__)
 
-app = FastAPI(title="Aletheia")
+
+app = FastAPI(
+    title="Aletheia",
+    lifespan=lifespan,
+)
 
 
 @app.get("/health")
