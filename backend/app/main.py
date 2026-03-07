@@ -3,6 +3,7 @@ from app.core.logging import get_logger, setup_logging
 from app.db.neo4j import check_neo4j
 from app.db.postgres import engine
 from app.db.redis import check_redis
+from app.services.health_service import system_health
 from fastapi import FastAPI
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -46,3 +47,8 @@ def neo4j_status():
     if check_neo4j():
         return {"neo4j": "ok"}
     return {"neo4j": "unavailable"}
+
+
+@app.get("/system/health")
+def system_status():
+    return system_health()
