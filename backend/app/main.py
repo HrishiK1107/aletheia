@@ -1,5 +1,8 @@
 from app.core.logging import get_logger, setup_logging
+from app.db.postgres import engine
 from fastapi import FastAPI
+from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 
 setup_logging()
 
@@ -12,3 +15,13 @@ app = FastAPI(title="Aletheia")
 def health():
     logger.info("Health check requested")
     return {"status": "ok"}
+
+
+@app.get("/db/status")
+def db_status():
+    try:
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        return {"database": "ok"}
+    except SQLAlchemyError:
+        return {"database": "unavailable"}
