@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from app.core.logging import get_logger
+from app.db.base import Base
 from app.db.neo4j import driver
 from app.db.postgres import engine
 from app.db.redis import redis_client
@@ -12,6 +13,8 @@ logger = get_logger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Starting Aletheia backend services")
+
+    Base.metadata.create_all(bind=engine)
 
     # Startup checks
     try:
