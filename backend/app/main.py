@@ -1,3 +1,4 @@
+from app.api.routes_indicators import router as indicators_router
 from app.core.lifespan import lifespan
 from app.core.logging import get_logger, setup_logging
 from app.db.neo4j import check_neo4j
@@ -17,6 +18,8 @@ app = FastAPI(
     title="Aletheia",
     lifespan=lifespan,
 )
+
+app.include_router(indicators_router)
 
 
 @app.get("/health")

@@ -3,8 +3,8 @@ from sqlalchemy import Column, DateTime, Integer, String
 from sqlalchemy.sql import func
 
 
-class IOC(Base):
-    __tablename__ = "iocs"
+class Indicator(Base):
+    __tablename__ = "indicators"
 
     id = Column(Integer, primary_key=True, index=True)
 

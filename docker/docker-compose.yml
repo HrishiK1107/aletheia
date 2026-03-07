@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+
+  postgres:
+    image: postgres:16
+    container_name: aletheia-postgres
+    environment:
+      POSTGRES_USER: aletheia
+      POSTGRES_PASSWORD: aletheia
+      POSTGRES_DB: aletheia
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: aletheia-redis
+    ports:
+      - "6379:6379"
+
+  neo4j:
+    image: neo4j:5
+    container_name: aletheia-neo4j
+    environment:
+      NEO4J_AUTH: neo4j/password
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - neo4j_data:/data
+
+volumes:
+  postgres_data:
+  neo4j_data:
