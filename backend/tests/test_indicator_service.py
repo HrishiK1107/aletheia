@@ -1,13 +1,13 @@
 from app.schemas.indicator_schema import IndicatorCreate
 
 
-def test_indicator_schema_fields():
+def test_indicator_schema_usage():
     indicator = IndicatorCreate(
-        value="1.1.1.1",
+        value="8.8.8.8",
         type="ip",
         confidence=80,
+        source="unit_test",
     )
 
-    assert indicator.value == "1.1.1.1"
+    assert indicator.value == "8.8.8.8"
     assert indicator.type == "ip"
-    assert indicator.confidence == 80

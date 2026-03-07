@@ -4,7 +4,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
-class IOCCreate(BaseModel):
+class IndicatorCreate(BaseModel):
     value: str = Field(..., min_length=1, max_length=500)
 
     type: str = Field(
@@ -25,7 +25,7 @@ class IOCCreate(BaseModel):
     )
 
 
-class IOCResponse(BaseModel):
+class IndicatorResponse(BaseModel):
     id: int
     value: str
     type: str

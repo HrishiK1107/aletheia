@@ -1,14 +1,14 @@
-from app.schemas.ioc import IOCCreate
+from app.schemas.indicator_schema import IndicatorCreate
 
 
-def test_ioc_schema_validation():
-    ioc = IOCCreate(
+def test_indicator_schema_validation():
+    indicator = IndicatorCreate(
         value="8.8.8.8",
         type="ip",
         confidence=80,
         source="test_feed",
     )
 
-    assert ioc.value == "8.8.8.8"
-    assert ioc.type == "ip"
-    assert ioc.confidence == 80
+    assert indicator.value == "8.8.8.8"
+    assert indicator.type == "ip"
+    assert indicator.confidence == 80
