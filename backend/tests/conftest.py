@@ -15,6 +15,7 @@ def db_session():
     Creates a fresh database session for each test.
     """
 
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
     db = TestingSessionLocal()
