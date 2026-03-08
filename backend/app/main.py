@@ -1,3 +1,4 @@
+from app.api.routes_feeds import router as feeds_router
 from app.api.routes_indicators import router as indicators_router
 from app.core.lifespan import lifespan
 from app.core.logging import get_logger, setup_logging
@@ -20,6 +21,7 @@ app = FastAPI(
 )
 
 app.include_router(indicators_router)
+app.include_router(feeds_router)
 
 
 @app.get("/health")
