@@ -1,4 +1,4 @@
-from app.models.indicator_models import Indicator
+from app.ingestion.enrichment.models.indicator_models import Indicator
 from app.schemas.indicator_schema import IndicatorCreate
 from app.services.normalization_service import normalize_indicator
 from sqlalchemy.orm import Session
