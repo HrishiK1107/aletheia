@@ -1,0 +1,51 @@
+import logging
+import time
+
+from app.db.postgres import SessionLocal
+from app.ingestion.indicator_queue import dequeue_indicator
+from app.schemas.indicator_schema import IndicatorCreate
+from app.services.indicator_service import create_indicator
+from sqlalchemy.orm import Session
+
+logger = logging.getLogger(__name__)
+
+
+def process_indicator(db: Session, raw_indicator: dict):
+    """
+    Convert raw indicator → schema → service layer
+    """
+
+    indicator = IndicatorCreate(**raw_indicator)
+
+    create_indicator(db, indicator)
+
+
+def run_worker():
+    """
+    Continuous ingestion worker.
+    """
+
+    logger.info("Ingestion worker started")
+
+    while True:
+
+        raw_indicator = dequeue_indicator()
+
+        if not raw_indicator:
+            time.sleep(1)
+            continue
+
+        db = SessionLocal()
+
+        try:
+            process_indicator(db, raw_indicator)
+
+        except Exception as e:
+            logger.error(f"Worker failed processing indicator: {e}")
+
+        finally:
+            db.close()
+
+
+if __name__ == "__main__":
+    run_worker()
