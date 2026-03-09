@@ -1,3 +1,4 @@
+from app.ingestion.deduplication.dedupe_engine import find_duplicate
 from app.ingestion.enrichment.models.indicator_models import Indicator
 from app.schemas.indicator_schema import IndicatorCreate
 from app.services.normalization_service import normalize_indicator
@@ -11,14 +12,7 @@ def create_indicator(db: Session, indicator: IndicatorCreate) -> Indicator:
 
     normalized_value = normalize_indicator(indicator.value, indicator.type)
 
-    existing = (
-        db.query(Indicator)
-        .filter(
-            Indicator.value == normalized_value,
-            Indicator.type == indicator.type,
-        )
-        .first()
-    )
+    existing = find_duplicate(db, normalized_value, indicator.type)
 
     if existing:
         return existing
