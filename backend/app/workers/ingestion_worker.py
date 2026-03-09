@@ -2,6 +2,7 @@ import logging
 import time
 
 from app.db.postgres import SessionLocal
+from app.ingestion.enrichment.models.raw_indicator_model import RawIndicator
 from app.ingestion.indicator_queue import dequeue_indicator
 from app.schemas.indicator_schema import IndicatorCreate
 from app.services.indicator_service import create_indicator
@@ -13,8 +14,22 @@ logger = logging.getLogger(__name__)
 def process_indicator(db: Session, raw_indicator: dict):
     """
     Convert raw indicator → schema → service layer
+    while preserving raw indicator storage.
     """
 
+    # Store raw indicator
+    raw = RawIndicator(
+        value=raw_indicator.get("value"),
+        type=raw_indicator.get("type"),
+        source=raw_indicator.get("source"),
+        confidence=raw_indicator.get("confidence"),
+        raw_payload=raw_indicator,
+    )
+
+    db.add(raw)
+    db.commit()
+
+    # Continue existing processing pipeline
     indicator = IndicatorCreate(**raw_indicator)
 
     create_indicator(db, indicator)

@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 from app.db.base import Base
 from sqlalchemy import Column, DateTime, Integer, String
@@ -11,7 +11,7 @@ class Feed(Base):
 
     name = Column(String, unique=True, nullable=False)
 
-    last_run = Column(DateTime, default=datetime.utcnow)
+    last_run = Column(DateTime, default=lambda: datetime.now(UTC))
 
     last_success = Column(DateTime, nullable=True)
 
