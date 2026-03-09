@@ -1,12 +1,13 @@
-from app.ingestion.collectors.openphish_collector import OpenPhishCollector
 from app.ingestion.indicator_queue import enqueue_indicators
+from app.ingestion.registry.feed_registry import registry
 
 
 def run_collectors():
+    """
+    Execute all registered collectors and push indicators to queue.
+    """
 
-    collectors = [
-        OpenPhishCollector(),
-    ]
+    collectors = registry.get_collectors()
 
     indicators = []
 
