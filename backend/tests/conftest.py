@@ -1,5 +1,8 @@
 import pytest
 from app.db.postgres import Base, engine
+
+# IMPORTANT: load models so SQLAlchemy metadata registers tables
+from app.ingestion.enrichment.models.indicator_models import Indicator  # noqa
 from sqlalchemy.orm import sessionmaker
 
 TestingSessionLocal = sessionmaker(
@@ -11,8 +14,9 @@ TestingSessionLocal = sessionmaker(
 
 def pytest_sessionstart(session):
     """
-    Ensure database tables exist before tests run.
+    Ensure all tables exist before tests run.
     """
+    Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
 
