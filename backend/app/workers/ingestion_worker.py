@@ -20,6 +20,28 @@ def process_indicator(db: Session, raw_indicator: dict):
     create_indicator(db, indicator)
 
 
+def process_indicator_queue():
+    """
+    Process all indicators currently in the queue once.
+    Used by tests and batch execution.
+    """
+
+    db = SessionLocal()
+
+    try:
+        while True:
+
+            raw_indicator = dequeue_indicator()
+
+            if not raw_indicator:
+                break
+
+            process_indicator(db, raw_indicator)
+
+    finally:
+        db.close()
+
+
 def run_worker():
     """
     Continuous ingestion worker.
