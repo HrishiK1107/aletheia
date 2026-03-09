@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from app.db.neo4j import driver
 from app.ingestion.enrichment.models.indicator_models import Indicator
 from neo4j.exceptions import Neo4jError
@@ -6,8 +8,8 @@ from sqlalchemy.orm import Session
 
 class GraphBuilder:
     """
-    Responsible for inserting indicators into Neo4j as graph nodes.
-    Uses deterministic MERGE queries to avoid duplicates.
+    Responsible for inserting indicators into Neo4j as graph nodes
+    and extracting deterministic relationships between them.
     """
 
     LABEL_MAP = {
@@ -21,16 +23,9 @@ class GraphBuilder:
         self.driver = driver
 
     def _get_label(self, indicator_type: str) -> str:
-        """
-        Map indicator type to graph label.
-        """
         return self.LABEL_MAP.get(indicator_type.lower(), "Indicator")
 
     def create_indicator_node(self, indicator: Indicator):
-        """
-        Insert a single indicator node into Neo4j.
-        """
-
         label = self._get_label(indicator.type)
 
         query = f"""
@@ -50,20 +45,43 @@ class GraphBuilder:
                 confidence=indicator.confidence,
             )
 
+    def create_url_domain_relationship(self, url_value: str):
+        """
+        Extract domain from URL and create relationship:
+        (URL)-[:HOSTS]->(Domain)
+        """
+
+        parsed = urlparse(url_value)
+
+        if not parsed.netloc:
+            return
+
+        domain = parsed.netloc.lower()
+
+        query = """
+        MERGE (u:URL {value:$url})
+        MERGE (d:Domain {value:$domain})
+        MERGE (u)-[:HOSTS]->(d)
+        """
+
+        with self.driver.session() as session:
+            session.run(query, url=url_value, domain=domain)
+
     def ingest_indicator(self, indicator: Indicator):
         """
-        Public method to ingest a single indicator into graph.
+        Insert indicator node and extract relationships.
         """
+
         try:
             self.create_indicator_node(indicator)
+
+            if indicator.type.lower() == "url":
+                self.create_url_domain_relationship(indicator.value)
+
         except Neo4jError as e:
             raise RuntimeError(f"Neo4j graph ingestion failed: {e}")
 
     def ingest_all_indicators(self, db: Session):
-        """
-        Load all indicators from PostgreSQL and insert them into Neo4j.
-        """
-
         indicators = db.query(Indicator).all()
 
         for indicator in indicators:

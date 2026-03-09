@@ -14,20 +14,19 @@ def test_label_mapping():
     assert builder._get_label("unknown") == "Indicator"
 
 
-def test_ingest_indicator_calls_neo4j(monkeypatch):
+def test_ingest_indicator_creates_graph_calls():
     builder = GraphBuilder()
 
     mock_session = MagicMock()
     mock_driver = MagicMock()
 
     mock_driver.session.return_value.__enter__.return_value = mock_session
-
     builder.driver = mock_driver
 
     indicator = Indicator(
         id=1,
-        value="example.com",
-        type="domain",
+        value="https://evil.com/login",
+        type="url",
         source="test",
         confidence=80,
     )
