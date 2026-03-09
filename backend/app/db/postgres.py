@@ -1,5 +1,4 @@
 from app.core.config import settings
-from app.db.base import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -23,6 +22,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-Base.metadata.create_all(bind=engine)

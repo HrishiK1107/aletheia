@@ -1,7 +1,9 @@
 import pytest
-from app.db.postgres import Base, engine
+from app.db.base import Base
+from app.db.postgres import engine
+from app.ingestion.enrichment.models.feed_models import Feed  # noqa
 
-# IMPORTANT: load models so SQLAlchemy metadata registers tables
+# Import models so SQLAlchemy registers them
 from app.ingestion.enrichment.models.indicator_models import Indicator  # noqa
 from sqlalchemy.orm import sessionmaker
 
@@ -12,12 +14,18 @@ TestingSessionLocal = sessionmaker(
 )
 
 
-def pytest_sessionstart(session):
+@pytest.fixture(scope="session", autouse=True)
+def setup_database():
     """
-    Ensure all tables exist before tests run.
+    Create tables once before the test session begins.
+    Ensures CI environments have the schema.
     """
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+
+    yield
+
+    Base.metadata.drop_all(bind=engine)
 
 
 @pytest.fixture(scope="function")
@@ -25,7 +33,6 @@ def db_session():
     """
     Creates a fresh database session for each test.
     """
-
     db = TestingSessionLocal()
 
     try:
