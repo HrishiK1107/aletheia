@@ -1,3 +1,4 @@
+from app.ingestion.collectors.malwarebazaar_collector import MalwareBazaarCollector
 from app.ingestion.collectors.openphish_collector import OpenPhishCollector
 from app.ingestion.collectors.otx_collector import OTXCollector
 from app.ingestion.collectors.threatfox_collector import ThreatFoxCollector
@@ -24,3 +25,4 @@ registry = FeedRegistry()
 registry.register(OpenPhishCollector())
 registry.register(OTXCollector())
 registry.register(ThreatFoxCollector())
+registry.register(MalwareBazaarCollector())
