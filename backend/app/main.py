@@ -1,5 +1,8 @@
+from app.api.routes_campaigns import router as campaigns_router
 from app.api.routes_feeds import router as feeds_router
 from app.api.routes_indicators import router as indicators_router
+from app.api.routes_infrastructure import router as infrastructure_router
+from app.api.routes_pivot import router as pivot_router
 from app.core.lifespan import lifespan
 from app.core.logging import get_logger, setup_logging
 from app.db.neo4j import check_neo4j
@@ -14,14 +17,24 @@ setup_logging()
 
 logger = get_logger(__name__)
 
-
 app = FastAPI(
     title="Aletheia",
     lifespan=lifespan,
 )
 
+# -----------------------------
+# Register API Routers
+# -----------------------------
+
 app.include_router(indicators_router)
 app.include_router(feeds_router)
+app.include_router(campaigns_router)
+app.include_router(pivot_router)
+app.include_router(infrastructure_router)
+
+# -----------------------------
+# Health Endpoints
+# -----------------------------
 
 
 @app.get("/health")
