@@ -40,3 +40,5 @@ psycopg2-binary==2.9.9
 redis==5.0.4
 neo4j==5.22.0
 requests==2.32.5
+dnspython==2.8.0
+python-whois==0.9.6
