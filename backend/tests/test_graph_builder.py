@@ -2,9 +2,11 @@ from unittest.mock import MagicMock
 
 from app.correlation.graph_builder import GraphBuilder
 from app.ingestion.enrichment.models.indicator_models import Indicator
+from app.ingestion.enrichment.models.infrastructure_models import IndicatorEnrichment
 
 
 def test_label_mapping():
+
     builder = GraphBuilder()
 
     assert builder._get_label("domain") == "Domain"
@@ -15,6 +17,7 @@ def test_label_mapping():
 
 
 def test_ingest_indicator_creates_graph_calls():
+
     builder = GraphBuilder()
 
     mock_session = MagicMock()
@@ -25,12 +28,20 @@ def test_ingest_indicator_creates_graph_calls():
 
     indicator = Indicator(
         id=1,
-        value="https://evil.com/login",
-        type="url",
+        value="evil.com",
+        type="domain",
         source="test",
         confidence=80,
     )
 
-    builder.ingest_indicator(indicator)
+    enrichment = IndicatorEnrichment(
+        indicator_id=1,
+        asn="AS13335",
+        registrar="Namecheap",
+        hosting_provider="Cloudflare",
+        nameservers="ns1.cloudflare.com",
+    )
+
+    builder.ingest_indicator(indicator, enrichment)
 
     assert mock_session.run.called
