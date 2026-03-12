@@ -1,5 +1,6 @@
 from app.correlation.infrastructure_engine import InfrastructureEngine
 from app.ingestion.enrichment.models.campaign_models import Campaign
+from app.services.timeline_service import TimelineService
 from sqlalchemy.orm import Session
 
 
@@ -10,6 +11,7 @@ class CampaignEngine:
 
     def __init__(self):
         self.infrastructure_engine = InfrastructureEngine()
+        self.timeline = TimelineService()
 
     def detect_campaigns(self, db: Session):
 
@@ -29,6 +31,15 @@ class CampaignEngine:
             )
 
             db.add(campaign)
+
+            # Record timeline event
+            self.timeline.record_event(
+                db=db,
+                event_type="campaign_created",
+                event_value=campaign_id,
+                campaign_id=campaign_id,
+                source="campaign_engine",
+            )
 
             campaigns.append(
                 {

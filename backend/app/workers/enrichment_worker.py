@@ -7,6 +7,7 @@ from app.ingestion.enrichment.dns_lookup import lookup_dns
 from app.ingestion.enrichment.models.indicator_models import Indicator
 from app.ingestion.enrichment.models.infrastructure_models import IndicatorEnrichment
 from app.ingestion.enrichment.registrar_lookup import lookup_registrar
+from app.services.timeline_service import TimelineService
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -62,6 +63,15 @@ def enrich_indicator(db: Session, indicator: Indicator):
         registrar=enrichment_data["registrar"],
         hosting_provider=enrichment_data["hosting_provider"],
         nameservers=enrichment_data["nameservers"],
+    )
+
+    timeline = TimelineService()
+
+    timeline.record_event(
+        db,
+        event_type="infrastructure_enriched",
+        event_value=indicator.value,
+        source="enrichment_worker",
     )
 
     db.add(enrichment)

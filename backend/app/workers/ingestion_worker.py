@@ -6,6 +6,7 @@ from app.ingestion.enrichment.models.raw_indicator_model import RawIndicator
 from app.ingestion.indicator_queue import dequeue_indicator
 from app.schemas.indicator_schema import IndicatorCreate
 from app.services.indicator_service import create_indicator
+from app.services.timeline_service import TimelineService
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -24,6 +25,15 @@ def process_indicator(db: Session, raw_indicator: dict):
         source=raw_indicator.get("source"),
         confidence=raw_indicator.get("confidence"),
         raw_payload=raw_indicator,
+    )
+
+    timeline = TimelineService()
+
+    timeline.record_event(
+        db,
+        event_type="indicator_discovered",
+        event_value=raw_indicator.get("value"),
+        source=raw_indicator.get("source"),
     )
 
     db.add(raw)
