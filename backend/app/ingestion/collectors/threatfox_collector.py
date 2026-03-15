@@ -1,4 +1,5 @@
 import requests
+from app.core.config import settings
 from app.ingestion.collectors.base_collector import BaseCollector
 
 
@@ -10,9 +11,22 @@ class ThreatFoxCollector(BaseCollector):
 
     def fetch(self):
 
-        payload = {"query": "get_iocs", "limit": 100}
+        payload = {
+            "query": "get_iocs",
+        }
 
-        response = requests.post(self.FEED_URL, json=payload, timeout=15)
+        headers = {
+            "User-Agent": "Aletheia-ThreatIntel-Collector",
+            "Auth-Key": settings.abusech_api_key,
+        }
+
+        response = requests.post(
+            self.FEED_URL,
+            json=payload,
+            headers=headers,
+            timeout=20,
+        )
+
         response.raise_for_status()
 
         return response.json()

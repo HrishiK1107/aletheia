@@ -9,11 +9,13 @@ from app.db.neo4j import check_neo4j
 from app.db.postgres import engine
 from app.db.redis import check_redis
 from app.services.health_service import system_health
+from dotenv import load_dotenv
 from fastapi import FastAPI
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
 setup_logging()
+load_dotenv()
 
 logger = get_logger(__name__)
 

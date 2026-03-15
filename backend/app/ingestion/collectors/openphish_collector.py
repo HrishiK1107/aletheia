@@ -10,7 +10,16 @@ class OpenPhishCollector(BaseCollector):
 
     def fetch(self):
 
-        response = requests.get(self.FEED_URL, timeout=10)
+        headers = {
+            "User-Agent": "Aletheia-ThreatIntel-Collector",
+        }
+
+        response = requests.get(
+            self.FEED_URL,
+            headers=headers,
+            timeout=15,
+        )
+
         response.raise_for_status()
 
         return response.text

@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from app.core.logging import get_logger
+from app.db.base import Base
 from app.db.neo4j import driver
 from app.db.postgres import engine
 from app.db.redis import redis_client
@@ -15,29 +16,32 @@ async def lifespan(app: FastAPI):
 
     # Create database tables
     try:
+        Base.metadata.create_all(bind=engine)
         logger.info("PostgreSQL tables initialized")
-    except Exception:
-        logger.warning("PostgreSQL not available")
+    except Exception as e:
+        logger.warning(f"PostgreSQL table initialization failed: {e}")
 
-    # Startup checks
+    # PostgreSQL connection check
     try:
         engine.connect().close()
         logger.info("PostgreSQL engine initialized")
-    except Exception:
-        logger.warning("PostgreSQL connection failed")
+    except Exception as e:
+        logger.warning(f"PostgreSQL connection failed: {e}")
 
+    # Redis check
     try:
         redis_client.ping()
         logger.info("Redis client initialized")
-    except Exception:
-        logger.warning("Redis not available")
+    except Exception as e:
+        logger.warning(f"Redis not available: {e}")
 
+    # Neo4j check
     try:
         with driver.session() as session:
             session.run("RETURN 1")
         logger.info("Neo4j driver initialized")
-    except Exception:
-        logger.warning("Neo4j not available")
+    except Exception as e:
+        logger.warning(f"Neo4j not available: {e}")
 
     yield
 

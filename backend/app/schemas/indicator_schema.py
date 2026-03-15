@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 
 class IndicatorCreate(BaseModel):
-    value: str = Field(..., min_length=1, max_length=500)
+    value: str = Field(..., min_length=1, max_length=2000)
 
     type: str = Field(
         ...,

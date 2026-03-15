@@ -1,5 +1,9 @@
 from abc import ABC, abstractmethod
 
+from app.core.logging import get_logger
+
+logger = get_logger(__name__)
+
 
 class BaseCollector(ABC):
     """
@@ -24,8 +28,17 @@ class BaseCollector(ABC):
 
     def collect(self):
         """
-        Fetch + parse pipeline.
+        Safe fetch + parse pipeline.
         """
-        data = self.fetch()
-        indicators = self.parse(data)
-        return indicators
+
+        try:
+            data = self.fetch()
+            indicators = self.parse(data)
+
+            logger.info(f"{self.name} collected {len(indicators)} indicators")
+
+            return indicators
+
+        except Exception as e:
+            logger.warning(f"{self.name} collector failed: {e}")
+            return []

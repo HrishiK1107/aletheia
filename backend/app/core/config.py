@@ -16,9 +16,14 @@ class Settings(BaseSettings):
     # Redis
     redis_url: str = "redis://localhost:6379"
 
+    # Threat intelligence feeds
+    otx_api_key: str | None = None
+    abusech_api_key: str | None = None
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,
+        extra="ignore",
     )
 
 

@@ -7,11 +7,19 @@ from sqlalchemy.orm import Session
 class CampaignEngine:
     """
     Convert infrastructure clusters into persistent campaigns.
+    Prevent duplicate campaign creation.
     """
 
     def __init__(self):
         self.infrastructure_engine = InfrastructureEngine()
         self.timeline = TimelineService()
+
+    def generate_campaign_id(self, cluster):
+        """
+        Generate deterministic campaign ID based on cluster indicators.
+        """
+        sorted_cluster = sorted(cluster)
+        return "campaign_" + str(abs(hash("|".join(sorted_cluster))) % 10**10)
 
     def detect_campaigns(self, db: Session):
 
@@ -19,9 +27,15 @@ class CampaignEngine:
 
         campaigns = []
 
-        for i, cluster in enumerate(clusters):
+        for cluster in clusters:
 
-            campaign_id = f"campaign_{i+1}"
+            campaign_id = self.generate_campaign_id(cluster)
+
+            # check if campaign already exists
+            existing = db.query(Campaign).filter(Campaign.campaign_id == campaign_id).first()
+
+            if existing:
+                continue
 
             campaign = Campaign(
                 campaign_id=campaign_id,
@@ -32,7 +46,7 @@ class CampaignEngine:
 
             db.add(campaign)
 
-            # Record timeline event
+            # timeline event
             self.timeline.record_event(
                 db=db,
                 event_type="campaign_created",

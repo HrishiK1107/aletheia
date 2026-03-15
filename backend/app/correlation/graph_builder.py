@@ -8,11 +8,6 @@ from sqlalchemy.orm import Session
 
 
 class GraphBuilder:
-    """
-    Responsible for inserting indicators into Neo4j
-    and building deterministic infrastructure relationships.
-    """
-
     LABEL_MAP = {
         "domain": "Domain",
         "ip": "IP",
@@ -31,7 +26,6 @@ class GraphBuilder:
     # ------------------------------------------------
 
     def create_indicator_node(self, indicator: Indicator):
-
         label = self._get_label(indicator.type)
 
         query = f"""
@@ -52,11 +46,30 @@ class GraphBuilder:
             )
 
     # ------------------------------------------------
+    # Indicator → Entity relationship
+    # ------------------------------------------------
+
+    def link_indicator_to_entity(self, indicator: Indicator):
+        label = self._get_label(indicator.type)
+
+        query = f"""
+        MERGE (ind:Indicator {{value:$indicator}})
+        MERGE (e:{label} {{value:$value}})
+        MERGE (ind)-[:INDICATES]->(e)
+        """
+
+        with self.driver.session() as session:
+            session.run(
+                query,
+                indicator=indicator.value,
+                value=indicator.value,
+            )
+
+    # ------------------------------------------------
     # URL → Domain
     # ------------------------------------------------
 
     def create_url_domain_relationship(self, url_value: str):
-
         parsed = urlparse(url_value)
 
         if not parsed.netloc:
@@ -74,59 +87,31 @@ class GraphBuilder:
             session.run(query, url=url_value, domain=domain)
 
     # ------------------------------------------------
-    # Domain → IP
+    # Domain Infrastructure
     # ------------------------------------------------
 
-    def create_domain_ip_relationship(self, domain: str, ip: str):
-
-        query = """
-        MERGE (d:Domain {value:$domain})
-        MERGE (ip:IP {value:$ip})
-        MERGE (d)-[:RESOLVES_TO]->(ip)
-        """
-
-        with self.driver.session() as session:
-            session.run(query, domain=domain, ip=ip)
-
-    # ------------------------------------------------
-    # Infrastructure Node
-    # ------------------------------------------------
-
-    def create_infrastructure_node(self, enrichment: IndicatorEnrichment):
-
-        query = """
-        MERGE (infra:Infrastructure {
-            asn:$asn,
-            registrar:$registrar,
-            hosting_provider:$hosting_provider,
-            nameservers:$nameservers
-        })
-        """
-
-        with self.driver.session() as session:
-            session.run(
-                query,
-                asn=enrichment.asn,
-                registrar=enrichment.registrar,
-                hosting_provider=enrichment.hosting_provider,
-                nameservers=enrichment.nameservers,
-            )
-
-    # ------------------------------------------------
-    # Domain → Infrastructure
-    # ------------------------------------------------
-
-    def create_domain_infrastructure_relationship(self, domain, enrichment):
-
+    def create_domain_infrastructure_relationship(
+        self,
+        domain: str,
+        enrichment: IndicatorEnrichment,
+    ):
         query = """
         MATCH (d:Domain {value:$domain})
-        MERGE (infra:Infrastructure {
-            asn:$asn,
-            registrar:$registrar,
-            hosting_provider:$hosting_provider,
-            nameservers:$nameservers
-        })
-        MERGE (d)-[:PART_OF_INFRA]->(infra)
+
+        FOREACH (_ IN CASE WHEN $asn IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (asn:ASN {value:$asn})
+            MERGE (d)-[:RESOLVES_TO_ASN]->(asn)
+        )
+
+        FOREACH (_ IN CASE WHEN $hosting_provider IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (hp:HostingProvider {name:$hosting_provider})
+            MERGE (d)-[:HOSTED_BY]->(hp)
+        )
+
+        FOREACH (_ IN CASE WHEN $registrar IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (r:Registrar {name:$registrar})
+            MERGE (d)-[:REGISTERED_WITH]->(r)
+        )
         """
 
         with self.driver.session() as session:
@@ -136,40 +121,126 @@ class GraphBuilder:
                 asn=enrichment.asn,
                 registrar=enrichment.registrar,
                 hosting_provider=enrichment.hosting_provider,
-                nameservers=enrichment.nameservers,
             )
 
+        if enrichment.nameservers:
+            for ns in enrichment.nameservers.split(","):
+                ns = ns.strip()
+
+                if not ns:
+                    continue
+
+                query = """
+                MATCH (d:Domain {value:$domain})
+                MERGE (ns:Nameserver {value:$nameserver})
+                MERGE (d)-[:USES_NS]->(ns)
+                """
+
+                with self.driver.session() as session:
+                    session.run(query, domain=domain, nameserver=ns)
+
     # ------------------------------------------------
-    # Main Ingestion Logic
+    # Domain → IP Pivot
     # ------------------------------------------------
 
-    def ingest_indicator(self, indicator: Indicator, enrichment: IndicatorEnrichment | None):
+    def create_domain_ip_relationship(self, domain: str, ip: str):
+        query = """
+        MERGE (d:Domain {value:$domain})
+        MERGE (ip:IP {value:$ip})
+        MERGE (d)-[:RESOLVES_TO_IP]->(ip)
+        """
 
+        with self.driver.session() as session:
+            session.run(query, domain=domain, ip=ip)
+
+    # ------------------------------------------------
+    # Main Ingestion
+    # ------------------------------------------------
+
+    def ingest_indicator(
+        self,
+        indicator: Indicator,
+        enrichment: IndicatorEnrichment | None,
+    ):
         try:
-
             self.create_indicator_node(indicator)
 
-            if indicator.type.lower() == "url":
+            self.link_indicator_to_entity(indicator)
+
+            indicator_type = indicator.type.lower()
+
+            if indicator_type == "url":
                 self.create_url_domain_relationship(indicator.value)
 
-            if indicator.type.lower() == "domain" and enrichment:
+            if indicator_type == "domain" and enrichment:
+                if (
+                    enrichment.asn
+                    or enrichment.registrar
+                    or enrichment.hosting_provider
+                    or enrichment.nameservers
+                ):
+                    self.create_domain_infrastructure_relationship(
+                        indicator.value,
+                        enrichment,
+                    )
 
-                if enrichment.nameservers:
-                    self.create_domain_infrastructure_relationship(indicator.value, enrichment)
+                # NEW: build Domain -> IP pivots from persisted enrichment
+                if enrichment.resolved_ips:
+                    for ip in enrichment.resolved_ips.split(","):
+                        ip = ip.strip()
+
+                        if not ip:
+                            continue
+
+                        self.create_domain_ip_relationship(indicator.value, ip)
+
+            # NEW: support URL-based enrichments too, without changing prior logic
+            if indicator_type == "url" and enrichment:
+                parsed = urlparse(indicator.value)
+
+                if parsed.netloc:
+                    domain = parsed.netloc.lower()
+
+                    if (
+                        enrichment.asn
+                        or enrichment.registrar
+                        or enrichment.hosting_provider
+                        or enrichment.nameservers
+                    ):
+                        self.create_domain_infrastructure_relationship(
+                            domain,
+                            enrichment,
+                        )
+
+                    if enrichment.resolved_ips:
+                        for ip in enrichment.resolved_ips.split(","):
+                            ip = ip.strip()
+
+                            if not ip:
+                                continue
+
+                            self.create_domain_ip_relationship(domain, ip)
+
+            # if indicator itself is IP, ensure node exists
+            if indicator_type == "ip":
+                query = """
+                MERGE (ip:IP {value:$ip})
+                """
+
+                with self.driver.session() as session:
+                    session.run(query, ip=indicator.value)
 
         except Neo4jError as e:
             raise RuntimeError(f"Neo4j graph ingestion failed: {e}")
 
     # ------------------------------------------------
-    # Batch Graph Build
+    # Batch Build
     # ------------------------------------------------
 
     def ingest_all_indicators(self, db: Session):
-
         indicators = db.query(Indicator).all()
 
         for indicator in indicators:
-
             enrichment = (
                 db.query(IndicatorEnrichment)
                 .filter(IndicatorEnrichment.indicator_id == indicator.id)
