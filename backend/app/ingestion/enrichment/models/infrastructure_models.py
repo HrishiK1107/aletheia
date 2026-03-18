@@ -18,7 +18,9 @@ class IndicatorEnrichment(Base):
 
     nameservers = Column(String, nullable=True)
 
-    # NEW: persist resolved IPs so graph can build Domain -> IP pivots
     resolved_ips = Column(String, nullable=True)
+
+    # ✅ FIX: ADD THIS FIELD
+    ssl_fingerprint = Column(String, nullable=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now())

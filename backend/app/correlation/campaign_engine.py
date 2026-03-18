@@ -35,6 +35,14 @@ class CampaignEngine:
             existing = db.query(Campaign).filter(Campaign.campaign_id == campaign_id).first()
 
             if existing:
+                # ✅ FIX: DO NOT SKIP RETURN
+                campaigns.append(
+                    {
+                        "campaign_id": campaign_id,
+                        "indicators": cluster,
+                        "size": len(cluster),
+                    }
+                )
                 continue
 
             campaign = Campaign(

@@ -112,7 +112,9 @@ def enrich_indicator(db: Session, indicator: Indicator):
     )
 
     if existing:
-        return
+        db.add(existing)  # re-attach to session for potential timeline event
+        db.commit()  # ensure any pending timeline events are saved
+        return existing
 
     enrichment_data = {
         "asn": None,
