@@ -106,7 +106,13 @@ def detect_hosting_platform(domain: str) -> str | None:
 # ------------------------------------------------
 
 
-def normalize_list(values: list[str] | None) -> str | None:
+def normalize_list(values: list[str] | None, lowercase: bool = True) -> str | None:
+    """
+    Dedup + comma-join. lowercase=False for values where case is part of
+    the canonical identity (ASN codes, e.g. "AS13335") rather than
+    incidental (domains/nameservers, which are case-insensitive by DNS
+    convention and safe to fold).
+    """
     if not values:
         return None
 
@@ -117,7 +123,10 @@ def normalize_list(values: list[str] | None) -> str | None:
         if not value:
             continue
 
-        item = str(value).strip().lower()
+        item = str(value).strip()
+
+        if lowercase:
+            item = item.lower()
 
         if not item or item in seen:
             continue
@@ -197,14 +206,30 @@ def build_enrichment_data(indicator_type: str, indicator_value: str) -> dict:
 
                 enrichment_data["resolved_ips"] = normalize_list(ips)
 
-                asn_data = safe_lookup(cached_lookup_asn, ips[0])
+                # CONTEXT.md item 2.3: iterate every resolved IP, not just
+                # ips[0] -- load-balanced infrastructure spanning multiple
+                # ASNs is exactly what campaigns use, and a single lookup
+                # was silently collapsing that to one. asn is stored
+                # comma-separated (matches graph_builder.py splitting it
+                # into one RESOLVES_TO_ASN edge per value, same pattern as
+                # nameservers).
+                asns = []
 
-                if asn_data:
+                for resolved_ip in ips:
 
-                    enrichment_data["asn"] = asn_data.get("asn")
+                    asn_data = safe_lookup(cached_lookup_asn, resolved_ip)
 
-                    if not enrichment_data["hosting_provider"]:
+                    if not asn_data:
+                        continue
+
+                    if asn_data.get("asn"):
+                        asns.append(asn_data["asn"])
+
+                    if not enrichment_data["hosting_provider"] and asn_data.get("hosting_provider"):
                         enrichment_data["hosting_provider"] = asn_data.get("hosting_provider")
+
+                if asns:
+                    enrichment_data["asn"] = normalize_list(asns, lowercase=False)
 
         registrar_data = safe_lookup(cached_lookup_registrar, domain)
 

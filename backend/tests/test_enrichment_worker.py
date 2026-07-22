@@ -81,6 +81,58 @@ def test_build_enrichment_data_prefers_hardcoded_hosting_map_over_asn():
         assert data["asn"] == "AS999"
 
 
+def test_build_enrichment_data_iterates_all_resolved_ips_for_asn():
+    """
+    CONTEXT.md item 2.3: a domain load-balanced across multiple IPs in
+    different ASNs must record all of them, not just ips[0].
+    """
+
+    with (
+        patch("app.workers.enrichment_worker.cached_lookup_dns") as mock_dns,
+        patch("app.workers.enrichment_worker.cached_lookup_registrar") as mock_reg,
+        patch("app.workers.enrichment_worker.cached_lookup_asn") as mock_asn,
+    ):
+        mock_dns.return_value = {"nameservers": [], "ips": ["1.1.1.1", "2.2.2.2", "3.3.3.3"]}
+        mock_reg.return_value = None
+
+        def fake_asn(ip):
+            return {
+                "1.1.1.1": {"asn": "AS111", "hosting_provider": "First ISP"},
+                "2.2.2.2": {"asn": "AS222", "hosting_provider": "Second ISP"},
+                "3.3.3.3": {"asn": "AS111", "hosting_provider": "First ISP"},  # duplicate ASN
+            }[ip]
+
+        mock_asn.side_effect = fake_asn
+
+        data = build_enrichment_data("domain", "load-balanced.example.com")
+
+        # all distinct ASNs across all IPs, deduped, order preserved, not lowercased
+        assert data["asn"] == "AS111,AS222"
+        # hosting_provider still takes the first-found value (unchanged
+        # single-value semantics -- only the ASN fix was requested)
+        assert data["hosting_provider"] == "First ISP"
+
+
+def test_build_enrichment_data_asn_lookup_failing_for_one_ip_does_not_block_others():
+
+    with (
+        patch("app.workers.enrichment_worker.cached_lookup_dns") as mock_dns,
+        patch("app.workers.enrichment_worker.cached_lookup_registrar") as mock_reg,
+        patch("app.workers.enrichment_worker.cached_lookup_asn") as mock_asn,
+    ):
+        mock_dns.return_value = {"nameservers": [], "ips": ["1.1.1.1", "2.2.2.2"]}
+        mock_reg.return_value = None
+
+        def fake_asn(ip):
+            return None if ip == "1.1.1.1" else {"asn": "AS222", "hosting_provider": "Second ISP"}
+
+        mock_asn.side_effect = fake_asn
+
+        data = build_enrichment_data("domain", "partial-failure.example.com")
+
+        assert data["asn"] == "AS222"
+
+
 def test_domain_lookup_is_cached_across_repeated_calls(monkeypatch):
     """
     CONTEXT.md item 2.6's "local DNS cache": the same domain must trigger

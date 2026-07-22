@@ -98,11 +98,6 @@ class GraphBuilder:
         query = """
         MATCH (d:Domain {value:$domain})
 
-        FOREACH (_ IN CASE WHEN $asn IS NOT NULL THEN [1] ELSE [] END |
-            MERGE (asn:ASN {value:$asn})
-            MERGE (d)-[:RESOLVES_TO_ASN]->(asn)
-        )
-
         FOREACH (_ IN CASE WHEN $hosting_provider IS NOT NULL THEN [1] ELSE [] END |
             MERGE (hp:HostingProvider {name:$hosting_provider})
             MERGE (d)-[:HOSTED_BY]->(hp)
@@ -118,10 +113,30 @@ class GraphBuilder:
             session.run(
                 query,
                 domain=domain,
-                asn=enrichment.asn,
                 registrar=enrichment.registrar,
                 hosting_provider=enrichment.hosting_provider,
             )
+
+        # asn is comma-separated (CONTEXT.md item 2.3: iterate every
+        # resolved IP, not just the first -- a domain load-balanced across
+        # multiple ASNs must produce multiple RESOLVES_TO_ASN edges, same
+        # split-and-loop pattern as nameservers below, not one node with a
+        # literal comma-joined value.
+        if enrichment.asn:
+            for asn in enrichment.asn.split(","):
+                asn = asn.strip()
+
+                if not asn:
+                    continue
+
+                query = """
+                MATCH (d:Domain {value:$domain})
+                MERGE (asn:ASN {value:$asn})
+                MERGE (d)-[:RESOLVES_TO_ASN]->(asn)
+                """
+
+                with self.driver.session() as session:
+                    session.run(query, domain=domain, asn=asn)
 
         if enrichment.nameservers:
             for ns in enrichment.nameservers.split(","):

@@ -331,6 +331,18 @@ new degree-weighted feature construction in item 6, not to the baseline.
 `asn_data = safe_lookup(lookup_asn, ips[0])`. A domain resolving to 5 IPs across
 3 ASNs records one ASN. Load-balanced infrastructure is exactly what campaigns use.
 **Fix:** iterate all IPs, store all ASNs.
+**Done 2026-07-23:** `build_enrichment_data()` now loops every IP in
+`dns_data["ips"]`, collecting every distinct ASN into a comma-separated
+`IndicatorEnrichment.asn` (same storage pattern as `nameservers`/
+`resolved_ips`) — deduped, original casing preserved (`normalize_list(...,
+lowercase=False)`; ASN codes like `AS13335` aren't case-insensitive by
+convention the way domains are, so folding them would just be noise).
+`hosting_provider` stays single-valued (first found) — only ASN handling
+was requested here. `graph_builder.py`'s `create_domain_infrastructure_relationship`
+updated to match: splits `enrichment.asn` on commas and creates one
+`RESOLVES_TO_ASN` edge per ASN, same split-and-loop pattern already used
+for nameservers, instead of merging one node with a literal comma-joined
+value. A failed lookup for one IP no longer blocks ASNs from the others.
 
 **2.4 Hashes receive no enrichment.**
 `enrich_indicator` handles `ip`, `domain`, `url`. Hashes fall through with an empty
@@ -360,8 +372,98 @@ own `SessionLocal()`, since SQLAlchemy sessions aren't safe to share across
 threads. `enrich_indicator()` (serial, single-session) is kept for callers
 that already hold a session; both paths share the same
 `build_enrichment_data()` lookup logic so there's one implementation of
-the actual enrichment rules, not two. Not yet run at the full 23,000+
-volume — that's the next step (full-volume cluster re-measurement).
+the actual enrichment rules, not two.
+
+**Run at full volume 2026-07-23: 22,642 indicators enriched in 40.9
+minutes** (under the "under an hour" target) — but this run surfaced a new,
+severe defect, item 2.7 below, that must be fixed and the run redone
+before this data is trustworthy for anything downstream.
+
+**2.7 Parallelizing enrichment (item 2.6) broke ASN lookups by exceeding
+the lookup API's rate limit — discovered at full volume, not a design
+flaw in item 2.6 itself.**
+The full-volume run showed ASN coverage collapsing to 5.6% overall (1,267
+of 22,642) and just 14.8% even among indicators that had a resolved IP to
+look up (1,233 of 8,340) — an order of magnitude below DNS (36.8%), WHOIS
+(42.0%), and nameserver (31.3%) coverage on the *same* run, which is the
+signature of a systemic failure, not sparse/aged data. ASN is a core
+clustering feature (item 2.1, item 6), so this had to be root-caused
+before any further work, not patched around.
+
+**Instrumented and confirmed, not guessed:** `asn_lookup.py` calls
+`ip-api.com`'s free JSON API, which allows ~45 requests/minute per client
+IP (confirmed via the `X-Rl`/`X-Ttl` response headers, which count down
+with each request). The same 9 real "failed" IPs from the actual run
+succeeded 100% of the time when queried serially, 1.5s apart — the IPs
+are perfectly resolvable; nothing wrong with the data. Reproducing the
+real load (a `ThreadPoolExecutor` burst matching `enrichment_worker_threads`)
+exhausts the budget within seconds and produces, depending on exactly how
+depleted the budget is: **HTTP 429 with an empty body** (`Content-Length:
+0`, `X-Rl: 0`, `X-Ttl: 0`), or **HTTP 200 with an empty body** right at
+the boundary, which crashes `response.json()` with `JSONDecodeError`.
+`asn_lookup.py`'s `if response.status_code != 200: return None` catches
+the first case but not the second, and the whole function is wrapped in a
+bare `except Exception: return None` with **zero logging** — every
+rate-limited lookup was silently indistinguishable from "this IP
+genuinely has no ASN." Root cause: item 2.6's thread pool gave every one
+of `enrichment_worker_threads` (30) workers access to a single shared
+external rate-limit budget that was never going to survive concurrent use
+— a case where fixing one defect (serial enrichment) exposed another
+(an ASN source with no headroom for the concurrency the fix introduced).
+
+**Fix decision, 2026-07-23: migrate to MaxMind GeoLite2 (offline .mmdb
+database), not Team Cymru's bulk DNS service and not independent
+rate-limiting of the existing HTTP calls.** All three were evaluated:
+- *Rate-limit the existing calls* (token bucket / semaphore, ~45/min) —
+  smallest change, but reintroduces the exact throughput bottleneck item
+  2.6 just removed for this one feature (ASN lookups would serialize back
+  to ~2,700/hour regardless of thread count), and leaves ASN coverage
+  permanently hostage to a third-party free-tier policy that isn't ours to
+  guarantee and could change without notice.
+- *Team Cymru's IP-to-ASN DNS service* — free, no signup, no comparable
+  rate ceiling, reuses the existing `dnspython` dependency. Real
+  contender, ruled out only in favor of the stronger option below.
+- **MaxMind GeoLite2 — chosen.** Downloaded `.mmdb` snapshot, queried
+  locally with no network call and no rate limit of any kind. The
+  deciding factor is reproducibility for the paper: a dated snapshot
+  ("GeoLite2-ASN, downloaded YYYY-MM-DD") gives the exact same answer for
+  a given IP no matter when the pipeline is re-run, which a live lookup
+  service — Team Cymru included — cannot promise as network topology
+  shifts over time. Requires a free MaxMind account + license key, which
+  only the project owner can create (blocking dependency — not
+  implemented yet, pending the key).
+
+**Status: not yet implemented.** The full-volume graph build (32→? cluster
+re-measurement) was allowed to finish on the ASN-broken data for
+inspection, but **the enrichment run and graph build must both be redone**
+once GeoLite2 is wired in before the cluster-attribution baseline (item
+2.1) or any degree-weighting work (item 6) can trust the ASN feature.
+
+**Honest enrichment coverage baseline, full volume (22,642 indicators),
+replacing the paper draft's unmeasured "~80% ECR" claim
+(`Documentation/Aletheia_Paper_Revised.md`, cited 5 times with a fabricated
+60/25/15% failure breakdown that does not correspond to any real run):**
+
+| Attribute | Coverage | Note |
+|---|---|---|
+| Resolved IP (DNS A record) | 36.8% (8,340/22,642) | |
+| Nameservers (DNS NS record) | 31.3% (7,088/22,642) | |
+| Registrar (WHOIS) | 42.0% (9,508/22,642) | highest of the four |
+| ASN | 5.6% (1,267/22,642), 14.8% of indicators with a resolved IP | **broken, see item 2.7** — not a real coverage number, re-measure after the GeoLite2 fix |
+| ≥1 attribute resolved (paper's own ECR definition) | 48.8% (11,038/22,642) | vs. the paper's claimed ~80% |
+
+These numbers (DNS/WHOIS/nameserver) are plausible for aged, open-source
+phishing/malware-URL OSINT — a meaningful fraction of collected indicators
+reference infrastructure that's already down, sinkholed, or DNS-expired by
+collection time, and coverage should be expected to degrade further with
+indicator age (older IOCs are more likely to be dead infrastructure by the
+time they're enriched). That degradation-with-age relationship is itself
+worth checking empirically before the paper asserts it (feed `first_seen`/
+`date_added` timestamps are already captured as labels — item 1.2 — and
+could be correlated against enrichment success). The ECR figure (48.8%)
+should be re-measured once ASN is fixed, since a working ASN source will
+push some currently-zero-attribute indicators (IP-type ones especially,
+which enrich via ASN only) into the "≥1 attribute" count.
 
 ### TIER 3 — evaluation
 
