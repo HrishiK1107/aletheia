@@ -7,6 +7,7 @@ from app.ingestion.indicator_queue import dequeue_indicator
 from app.schemas.indicator_schema import IndicatorCreate
 from app.services.indicator_service import create_indicator
 from app.services.timeline_service import TimelineService
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.orm import Session
 
 logger = logging.getLogger(__name__)
@@ -18,14 +19,27 @@ def process_indicator(db: Session, raw_indicator: dict):
     while preserving raw indicator storage.
     """
 
-    # Store raw indicator
-    raw = RawIndicator(
-        value=raw_indicator.get("value"),
-        type=raw_indicator.get("type"),
-        source=raw_indicator.get("source"),
-        confidence=raw_indicator.get("confidence"),
-        raw_payload=raw_indicator,
+    # Store raw indicator, deduplicated on (value, source): the same feed
+    # re-reporting the same value on every run must not accumulate a new
+    # row each time (CONTEXT.md item 1.4 -- 1,344 rows from two ~670
+    # collections). Scoped to (value, source) rather than value alone so a
+    # DIFFERENT feed reporting the same value still gets its own row --
+    # that's cross-feed corroboration, not a duplicate (CONTEXT.md §5).
+    # ON CONFLICT DO NOTHING at the DB level so this is safe under
+    # concurrent workers, not just a check-then-insert race.
+    stmt = (
+        pg_insert(RawIndicator)
+        .values(
+            value=raw_indicator.get("value"),
+            type=raw_indicator.get("type"),
+            source=raw_indicator.get("source"),
+            confidence=raw_indicator.get("confidence"),
+            raw_payload=raw_indicator,
+        )
+        .on_conflict_do_nothing(index_elements=["value", "source"])
     )
+
+    db.execute(stmt)
 
     timeline = TimelineService()
 
@@ -36,7 +50,6 @@ def process_indicator(db: Session, raw_indicator: dict):
         source=raw_indicator.get("source"),
     )
 
-    db.add(raw)
     db.commit()
 
     # Continue existing processing pipeline

@@ -174,6 +174,18 @@ deduplicates on `value` across runs. `dedupe_engine.py` exists but is not called
 from the ingestion path.
 **Fix:** unique constraint on `raw_indicators.value` + `ON CONFLICT DO NOTHING`,
 or wire `dedupe_engine` in properly.
+**Done 2026-07-23:** unique constraint on `(value, source)` — deliberately
+not `value` alone. The same value from a *different* feed is cross-feed
+corroboration (relevant to the §5 overlap analysis), not a duplicate; what
+actually accumulated unbounded was the same feed re-reporting the same value
+every run. `ingestion_worker.process_indicator()` now does a Postgres
+`INSERT ... ON CONFLICT (value, source) DO NOTHING` (atomic, safe under
+concurrent workers — not a check-then-insert race). Applied to the live dev
+DB too: 8 pre-existing rows were 2 real values duplicated 4x each from
+today's own test runs, deduped down to 2 before adding the constraint.
+`dedupe_engine.find_duplicate()` is unrelated to this — it already ran
+inside `indicator_service.create_indicator()`, deduplicating the separate,
+normalized `indicators` table, not `raw_indicators`.
 
 ### TIER 2 — method quality
 
@@ -425,7 +437,8 @@ feeds are actually this disjoint.
    ~~Not fixed~~ **fixed same day**, see item 1.1: separate `aletheia_test`
    database + `test_database_url` setting + `ensure_distinct_databases()`
    guard rail that fails loudly if they ever collide.
-4. Dedup constraint — 1 hour
+4. ~~Dedup constraint~~ **done 2026-07-23**, see item 1.4 — `(value, source)`
+   unique, not `value` alone
 5. Parallel enrichment + DNS cache — 1 day
 6. Inverse-degree weighting — 2 days — **the contribution**
 7. Evaluation harness + ARI + baselines — 2 days
