@@ -1,10 +1,7 @@
 import pytest
+from app.db import model_registry  # noqa: F401 -- registers all models on Base.metadata
 from app.db.base import Base
 from app.db.postgres import engine
-from app.ingestion.enrichment.models.feed_models import Feed  # noqa
-
-# Import models so SQLAlchemy registers them
-from app.ingestion.enrichment.models.indicator_models import Indicator  # noqa
 from sqlalchemy.orm import sessionmaker
 
 TestingSessionLocal = sessionmaker(

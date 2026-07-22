@@ -20,6 +20,11 @@ class Settings(BaseSettings):
     otx_api_key: str | None = None
     abusech_api_key: str | None = None
 
+    # ThreatFox lookback window in days. Verified live against the API
+    # 2026-07-22: it rejects anything outside 1-7 ("illegal_days"), despite
+    # CONTEXT.md documenting a max of 90 — 7 is the true ceiling.
+    threatfox_lookback_days: int = 7
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,
