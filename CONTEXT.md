@@ -312,6 +312,101 @@ That baseline is deliberately left as-is per item 1.1's reasoning (a
 faithful "v1 method" comparison point), so this merge applies only to the
 new degree-weighted feature construction in item 6, not to the baseline.
 
+**Full-volume re-measurement, 2026-07-23 — supersedes the 32-cluster/670-node
+baseline above as the number degree weighting (item 6) has to beat.** Run
+after item 2.7's GeoLite2 fix (ASN coverage 5.6%→38.0% overall, 14.8%→99.3%
+conditional on a resolved IP) and the corresponding enrichment/graph
+rebuild: 22,642 indicators enriched (18.3 min), graph rebuilt (11.4 min,
+22,637 indicator nodes + 619 ASN / 582 HostingProvider / 490 Registrar /
+4,122 Nameserver nodes), BFS clustering run (20.2s) →
+**1,396 clusters, 13,496 members.**
+
+Same methodology as the small-scale baseline (per cluster, which
+attribute(s) are shared by ≥2 members, same relationship types/depth the
+detector traverses), but computed via 5 bulk queries (all members at
+once, results grouped per-cluster in Python) rather than one query per
+cluster — 1,396 clusters made the small-scale approach impractical
+(the Nameserver bulk query alone took 544s against this graph size).
+
+| Grouping basis | Clusters | % |
+|---|---|---|
+| No shared infra attribute at all (same-domain/unenriched) | 182 / 1,396 | 13.0% |
+| `ASN`+`HostingProvider`+`Nameserver`+`Registrar` | 504 / 1,396 | 36.1% |
+| `ASN`+`HostingProvider`+`Nameserver`+`Registrar`+`ResolvedIP` | 230 / 1,396 | 16.5% |
+| `ASN`+`HostingProvider`+`Nameserver` | 168 / 1,396 | 12.0% |
+| `ASN`+`HostingProvider`+`Registrar` | 122 / 1,396 | 8.7% |
+| `Registrar` alone | 61 / 1,396 | 4.4% |
+| `ASN`+`HostingProvider`+`Nameserver`+`ResolvedIP` | 39 / 1,396 | 2.8% |
+| `ASN`+`HostingProvider` **only** (functionally commodity-only) | 36 / 1,396 | 2.6% |
+| `ASN`+`HostingProvider`+`Registrar`+`ResolvedIP` | 24 / 1,396 | 1.7% |
+| `ASN`+`HostingProvider`+`ResolvedIP` | 15 / 1,396 | 1.1% |
+| All other combinations (6 types, ≤6 clusters each) | 15 / 1,396 | 1.1% |
+| **`HostingProvider` alone, no `ASN`** | **0 / 1,396** | **0%** |
+
+The `ASN`/`HostingProvider` 1:1 pairing from the small-N check holds
+exactly at full volume too (0 clusters with one but not the other,
+across 1,396) — the merge decision above is on solid empirical ground,
+not just a 9-pair coincidence.
+
+**The concrete "used by millions" evidence, now at scale — and it's worse,
+not better, than the small-scale signal suggested:**
+
+| Value | Type | Clusters it bridges |
+|---|---|---|
+| `Cloudflare, Inc.` | HostingProvider | 223 |
+| `AS13335` (Cloudflare) | ASN | 255 |
+| `Hostinger International Limited` | HostingProvider | 138 |
+| `AS47583` (Hostinger) | ASN | 138 |
+| `Amazon.com, Inc.` | HostingProvider | 73 |
+| `AS16509` (Amazon) | ASN | 61 |
+| `Oracle Corporation` / `AS31898` | Hosting/ASN | 38 |
+| `IONOS SE` / `AS8560` | Hosting/ASN | 33 |
+| `Cloudflare Pages` | HostingProvider | 32 |
+| `OVH SAS` / `AS16276` | Hosting/ASN | 31 |
+
+**953 / 1,396 clusters (68.3%) touch a `HostingProvider` value that also
+appears in at least one other, otherwise-disjoint cluster in the same
+run; 952 / 1,396 (68.2%) touch a recurring `ASN` value** (nearly the same
+set of clusters, consistent with the 1:1 pairing). This is the single
+biggest finding of this re-measurement: at the small 32-cluster scale
+the equivalent number was 6/32 (19%); at full volume it's over two-thirds
+of all detected clusters. More clusters means more chances to collide on
+the same handful of big commodity hosts — the problem gets *worse* with
+scale, not better, which is exactly what the research claim (§3) predicts
+and exactly the case degree-weighting has to make.
+
+**Important nuance — this is not the same as "68% of clusters are pure
+false positives."** Touching a hub value doesn't mean a cluster's *only*
+evidence is that hub: 980 of the 1,396 clusters (70%) have `ASN`+
+`HostingProvider` *plus* at least one more specific attribute
+(`Nameserver`, `Registrar`, or `ResolvedIP`) — real additional
+corroboration, not just the commodity pair. The strict "commodity-only,
+nothing else shared" count is 36/1,396 (2.6%) — smaller as a share of
+the total than the small-scale run's 16% (5/32), because full-volume
+enrichment coverage is far better (38% ASN vs. near-zero), so more
+clusters have real additional evidence available to attach. The 68%
+hub-touching number is a *feature-level* finding, not a *cluster-level
+verdict*: even a cluster with genuine additional evidence still has one
+input (its `ASN`/`HostingProvider` feature) that is globally
+uninformative and should contribute ~0 after inverse-degree weighting —
+which is exactly what item 6 needs to get right, and exactly the effect
+size (68% of clusters carry at least one such feature) that would make
+degree-weighting's before/after comparison meaningful rather than noise.
+
+**Cluster size is heavily skewed and the top end is extreme:** min 3,
+median 3, mean 9.7, max **1,849**. Top 5: 258, 485, 1,054, 1,073, 1,849.
+A dedicated attribute-breakdown query against just the single 1,849-member
+cluster timed out after 280s (all four other top-5 clusters would have
+been queried in the same run, so this is specific to that one cluster) —
+itself suggestive of an extremely high-fanout hub node dominating it,
+consistent with the over-clustering hypothesis, but **not confirmed in
+detail**. Worth a dedicated, more efficient investigation (e.g., degree
+of every node reachable from that cluster's seed, computed as a single
+aggregate rather than per-attribute-type) before or during item 6, since
+if one cluster this large is genuinely commodity-hub-dominated, it alone
+would swing aggregate metrics (mean cluster size, mean confidence)
+disproportionately.
+
 **2.2 The scoring function is broken in four ways.**
 `score(C) = 0.30·N + 0.30·D + 0.20·R + 0.20·E`
 - `D(C)` type diversity — 30% of the score, but ~90% of input is URLs, so it is a
@@ -482,8 +577,15 @@ ASN-derived results can cite the exact snapshot by date.
   `(dependent, prerequisite, reason)` tuples to `COVERAGE_DEPENDENCIES`
   as more such relationships are identified.
 
-**Next: re-run enrichment, rebuild the graph, then redo the full-volume
-cluster-attribution re-measurement** — not done yet as of this entry.
+**Done 2026-07-23: re-ran enrichment, rebuilt the graph, redid the
+full-volume cluster-attribution re-measurement.** Results in item 2.1
+above (search "Full-volume re-measurement"). `check_enrichment_coverage_sanity()`
+confirmed healthy (no warnings) against the corrected data. Enrichment
+re-run took 18.3 min (down from 40.9 min pre-fix — removing the ASN
+network calls' contention sped up the whole batch, not just ASN itself).
+83 indicators now record more than one distinct ASN (item 2.3's multi-IP
+fix confirmed working on real load-balanced infrastructure, not just in
+tests).
 
 **Honest enrichment coverage baseline, full volume (22,642 indicators),
 replacing the paper draft's unmeasured "~80% ECR" claim
@@ -492,11 +594,12 @@ replacing the paper draft's unmeasured "~80% ECR" claim
 
 | Attribute | Coverage | Note |
 |---|---|---|
-| Resolved IP (DNS A record) | 36.8% (8,340/22,642) | |
-| Nameservers (DNS NS record) | 31.3% (7,088/22,642) | |
-| Registrar (WHOIS) | 42.0% (9,508/22,642) | highest of the four |
-| ASN | 5.6% (1,267/22,642), 14.8% of indicators with a resolved IP | **broken, see item 2.7** — not a real coverage number, re-measure after the GeoLite2 fix |
-| ≥1 attribute resolved (paper's own ECR definition) | 48.8% (11,038/22,642) | vs. the paper's claimed ~80% |
+| Resolved IP (DNS A record) | 37.3% (8,451/22,642) | re-measured post-fix; DNS itself untouched by item 2.7, small variance vs. the 36.8% pre-fix run is normal live-lookup noise |
+| Nameservers (DNS NS record) | 31.9% (7,221/22,642) | |
+| Registrar (WHOIS) | 42.1% (9,522/22,642) | |
+| ASN | **38.0% (8,610/22,642) overall, 99.3% (8,390/8,451) of indicators with a resolved IP** — fixed, see item 2.7 | was 5.6%/14.8% pre-fix; 99.3% is what a working local lookup should give (only private/reserved/unallocated IPs genuinely lack an ASN) |
+| HostingProvider | 38.0% (8,610/22,642) | now tracks ASN exactly — GeoLite2 returns both from the same record for the ASN-fallback path |
+| ≥1 attribute resolved (paper's own ECR definition) | 49.8% (11,275/22,642) | vs. the paper's claimed ~80%; up from 48.8% pre-fix as the ASN fix pulled some previously-zero-attribute IP-type indicators into the count |
 
 These numbers (DNS/WHOIS/nameserver) are plausible for aged, open-source
 phishing/malware-URL OSINT — a meaningful fraction of collected indicators
