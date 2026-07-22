@@ -186,8 +186,8 @@ intervals, more infrastructure overlap, and a dataset a reviewer takes seriously
 | Feed | Now | Cause | Fix | After |
 |---|---|---|---|---|
 | ThreatFox | 373 | `{"query": "get_iocs"}` with no `days` param defaults to 1 day | ~~add `"days": 90` (API max)~~ **corrected 2026-07-22:** the live API rejects anything outside 1–7 (`"illegal_days"`); 90 was never valid. `days: 7` verified live → 4,019 IOCs. There is no larger single-call window — higher volume needs the same accumulate-over-time strategy as OpenPhish below. | 4,019/week (verified), not 20,000–40,000 |
-| OTX | 0 | hits `/indicators/export`, a bulk endpoint that times out at 20s | use `/api/v1/pulses/subscribed?limit=50&page=N` with pagination — **pulses are pre-grouped by campaign = free ground truth** | 5,000–15,000 |
-| MalwareBazaar | 0 | `get_recent` + `selector: "time"` returns the last hour, often empty | `selector: "100"`, or query by signature for family-labelled batches | 1,000+ |
+| OTX | 0 | hits `/indicators/export`, a bulk endpoint that times out at 20s | use `/api/v1/pulses/subscribed?limit=50&page=N` with pagination — **pulses are pre-grouped by campaign = free ground truth**. **Corrected 2026-07-22:** page size caps at 50 server-side regardless of requested `limit`; the account had 8,821 subscribed pulses (~220k indicators) at verification time, so pulled bounded by `otx_max_pages` (config, default 10 → 500 pulses). Also fixed: collector was reading `os.getenv("OTX_API_KEY")` directly, which is never populated (the key only exists in `.env`, loaded by `settings`, not by the process environment) — silently sent `X-OTX-API-KEY: None` on every request. | 18,056 from 500 pulses (verified, default config) |
+| MalwareBazaar | 0 | `get_recent` + `selector: "time"` returns the last hour, often empty | `selector: "100"`. **Corrected 2026-07-22:** the deeper bug was `json=payload` — the API requires form-encoded (`data=payload`); JSON body returned `"missing_query"` regardless of `selector`, which is what actually caused the empty results, not just the 1-hour window. | 100/call (verified), 61% with non-null `signature`, 19 families |
 | OpenPhish | 300 | free feed is capped at ~500 most recent, refreshes every 12h — hard ceiling | accumulate: poll every 12h over several days | 4,000+ over a week |
 
 **Done: ThreatFox `days: 7` (verified max) + labels captured.** Live `days=7` pull
@@ -207,13 +207,41 @@ in practice: `ip:port` (980), `sha256_hash` (123), `sha1_hash`/`md5_hash` (76 ea
 These pass through unvalidated/unnormalized today — logged at runtime by the
 collector, tracked as item 2.4.
 
+**Done: OTX pulse pagination + labels captured.** Live pull at default config
+(10 pages, 500 pulses) returned 18,056 indicators across 489 pulses with >=1
+indicator (11 pulses were empty). `type` breakdown: domain 8,954, hash 7,343,
+url 1,202, ip 236, plus small counts of CVE/email/YARA/BitcoinAddress that
+don't map onto `{ip, domain, url, hash}` — same item-2.4 pattern as ThreatFox,
+also logged at runtime.
+
+**Open decision needed for item 7 (OTX pulse-size skew is worse than ThreatFox's
+family skew):** pulse sizes range 1–4,499, median 13, mean 36.9. One pulse
+("The Evolution of ClickFix...") alone accounts for 4,499 of 18,056 indicators
+(~25% of the set). Unlike the ThreatFox `'Unknown malware'` case this isn't a
+mislabelled bucket — it's a real human-curated pulse that happens to be huge —
+so excluding it isn't obviously right. Decide before building the eval harness
+whether to: use it as-is (aggregate ARI will be dominated by this one pulse,
+worse than the ThreatFox skew), cap/exclude outlier pulses above some size
+threshold, or report OTX pulse-membership and ThreatFox family-membership as
+two separate ARI numbers rather than combining them.
+
+**Done: MalwareBazaar `get_recent`/`selector: "100"` fixed (form-encoded body)
++ `signature`/`tags`/`file_type`/`reporter`/`first_seen` captured as labels.**
+Live pull returned 100 samples, 61% with non-null `signature`, 19 distinct
+families. `get_recent` selector only accepts `"time"` or `"100"` (other values
+tested returned `"unknown_selector"`) — 100/call is the practical per-run max;
+volume beyond that needs the same accumulate-over-time strategy as OpenPhish,
+or `get_siginfo` queried per known family name (not implemented — CONTEXT.md's
+original "query by signature for family-labelled batches" suggestion assumes
+a list of target families, which we don't have yet).
+
 ---
 
 ## 6. Work order — target one week
 
 1. ~~ThreatFox `days: 90`~~ ThreatFox `days: 7` (verified max) + capture labels —
    **done 2026-07-22**, see §5
-2. Fix OTX and MalwareBazaar endpoints — half day — **in progress**
+2. ~~Fix OTX and MalwareBazaar endpoints~~ **done 2026-07-22**, see §5
 3. Wire `CampaignDetector` in, retire Jaccard as a baseline — half day
 4. Dedup constraint — 1 hour
 5. Parallel enrichment + DNS cache — 1 day

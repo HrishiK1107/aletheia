@@ -25,6 +25,14 @@ class Settings(BaseSettings):
     # CONTEXT.md documenting a max of 90 — 7 is the true ceiling.
     threatfox_lookback_days: int = 7
 
+    # OTX /pulses/subscribed pagination. The API caps results per page at 50
+    # regardless of the requested limit (verified live 2026-07-22). The
+    # subscribed count was 8,821 pulses (~220k indicators) at verification
+    # time, far more than one collection run should pull, so max_pages
+    # bounds each run; raise it for a larger accumulation pass.
+    otx_pulse_page_size: int = 50
+    otx_max_pages: int = 10
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,
