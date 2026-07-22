@@ -199,6 +199,38 @@ campaign" sharing nothing but a hosting provider used by millions.
 the graph. A nameserver shared by 3 domains carries weight; one shared by 3,000
 carries ~0. No blocklist — it self-suppresses. This is the novel method.
 
+**Baseline measurement, 2026-07-23, before building the weighting (item 6).**
+Taken on the BFS clustering from item 1.1 (32 clusters, 122 members, from the
+670-node graph populated before today's collector fixes — small N, will
+change once the newly-collected volume is enriched and graph-built; treat
+as an early signal, not the final number). For each cluster, checked which
+infrastructure attribute(s) (ASN, HostingProvider, Registrar, Nameserver,
+resolved IP) are actually shared by ≥2 of its members, using the same
+relationship types/depth the detector itself traverses:
+
+| Grouping basis | Clusters | Note |
+|---|---|---|
+| No shared infra attribute at all | 18 / 32 (56%) | Not commodity over-clustering — these are the *same literal domain* represented as multiple URL paths (structural `HOSTS`, not shared infra), on domains that haven't been enrichment-crawled yet (item 2.6). |
+| Shared infra attribute, some combination | 14 / 32 (44%) | 13 involve `HostingProvider`; 1 (`cluster 32`) involves `Registrar` alone. |
+| `ASN` + `HostingProvider` and **nothing else shared** | 5 / 32 (16%) | Clusters 1, 6, 7, 8, 9. Functionally "commodity-infra-only": `ASN` and `HostingProvider` are not independent signals in this graph — every `HostingProvider` node co-occurs with exactly one `ASN` (same underlying company, two fields), so this is one fact reported twice, not two corroborating facts. |
+| Literally *only* `HostingProvider`, no `ASN` either | 0 / 32 | `ASN` always rides along with `HostingProvider` here — the strict "purely hosting_provider" framing undercounts the real risk because of that correlation. |
+
+**The concrete "used by millions" evidence:** of the 5 ASN+HostingProvider-only
+clusters, 4 (clusters 6, 7, 8, 9 — the exact `n=4` "unrelated Vercel URLs"
+anecdote already in this section) key off the identical `HostingProvider`
+value `'Vercel'`, and 2 more (clusters 2, 3, which also share a `Nameserver`)
+key off `'Cloudflare Pages'`. Both are named in this item's own `pages.dev`/
+`vercel.app` list. So **6 of 32 clusters (19%) sit on a `HostingProvider` value
+that recurs across multiple otherwise-disjoint clusters in the same run** —
+the same commodity node bridging unrelated indicator sets, which is exactly
+the failure mode this item describes, measured rather than anecdotal.
+
+**Methodological note for item 6:** because `ASN` and `HostingProvider` are
+near-collinear in this graph (one maps to the other), inverse-degree weighting
+needs to either weight them as a single combined feature or explicitly check
+for this correlation — otherwise a cluster sharing both gets what looks like
+two down-weighted-but-still-additive signals when it's really only one.
+
 **2.2 The scoring function is broken in four ways.**
 `score(C) = 0.30·N + 0.30·D + 0.20·R + 0.20·E`
 - `D(C)` type diversity — 30% of the score, but ~90% of input is URLs, so it is a
