@@ -125,6 +125,26 @@ in place. Covered by `tests/test_db_safety.py` (6 cases: distinct DBs
 allowed, same DB blocked, credentials don't mask identity, default-port
 normalization, different host allowed).
 
+**Concrete proof this was a real risk, not theoretical:** the 23,447-indicator
+live collection pushed to Redis while verifying the FeedRun wiring (previous
+commit) was drained into the dev DB's `raw_indicators`/`indicators` tables by
+a subsequent `pytest` run's `process_indicator_queue()` call, then destroyed
+moments later by that same test session's teardown `drop_all()` — before this
+fix existed. The data itself was disposable (a live-collector re-run
+reproduces it), but the mechanism is exactly what this fix closes off.
+
+**Related, unfixed finding: the same class of risk exists for Redis.**
+`test_ingestion_pipeline.py` calls `process_indicator_queue()`, which drains
+`indicator_queue.py`'s real Redis queue (`settings.redis_url`, the same
+instance the live pipeline uses) via a `while True: dequeue... until empty`
+loop — there is no test-specific Redis database or key prefix. Any test that
+exercises the ingestion worker will consume whatever is genuinely queued at
+that moment (this is what happened to the 23,447 indicators above). Postgres
+now has an isolation guard; Redis does not. Worth the same treatment (a
+`test_redis_url`/separate logical DB index) before an evaluation run's queued
+backlog meets the same fate — not fixed here, flagging for a scoping
+decision rather than doing it unrequested.
+
 **1.2 Ground truth is discarded at ingestion.**
 ThreatFox returns `malware`, `malware_printable`, `threat_type`, `tags`,
 `confidence_level`, `first_seen`, `reporter`. The parser keeps only `ioc` and
