@@ -55,6 +55,14 @@ class Settings(BaseSettings):
     # 20-50 range CONTEXT.md suggested.
     enrichment_worker_threads: int = 30
 
+    # GeoLite2 ASN database (offline, frozen snapshot -- CONTEXT.md item
+    # 2.7). Path is relative to the repository root regardless of process
+    # cwd (see asn_lookup.py). Not committed to git (data/*.mmdb) -- must
+    # be downloaded and placed here manually; there is no network fallback
+    # if it's missing, by design (item 2.7: the previous network-based
+    # lookup collapsed under item 2.6's concurrency).
+    geolite2_asn_db_path: str = "data/GeoLite2-ASN.mmdb"
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,

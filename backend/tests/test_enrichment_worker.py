@@ -8,6 +8,7 @@ from app.workers.enrichment_worker import (
     cached_lookup_asn,
     cached_lookup_dns,
     cached_lookup_registrar,
+    check_enrichment_coverage_sanity,
     enrich_indicator,
     run_enrichment_batch,
 )
@@ -199,6 +200,47 @@ def test_run_enrichment_batch_enriches_pending_and_skips_existing(db_session, mo
     # already_enriched_indicator must still have exactly its one
     # pre-existing row -- run_enrichment_batch() must not have resubmitted it
     assert len(own_enrichments) == 2
+
+
+def test_check_enrichment_coverage_sanity_warns_on_implausible_gap(caplog):
+    """
+    This exact check, run against the real full-volume data, is what
+    would have caught CONTEXT.md item 2.7 (ASN collapsing to 14.8% among
+    indicators with a resolved IP) automatically.
+    """
+
+    db = MagicMock()
+    # first call: prereq_count (resolved_ips present) = 100
+    # second call: both_count (resolved_ips AND asn present) = 15
+    db.query.return_value.filter.return_value.count.side_effect = [100, 15]
+
+    with caplog.at_level("WARNING"):
+        warnings = check_enrichment_coverage_sanity(db, warn_threshold=0.5)
+
+    assert len(warnings) == 1
+    assert "asn" in warnings[0]
+    assert "15.0%" in warnings[0]
+    assert any("Coverage sanity check" in r.message for r in caplog.records)
+
+
+def test_check_enrichment_coverage_sanity_silent_when_healthy():
+
+    db = MagicMock()
+    db.query.return_value.filter.return_value.count.side_effect = [100, 90]
+
+    warnings = check_enrichment_coverage_sanity(db, warn_threshold=0.5)
+
+    assert warnings == []
+
+
+def test_check_enrichment_coverage_sanity_skips_when_no_prerequisite_data():
+
+    db = MagicMock()
+    db.query.return_value.filter.return_value.count.side_effect = [0]
+
+    warnings = check_enrichment_coverage_sanity(db, warn_threshold=0.5)
+
+    assert warnings == []
 
 
 def test_run_enrichment_batch_does_nothing_when_all_enriched(db_session, monkeypatch):

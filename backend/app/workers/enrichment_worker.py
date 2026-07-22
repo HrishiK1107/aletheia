@@ -346,6 +346,77 @@ def _enrich_one(indicator_id: int, indicator_type: str, indicator_value: str) ->
 
 
 # ------------------------------------------------
+# Post-enrichment coverage sanity check
+# ------------------------------------------------
+
+# (dependent field, prerequisite field, why the dependency exists). ASN is
+# only looked up for domain/url-type indicators once DNS resolves at
+# least one IP (build_enrichment_data) -- a working local ASN source
+# should cover the large majority of those, since only genuinely
+# private/reserved/unallocated ranges have no ASN entry. This is exactly
+# the relationship whose violation (14.8%, CONTEXT.md item 2.7) would
+# have caught the ip-api.com rate-limit collapse automatically, without
+# needing a human to notice the discrepancy across separately-reported
+# per-field percentages.
+COVERAGE_DEPENDENCIES = [
+    ("asn", "resolved_ips", "ASN lookups only run for indicators with a resolved IP"),
+]
+
+
+def check_enrichment_coverage_sanity(db: Session, warn_threshold: float = 0.5) -> list[str]:
+    """
+    Compare each dependent field's coverage against its prerequisite
+    field's, among indicators where the prerequisite succeeded. Warn if
+    it's implausibly low -- a large gap is the signature of a systemic
+    lookup failure (rate limiting, a broken source, a misconfigured
+    path), not sparse data.
+
+    Returns the warning messages raised (also logged at WARNING).
+    """
+
+    warnings = []
+
+    for dependent_field, prerequisite_field, reason in COVERAGE_DEPENDENCIES:
+
+        prereq_count = (
+            db.query(IndicatorEnrichment)
+            .filter(getattr(IndicatorEnrichment, prerequisite_field).isnot(None))
+            .count()
+        )
+
+        if prereq_count == 0:
+            continue
+
+        both_count = (
+            db.query(IndicatorEnrichment)
+            .filter(
+                getattr(IndicatorEnrichment, prerequisite_field).isnot(None),
+                getattr(IndicatorEnrichment, dependent_field).isnot(None),
+            )
+            .count()
+        )
+
+        ratio = both_count / prereq_count
+
+        if ratio < warn_threshold:
+            message = (
+                f"Coverage sanity check: '{dependent_field}' is present for only "
+                f"{ratio:.1%} of indicators with '{prerequisite_field}' set "
+                f"({both_count}/{prereq_count}), below the {warn_threshold:.0%} "
+                f"threshold. {reason}. A large gap here is the signature of a "
+                f"systemic lookup failure (see CONTEXT.md item 2.7), not sparse "
+                f"data -- investigate before trusting this field."
+            )
+            logger.warning(message)
+            warnings.append(message)
+
+    if not warnings:
+        logger.info("Coverage sanity check: no implausible field-dependency gaps detected.")
+
+    return warnings
+
+
+# ------------------------------------------------
 # Batch enrichment
 # ------------------------------------------------
 
@@ -385,6 +456,12 @@ def run_enrichment_batch():
 
         for future in as_completed(futures):
             future.result()  # _enrich_one catches its own errors; surface anything that escapes that anyway
+
+    db = SessionLocal()
+    try:
+        check_enrichment_coverage_sanity(db)
+    finally:
+        db.close()
 
 
 # ------------------------------------------------

@@ -433,11 +433,57 @@ rate-limiting of the existing HTTP calls.** All three were evaluated:
   only the project owner can create (blocking dependency — not
   implemented yet, pending the key).
 
-**Status: not yet implemented.** The full-volume graph build (32→? cluster
-re-measurement) was allowed to finish on the ASN-broken data for
-inspection, but **the enrichment run and graph build must both be redone**
-once GeoLite2 is wired in before the cluster-attribution baseline (item
-2.1) or any degree-weighting work (item 6) can trust the ASN feature.
+**Status: implemented 2026-07-23.** `asn_lookup.py` rewritten to query the
+local `.mmdb` snapshot (`geoip2.database.Reader`) instead of `ip-api.com` —
+no network call, no rate limit, `lookup_asn()`'s public signature/return
+shape unchanged so nothing downstream needed to change. `data/GeoLite2-ASN.mmdb`
+(12MB, MaxMind build date 2026-07-22, confirmed via the file's own
+metadata) is a frozen snapshot the project owner downloaded and placed
+directly — not fetched by any code, not gitignored-but-required at
+runtime via a license key (`data/*.mmdb` stays gitignored; the file
+itself is provisioned out of band). `geolite2_asn_db_path` (config,
+default `data/GeoLite2-ASN.mmdb`) resolves relative to the repo root
+regardless of process cwd (works the same under uvicorn, a worker
+script, or pytest). **Fails loudly at import time, no silent network
+fallback**, if the file is missing or is the wrong MaxMind database type
+— verified via a test that reloads the module with a bad path and
+asserts the `RuntimeError`. The snapshot's build date is exposed via
+`get_database_build_date()` and logged at load — available for whichever
+results-metadata mechanism item 7's evaluation harness ends up using, so
+ASN-derived results can cite the exact snapshot by date.
+
+**Also done 2026-07-23, the two follow-up items:**
+- **Silent-failure audit, `dns_lookup.py` and `registrar_lookup.py`.**
+  Both had the same shape as the old `asn_lookup.py`: bare
+  `except Exception: return None`/`pass`, zero logging, every failure
+  reason indistinguishable from every other. Neither gets the fix ASN
+  got (they're not broken — the DNS/WHOIS coverage numbers above are
+  accepted as plausible for aged OSINT data) — this is purely an
+  observability fix: `logger.debug(...)` now records the exception
+  type/domain wherever one of these previously vanished silently, so a
+  *future* systemic failure in either (e.g. a resolver rate limit, a
+  WHOIS server blocking us) would leave a diagnostic trail instead of
+  requiring the same manual instrumentation effort item 2.7 needed.
+  WHOIS lookups also print their own connection errors directly to
+  stdout via the underlying `whois`/socket library (the wall of "Error
+  trying to connect to socket" text seen during the full-volume run) —
+  that's a separate, third-party channel this doesn't silence, but our
+  own code's reasoning is no longer opaque on top of it.
+- **Post-enrichment coverage sanity check.** `check_enrichment_coverage_sanity()`
+  in `enrichment_worker.py`, called automatically at the end of every
+  `run_enrichment_batch()`. Compares a dependent field's coverage against
+  its prerequisite field's coverage (currently one pair: `asn` given
+  `resolved_ips` — ASN can only be looked up once DNS resolves an IP) and
+  logs a `WARNING` if the ratio falls below a threshold (default 50%).
+  This is exactly the check that would have caught item 2.7 automatically
+  — 14.8% is far below any plausible threshold for a working local
+  lookup — without needing a human to notice the discrepancy across
+  separately-reported per-field percentages. Extensible: add more
+  `(dependent, prerequisite, reason)` tuples to `COVERAGE_DEPENDENCIES`
+  as more such relationships are identified.
+
+**Next: re-run enrichment, rebuild the graph, then redo the full-volume
+cluster-attribution re-measurement** — not done yet as of this entry.
 
 **Honest enrichment coverage baseline, full volume (22,642 indicators),
 replacing the paper draft's unmeasured "~80% ECR" claim
