@@ -1,5 +1,5 @@
 import pytest
-from app.core.db_safety import ensure_distinct_databases
+from app.core.db_safety import ensure_distinct_databases, ensure_distinct_redis_targets
 
 
 def test_allows_distinct_databases():
@@ -54,4 +54,46 @@ def test_different_host_is_distinct():
     ensure_distinct_databases(
         "postgresql://aletheia:aletheia@test-db-host:5432/aletheia",
         "postgresql://aletheia:aletheia@localhost:5432/aletheia",
+    )
+
+
+def test_redis_allows_distinct_db_index():
+    ensure_distinct_redis_targets(
+        "redis://localhost:6379/1",
+        "redis://localhost:6379",
+    )
+
+
+def test_redis_raises_when_same_target():
+    with pytest.raises(RuntimeError, match="same Redis target"):
+        ensure_distinct_redis_targets(
+            "redis://localhost:6379",
+            "redis://localhost:6379",
+        )
+
+
+def test_redis_raises_when_same_db_index_explicit_and_default():
+    """
+    An explicit /0 and an omitted db index (which defaults to 0) must be
+    treated as the same logical database, not silently allowed through.
+    """
+    with pytest.raises(RuntimeError, match="same Redis target"):
+        ensure_distinct_redis_targets(
+            "redis://localhost:6379/0",
+            "redis://localhost:6379",
+        )
+
+
+def test_redis_default_port_applied_when_omitted():
+    with pytest.raises(RuntimeError, match="same Redis target"):
+        ensure_distinct_redis_targets(
+            "redis://localhost/1",
+            "redis://localhost:6379/1",
+        )
+
+
+def test_redis_different_host_is_distinct():
+    ensure_distinct_redis_targets(
+        "redis://test-redis-host:6379/0",
+        "redis://localhost:6379/0",
     )

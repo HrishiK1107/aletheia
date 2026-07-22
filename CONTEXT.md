@@ -133,17 +133,33 @@ moments later by that same test session's teardown `drop_all()` — before this
 fix existed. The data itself was disposable (a live-collector re-run
 reproduces it), but the mechanism is exactly what this fix closes off.
 
-**Related, unfixed finding: the same class of risk exists for Redis.**
-`test_ingestion_pipeline.py` calls `process_indicator_queue()`, which drains
-`indicator_queue.py`'s real Redis queue (`settings.redis_url`, the same
-instance the live pipeline uses) via a `while True: dequeue... until empty`
-loop — there is no test-specific Redis database or key prefix. Any test that
-exercises the ingestion worker will consume whatever is genuinely queued at
-that moment (this is what happened to the 23,447 indicators above). Postgres
-now has an isolation guard; Redis does not. Worth the same treatment (a
-`test_redis_url`/separate logical DB index) before an evaluation run's queued
-backlog meets the same fate — not fixed here, flagging for a scoping
-decision rather than doing it unrequested.
+**Related finding, fixed 2026-07-23: the same class of risk existed for
+Redis.** `test_ingestion_pipeline.py` calls `process_indicator_queue()`,
+which drains `indicator_queue.py`'s real Redis queue via a
+`while True: dequeue... until empty` loop — there was no test-specific
+Redis database. **Fixed:** `test_redis_url` setting, defaulting to
+`redis://localhost:6379/1` — Redis's logical-database feature (16 per
+server, `SELECT`ed via the URL path) gives the same same-container
+isolation as `aletheia_test` did for Postgres, no second Redis instance
+needed. `ensure_distinct_redis_targets()` (`app/core/db_safety.py`) runs
+at conftest import time and raises if `test_redis_url`/`redis_url` ever
+resolve to the same `(host, port, db index)`.
+
+Implementation differs from the Postgres fix in one way worth noting:
+`redis_client` (`app/db/redis.py`) is a single module-level singleton
+imported *by reference* everywhere (`indicator_queue.py`, etc.), not a
+factory like `SessionLocal` — so instead of monkeypatching every import
+site, `conftest.py` redirects the shared object once, by swapping its
+`.connection_pool` to one built from `test_redis_url`. Every module that
+already imported `redis_client` transparently starts talking to the test
+database, verified directly: writes before the swap land in db 0, writes
+after land in db 1, and a value written to db 0 before a full `pytest` run
+was confirmed still present after. The guard rail was also verified to
+fire and block test collection when deliberately misconfigured to match.
+Covered by 5 cases in `tests/test_db_safety.py` (mirroring the Postgres
+guard's test shape: distinct index allowed, same target blocked, explicit
+`/0` vs. default treated as identical, default-port normalization,
+different host allowed).
 
 **1.2 Ground truth is discarded at ingestion.**
 ThreatFox returns `malware`, `malware_printable`, `threat_type`, `tags`,

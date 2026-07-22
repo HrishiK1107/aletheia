@@ -22,6 +22,15 @@ class Settings(BaseSettings):
     # Redis
     redis_url: str = "redis://localhost:6379"
 
+    # Test Redis target. Must be a distinct logical database from redis_url
+    # -- tests that exercise the ingestion queue drain it until empty, so
+    # pointing this at the dev database destroys whatever is genuinely
+    # queued (same reasoning as test_database_url above). Redis supports 16
+    # logical databases per server (0-15); index 1 keeps this on the same
+    # container without needing a second Redis instance. See
+    # tests/conftest.py's guard rail.
+    test_redis_url: str = "redis://localhost:6379/1"
+
     # Threat intelligence feeds
     otx_api_key: str | None = None
     abusech_api_key: str | None = None
