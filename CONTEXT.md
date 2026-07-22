@@ -89,6 +89,32 @@ lexicographic seed ordering) and its docstring cites "paper, Section 3.5".
 So the published algorithm and the executed algorithm are different.
 **Fix:** wire `CampaignDetector` into `CampaignEngine`. Retire the Jaccard path or
 keep it explicitly as a labelled baseline for comparison.
+**Done 2026-07-23:** `CampaignEngine.detect_campaigns()` now calls
+`CampaignDetector.find_connected_clusters()` (the BFS/d=2/k=3 method the paper
+actually describes). `InfrastructureEngine.detect_clusters()` (Jaccard, 0.75)
+is kept, unchanged, as an explicitly-documented, separately-callable baseline
+for the §3 results table — deliberately not deleted and deliberately not
+wired back into `CampaignEngine`. `InfrastructureEngine.build_fingerprints()`
+(Postgres enrichment) still feeds the R(C)/E(C) scoring inputs regardless of
+which algorithm produced the clusters — clustering and scoring are
+independent concerns. Verified live against the real Neo4j graph (670 nodes
+from a prior collection run): BFS found 32 clusters, sizes 3–10+, all
+persisted to `campaigns`. The Jaccard baseline returned 0 in the same
+verification run, but only because Postgres `indicator_enrichment`/
+`indicators` were empty at the time (see the test-DB-wipe finding below) —
+not a regression in Jaccard itself.
+
+**Related finding, not caused by this change but hit while verifying it:**
+`conftest.py`'s session-scoped fixture runs `Base.metadata.drop_all()` /
+`create_all()` against `app.db.postgres.engine` — the **same DSN as the live
+dev database**, not an isolated test database. Running `pytest` at any point
+wipes every Postgres table in the dev DB (both at session start and again at
+teardown), including `raw_indicators`/`campaigns`/`feed_runs` from real
+collection or detection runs. This directly contradicts §7's "persist every
+run" rule — the CI/test run itself is destructive to dev-DB state. Worth a
+real fix (env-configured test DSN pointing at a separate database/schema)
+before relying on any live run's data surviving until the next `pytest`
+invocation; not fixed here since it's infra scope beyond item 3.
 
 **1.2 Ground truth is discarded at ingestion.**
 ThreatFox returns `malware`, `malware_printable`, `threat_type`, `tags`,
@@ -364,7 +390,10 @@ feeds are actually this disjoint.
    committed without the actual model imports, so a fresh clone would have
    hit the same silent table-registration failure CONTEXT.md already
    documented once (§7) — see git history.
-3. Wire `CampaignDetector` in, retire Jaccard as a baseline — half day
+3. ~~Wire `CampaignDetector` in, retire Jaccard as a baseline~~ **done
+   2026-07-23**, see item 1.1. Found while verifying: `conftest.py` shares
+   the live dev DB's DSN, so running the test suite wipes dev-DB state —
+   flagged in item 1.1, not fixed (infra scope beyond this item).
 4. Dedup constraint — 1 hour
 5. Parallel enrichment + DNS cache — 1 day
 6. Inverse-degree weighting — 2 days — **the contribution**
