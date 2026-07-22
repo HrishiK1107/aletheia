@@ -48,6 +48,13 @@ class Settings(BaseSettings):
     otx_pulse_page_size: int = 50
     otx_max_pages: int = 10
 
+    # Enrichment worker thread pool size. CONTEXT.md item 2.6: serial
+    # enrichment was ~1-3s/indicator (10-25 hours at 30k indicators);
+    # enrichment lookups are I/O-bound (DNS/WHOIS/HTTP), so a thread pool
+    # -- not multiprocessing -- is the right tool. 30 is the middle of the
+    # 20-50 range CONTEXT.md suggested.
+    enrichment_worker_threads: int = 30
+
     model_config = SettingsConfigDict(
         env_file=".env",
         case_sensitive=False,

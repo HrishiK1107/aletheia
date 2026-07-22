@@ -346,6 +346,22 @@ and is partly counting our own duplication.
 **2.6 Enrichment is serial.**
 ~1–3s per indicator. At 30,000 indicators that is 10–25 hours.
 **Fix:** thread pool (20–50 workers) + local DNS cache. Target: under an hour.
+**Done 2026-07-23:** `run_enrichment_batch()` now filters to unenriched
+indicators up front (one query, `NOT EXISTS` join) and submits them to a
+`ThreadPoolExecutor` (`enrichment_worker_threads`, config, default 30 — the
+middle of the suggested 20–50). Enrichment is I/O-bound (DNS/WHOIS/HTTP),
+so threads, not processes. Each worker task runs the lookups against a
+shared `functools.lru_cache` per lookup type (`cached_lookup_dns`,
+`cached_lookup_registrar`, `cached_lookup_asn`) — the "local DNS cache" —
+so indicators sharing a domain (common: see the same-domain-different-path
+finding in item 2.1's baseline) only trigger one real network round-trip
+per domain, not one per indicator. DB writes happen per-task with their
+own `SessionLocal()`, since SQLAlchemy sessions aren't safe to share across
+threads. `enrich_indicator()` (serial, single-session) is kept for callers
+that already hold a session; both paths share the same
+`build_enrichment_data()` lookup logic so there's one implementation of
+the actual enrichment rules, not two. Not yet run at the full 23,000+
+volume — that's the next step (full-volume cluster re-measurement).
 
 ### TIER 3 — evaluation
 
@@ -552,7 +568,7 @@ feeds are actually this disjoint.
    guard rail that fails loudly if they ever collide.
 4. ~~Dedup constraint~~ **done 2026-07-23**, see item 1.4 — `(value, source)`
    unique, not `value` alone
-5. Parallel enrichment + DNS cache — 1 day
+5. ~~Parallel enrichment + DNS cache~~ **done 2026-07-23**, see item 2.6
 6. Inverse-degree weighting — 2 days — **the contribution**
 7. Evaluation harness + ARI + baselines — 2 days
 8. Parameter sweeps — 1 day

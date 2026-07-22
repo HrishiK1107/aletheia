@@ -1,7 +1,10 @@
 import logging
 import time
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from functools import lru_cache
 from urllib.parse import urlparse
 
+from app.core.config import settings
 from app.db.postgres import SessionLocal
 from app.ingestion.enrichment.asn_lookup import lookup_asn
 from app.ingestion.enrichment.dns_lookup import lookup_dns
@@ -39,6 +42,36 @@ def safe_lookup(func, *args):
     except Exception as e:
         logger.debug(f"Lookup failed: {func.__name__} {args} {e}")
         return None
+
+
+# ------------------------------------------------
+# Cached network lookups. Several indicators commonly share a domain (a
+# domain and its own URLs, or multiple URL paths on one site -- see the
+# cluster-attribution baseline in CONTEXT.md item 2.1), so without a cache
+# each one triggers its own DNS/WHOIS round-trip for the identical domain.
+# functools.lru_cache is safe under the thread pool below: its internal
+# lock serializes cache reads/writes. A concurrent miss on the same
+# not-yet-cached key can still call through more than once -- wasted
+# duplicate work, not a correctness issue. A failed lookup (None) is
+# cached too, on the assumption that a DNS/WHOIS failure for a given
+# domain is more likely to keep failing within one run than to be a
+# transient blip worth retrying immediately.
+# ------------------------------------------------
+
+
+@lru_cache(maxsize=None)
+def cached_lookup_dns(domain: str):
+    return lookup_dns(domain)
+
+
+@lru_cache(maxsize=None)
+def cached_lookup_registrar(domain: str):
+    return lookup_registrar(domain)
+
+
+@lru_cache(maxsize=None)
+def cached_lookup_asn(ip: str):
+    return lookup_asn(ip)
 
 
 # ------------------------------------------------
@@ -99,7 +132,91 @@ def normalize_list(values: list[str] | None) -> str | None:
 
 
 # ------------------------------------------------
-# Enrich a single indicator
+# Pure enrichment lookups (no DB access) -- safe to run concurrently
+# across worker threads. DB writes happen in the caller, each with its
+# own session (SQLAlchemy sessions are not safe to share across threads).
+# ------------------------------------------------
+
+
+def build_enrichment_data(indicator_type: str, indicator_value: str) -> dict:
+
+    enrichment_data = {
+        "asn": None,
+        "hosting_provider": None,
+        "nameservers": None,
+        "registrar": None,
+        "resolved_ips": None,
+    }
+
+    domain = None
+
+    # ------------------------------------------------
+    # IP enrichment
+    # ------------------------------------------------
+
+    if indicator_type == "ip":
+
+        asn_data = safe_lookup(cached_lookup_asn, indicator_value)
+
+        if asn_data:
+            enrichment_data["asn"] = asn_data.get("asn")
+            enrichment_data["hosting_provider"] = asn_data.get("hosting_provider")
+
+    # ------------------------------------------------
+    # Domain extraction
+    # ------------------------------------------------
+
+    if indicator_type == "domain":
+        domain = indicator_value.lower()
+
+    if indicator_type == "url":
+        domain = extract_domain(indicator_value)
+
+    # ------------------------------------------------
+    # Domain infrastructure enrichment
+    # ------------------------------------------------
+
+    if domain:
+
+        hosting = detect_hosting_platform(domain)
+
+        if hosting:
+            enrichment_data["hosting_provider"] = hosting
+
+        dns_data = safe_lookup(cached_lookup_dns, domain)
+
+        if dns_data:
+
+            nameservers = dns_data.get("nameservers")
+            ips = dns_data.get("ips", [])
+
+            if nameservers:
+                enrichment_data["nameservers"] = normalize_list(nameservers)
+
+            if ips:
+
+                enrichment_data["resolved_ips"] = normalize_list(ips)
+
+                asn_data = safe_lookup(cached_lookup_asn, ips[0])
+
+                if asn_data:
+
+                    enrichment_data["asn"] = asn_data.get("asn")
+
+                    if not enrichment_data["hosting_provider"]:
+                        enrichment_data["hosting_provider"] = asn_data.get("hosting_provider")
+
+        registrar_data = safe_lookup(cached_lookup_registrar, domain)
+
+        if registrar_data:
+            enrichment_data["registrar"] = registrar_data.get("registrar")
+
+    return enrichment_data
+
+
+# ------------------------------------------------
+# Enrich a single indicator (serial entry point -- kept for callers that
+# already hold a Session, e.g. one-off/manual use)
 # ------------------------------------------------
 
 
@@ -116,80 +233,7 @@ def enrich_indicator(db: Session, indicator: Indicator):
         db.commit()  # ensure any pending timeline events are saved
         return existing
 
-    enrichment_data = {
-        "asn": None,
-        "hosting_provider": None,
-        "nameservers": None,
-        "registrar": None,
-        "resolved_ips": None,
-    }
-
-    domain = None
-
-    # ------------------------------------------------
-    # IP enrichment
-    # ------------------------------------------------
-
-    if indicator.type == "ip":
-
-        asn_data = safe_lookup(lookup_asn, indicator.value)
-
-        if asn_data:
-            enrichment_data["asn"] = asn_data.get("asn")
-            enrichment_data["hosting_provider"] = asn_data.get("hosting_provider")
-
-    # ------------------------------------------------
-    # Domain extraction
-    # ------------------------------------------------
-
-    if indicator.type == "domain":
-        domain = indicator.value.lower()
-
-    if indicator.type == "url":
-        domain = extract_domain(indicator.value)
-
-    # ------------------------------------------------
-    # Domain infrastructure enrichment
-    # ------------------------------------------------
-
-    if domain:
-
-        hosting = detect_hosting_platform(domain)
-
-        if hosting:
-            enrichment_data["hosting_provider"] = hosting
-
-        dns_data = safe_lookup(lookup_dns, domain)
-
-        if dns_data:
-
-            nameservers = dns_data.get("nameservers")
-            ips = dns_data.get("ips", [])
-
-            if nameservers:
-                enrichment_data["nameservers"] = normalize_list(nameservers)
-
-            if ips:
-
-                enrichment_data["resolved_ips"] = normalize_list(ips)
-
-                asn_data = safe_lookup(lookup_asn, ips[0])
-
-                if asn_data:
-
-                    enrichment_data["asn"] = asn_data.get("asn")
-
-                    if not enrichment_data["hosting_provider"]:
-                        enrichment_data["hosting_provider"] = asn_data.get("hosting_provider")
-
-        registrar_data = safe_lookup(lookup_registrar, domain)
-
-        if registrar_data:
-            enrichment_data["registrar"] = registrar_data.get("registrar")
-
-    # ------------------------------------------------
-    # Store enrichment
-    # ------------------------------------------------
+    enrichment_data = build_enrichment_data(indicator.type, indicator.value)
 
     try:
 
@@ -229,6 +273,52 @@ def enrich_indicator(db: Session, indicator: Indicator):
 
         logger.debug(f"Timeline event skipped: {e}")
 
+    return enrichment
+
+
+# ------------------------------------------------
+# Thread-pool task: lookups (shared cache) + its own DB session
+# ------------------------------------------------
+
+
+def _enrich_one(indicator_id: int, indicator_type: str, indicator_value: str) -> None:
+
+    enrichment_data = build_enrichment_data(indicator_type, indicator_value)
+
+    db = SessionLocal()
+
+    try:
+
+        enrichment = IndicatorEnrichment(
+            indicator_id=indicator_id,
+            asn=enrichment_data["asn"],
+            registrar=enrichment_data["registrar"],
+            hosting_provider=enrichment_data["hosting_provider"],
+            nameservers=enrichment_data["nameservers"],
+            resolved_ips=enrichment_data["resolved_ips"],
+        )
+
+        db.add(enrichment)
+        db.commit()
+
+        try:
+            timeline = TimelineService()
+            timeline.record_event(
+                db,
+                event_type="infrastructure_enriched",
+                event_value=indicator_value,
+                source="enrichment_worker",
+            )
+        except Exception as e:
+            logger.debug(f"Timeline event skipped: {e}")
+
+    except Exception as e:
+        logger.error(f"Enrichment failed for indicator {indicator_id} ({indicator_value}): {e}")
+        db.rollback()
+
+    finally:
+        db.close()
+
 
 # ------------------------------------------------
 # Batch enrichment
@@ -236,25 +326,40 @@ def enrich_indicator(db: Session, indicator: Indicator):
 
 
 def run_enrichment_batch():
+    """
+    Enrich every indicator that doesn't have enrichment yet, in parallel.
+    CONTEXT.md item 2.6: serial enrichment was ~1-3s/indicator (10-25 hours
+    at 30k indicators); target is under an hour. Filtered to unenriched
+    indicators up front (a single query) so already-enriched indicators
+    from a prior run/cycle aren't resubmitted to the pool.
+    """
 
     db = SessionLocal()
 
     try:
-
-        indicators = db.query(Indicator).all()
-
-        for indicator in indicators:
-
-            try:
-                enrich_indicator(db, indicator)
-
-            except Exception as e:
-
-                logger.error(f"Enrichment failed for {indicator.value}: {e}")
-                db.rollback()
-
+        pending = (
+            db.query(Indicator.id, Indicator.type, Indicator.value)
+            .outerjoin(IndicatorEnrichment, IndicatorEnrichment.indicator_id == Indicator.id)
+            .filter(IndicatorEnrichment.id.is_(None))
+            .all()
+        )
     finally:
         db.close()
+
+    if not pending:
+        return
+
+    logger.info(f"Enriching {len(pending)} indicators with {settings.enrichment_worker_threads} threads")
+
+    with ThreadPoolExecutor(max_workers=settings.enrichment_worker_threads) as executor:
+
+        futures = [
+            executor.submit(_enrich_one, ind_id, ind_type, ind_value)
+            for ind_id, ind_type, ind_value in pending
+        ]
+
+        for future in as_completed(futures):
+            future.result()  # _enrich_one catches its own errors; surface anything that escapes that anyway
 
 
 # ------------------------------------------------
