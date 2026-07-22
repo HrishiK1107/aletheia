@@ -104,17 +104,26 @@ verification run, but only because Postgres `indicator_enrichment`/
 `indicators` were empty at the time (see the test-DB-wipe finding below) —
 not a regression in Jaccard itself.
 
-**Related finding, not caused by this change but hit while verifying it:**
-`conftest.py`'s session-scoped fixture runs `Base.metadata.drop_all()` /
-`create_all()` against `app.db.postgres.engine` — the **same DSN as the live
-dev database**, not an isolated test database. Running `pytest` at any point
-wipes every Postgres table in the dev DB (both at session start and again at
+**Related finding, hit while verifying this, fixed 2026-07-23:**
+`conftest.py`'s session-scoped fixture ran `Base.metadata.drop_all()` /
+`create_all()` against `app.db.postgres.engine` — the same DSN as the live
+dev database, not an isolated test database. Running `pytest` at any point
+wiped every Postgres table in the dev DB (both at session start and again at
 teardown), including `raw_indicators`/`campaigns`/`feed_runs` from real
-collection or detection runs. This directly contradicts §7's "persist every
-run" rule — the CI/test run itself is destructive to dev-DB state. Worth a
-real fix (env-configured test DSN pointing at a separate database/schema)
-before relying on any live run's data surviving until the next `pytest`
-invocation; not fixed here since it's infra scope beyond item 3.
+collection or detection runs — directly contradicting §7's "persist every
+run" rule. **Fixed:** a real `aletheia_test` database now exists (same
+Postgres container, separate database), `test_database_url` is a config
+setting pointing at it, `conftest.py` builds its own engine/session bound to
+that DSN, and `app/core/db_safety.py::ensure_distinct_databases()` runs at
+conftest import time — before any fixture or test executes — and raises
+`RuntimeError` immediately if `test_database_url` and `postgres_dsn` ever
+resolve to the same `(host, port, database)`, regardless of matching
+credentials. Verified: the guard fires and refuses to collect tests when
+misconfigured to match; the dev DB's tables were confirmed unchanged (via
+direct inspection) both before and after a full test run once the fix was
+in place. Covered by `tests/test_db_safety.py` (6 cases: distinct DBs
+allowed, same DB blocked, credentials don't mask identity, default-port
+normalization, different host allowed).
 
 **1.2 Ground truth is discarded at ingestion.**
 ThreatFox returns `malware`, `malware_printable`, `threat_type`, `tags`,
@@ -391,9 +400,11 @@ feeds are actually this disjoint.
    hit the same silent table-registration failure CONTEXT.md already
    documented once (§7) — see git history.
 3. ~~Wire `CampaignDetector` in, retire Jaccard as a baseline~~ **done
-   2026-07-23**, see item 1.1. Found while verifying: `conftest.py` shares
-   the live dev DB's DSN, so running the test suite wipes dev-DB state —
-   flagged in item 1.1, not fixed (infra scope beyond this item).
+   2026-07-23**, see item 1.1. Found while verifying: `conftest.py` shared
+   the live dev DB's DSN, so running the test suite wiped dev-DB state.
+   ~~Not fixed~~ **fixed same day**, see item 1.1: separate `aletheia_test`
+   database + `test_database_url` setting + `ensure_distinct_databases()`
+   guard rail that fails loudly if they ever collide.
 4. Dedup constraint — 1 hour
 5. Parallel enrichment + DNS cache — 1 day
 6. Inverse-degree weighting — 2 days — **the contribution**

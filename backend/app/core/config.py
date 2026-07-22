@@ -8,6 +8,12 @@ class Settings(BaseSettings):
     # PostgreSQL
     postgres_dsn: str = "postgresql://aletheia:aletheia@localhost:5432/aletheia"
 
+    # Test database. Must be a distinct database from postgres_dsn --
+    # conftest.py drops/recreates every table in this DSN on every test
+    # session, so pointing it at the dev DSN destroys real run data (this
+    # happened once, 2026-07-23). See tests/conftest.py's guard rail.
+    test_database_url: str = "postgresql://aletheia:aletheia@localhost:5432/aletheia_test"
+
     # Neo4j
     neo4j_uri: str = "bolt://localhost:7687"
     neo4j_user: str = "neo4j"
