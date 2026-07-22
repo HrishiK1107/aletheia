@@ -225,11 +225,76 @@ that recurs across multiple otherwise-disjoint clusters in the same run** —
 the same commodity node bridging unrelated indicator sets, which is exactly
 the failure mode this item describes, measured rather than anecdotal.
 
-**Methodological note for item 6:** because `ASN` and `HostingProvider` are
-near-collinear in this graph (one maps to the other), inverse-degree weighting
-needs to either weight them as a single combined feature or explicitly check
-for this correlation — otherwise a cluster sharing both gets what looks like
-two down-weighted-but-still-additive signals when it's really only one.
+**Design decision, 2026-07-23: merge ASN and HostingProvider into one feature
+for clustering/weighting, rather than dropping HostingProvider or applying a
+correlation penalty.** This is a design decision for item 6, not a note —
+treating two names for the same company as two pieces of evidence inflates
+`R(C)` and would corrupt the weighting results. Worked out as follows.
+
+*Mechanism, from `enrichment_worker.py`/`asn_lookup.py`.* `hosting_provider`
+is populated by one of two independent code paths, in priority order:
+1. `detect_hosting_platform()` — an 8-entry hardcoded suffix map
+   (`vercel.app`→`"Vercel"`, `pages.dev`→`"Cloudflare Pages"`,
+   `blogspot.com`→`"Google Blogger"`, etc., item 2.1). Pure string match on
+   the domain; **has nothing to do with the ASN lookup.**
+2. Fallback, only when (1) finds no match: `asn_data.get("hosting_provider")`
+   — from the *same* `ip-api.com` response that also produces `asn`
+   (`asn_lookup.py`: `asn` = the `as` field, `hosting_provider` = the `isp`
+   field, one HTTP call, two keys of the same JSON object). This path is
+   collinear with `asn` by construction — it's one measurement read twice.
+
+So the two paths have different collinearity properties: (2) is guaranteed
+collinear; (1) is not guaranteed collinear (a suffix-matched platform's IPs
+could in principle sit on more than one ASN), only *empirically* correlated
+if the platform happens to concentrate its edge presence on one ASN block.
+
+**Checked empirically, current graph (small — see the N caveat above):**
+every `HostingProvider` value present maps to exactly one `ASN` and every
+`ASN` maps to exactly one `HostingProvider`, 9/9 pairs, both directions, no
+divergence. All 9 observed values arose via path (1) (they're all
+brand/product names, not raw ISP strings), so this is the *not-guaranteed*
+path showing 1:1 anyway at this scale — consistent with, but not proof of,
+permanent collinearity. **Re-check this at the 23,000+-indicator
+re-measurement below** — a platform spanning multiple ASNs would only show
+up once volume increases past what 9 small clusters can reveal.
+
+**Why merge, not drop or penalize:**
+- *Dropping `HostingProvider`* is not defensible: it is the literal feature
+  item 2.1's own motivating anecdote is about (the "four unrelated Vercel
+  URLs" case, now measured above as clusters 6–9). Removing it would strip
+  the paper's central example of the exact evidence it needs, and
+  `HostingProvider` is often more discriminating and more legible than `ASN`
+  alone (a brand name vs. an opaque number).
+- *A correlation penalty* (down-weight `R(C)` when features co-vary) requires
+  estimating a correlation from data, re-estimating as the graph grows, and
+  is harder to justify to a reviewer than removing the redundancy at the
+  source — it dampens double-counting instead of eliminating it.
+- *Merging* removes the redundancy structurally, not statistically: define a
+  single canonical `org` feature — `hosting_provider` when set (the more
+  legible identity, from either path), else `asn` (the only identity signal
+  available when neither path resolved a name). A cluster sharing "Vercel"
+  then contributes exactly one unit of shared-infrastructure evidence to
+  `R(C)`, not two, regardless of which code path populated the value. One
+  paragraph explains it in a methods/limitations section: *we observed
+  self-reported hosting-provider name and ASN to be collinear in our data
+  (verified 1:1 at N=9); we treat them as one organizational-identity
+  feature to avoid counting one fact as two pieces of corroborating
+  evidence.*
+- `Registrar` and `Nameserver` are not merged in — registration and hosting
+  are genuinely independent facts (a domain can be registered at GoDaddy and
+  hosted at Cloudflare), and nothing in the enrichment code ties them
+  together the way `asn`/`hosting_provider` are tied in path (2) above. Not
+  independently re-verified beyond that reasoning; worth a similar empirical
+  check if item 6's results look off in a way this doesn't explain.
+
+**Action for item 6:** build the weighted fingerprint's feature set from
+`{org (merged asn/hosting_provider), registrar, nameserver, resolved_ip}` —
+four feature classes, not five — rather than weighting `asn` and
+`hosting_provider` as separate dictionary entries the way
+`InfrastructureEngine.fingerprint()` (the retained Jaccard baseline) does.
+That baseline is deliberately left as-is per item 1.1's reasoning (a
+faithful "v1 method" comparison point), so this merge applies only to the
+new degree-weighted feature construction in item 6, not to the baseline.
 
 **2.2 The scoring function is broken in four ways.**
 `score(C) = 0.30·N + 0.30·D + 0.20·R + 0.20·E`
