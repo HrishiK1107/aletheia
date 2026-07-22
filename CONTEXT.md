@@ -287,21 +287,40 @@ an empty result.
 - **OpenPhish:** no auth (public feed), plain-text response, no JSON
   encoding to get wrong, `raise_for_status()` covers the only failure mode.
   No issue found.
-- **Systemic finding, not fixed (flagging for a decision):** `FeedRun`
-  (`feed_run_model.py`) and `update_feed_status`/`Feed.status`
-  (`feed_service.py`) exist specifically to record per-feed success/failure
-  and indicator counts, but **`collector_runner.py` never calls either
-  one.** Combined with `base_collector.collect()`'s blanket
-  `except Exception: log + return []`, every collector failure of any
-  kind — auth, encoding, network timeout, malformed response — collapses
-  into "0 indicators, one text log line," with nothing persisted and no
-  distinction from a genuinely quiet feed. The query_status fixes above
-  make the *log line* honest; nothing currently makes that failure
-  queryable or alertable. Wiring `FeedRun`/`update_feed_status` into
-  `collector_runner.py` would close this, but touches the collection
-  entrypoint rather than a single collector — not done here, pending a
-  decision on whether it's in scope now or belongs with item 7's
-  reporting infrastructure.
+
+**Paper limitations note:** both abuse.ch APIs (ThreatFox, MalwareBazaar —
+URLhaus too, by the same convention) return **HTTP 200 even when the request
+itself is invalid**, and signal the real failure only through a
+`query_status` field in the response body. A collector that only checks the
+HTTP status code (the obvious, default thing to do) will record a
+zero-indicator error run as a *successful* zero-indicator run — indistinguishable
+from a genuinely quiet collection cycle. This is a real operational
+finding about working with these feeds, not just an internal bug, and worth
+a line in the paper's limitations/threats-to-validity section: silent
+zero-yield failures are a plausible, easy-to-miss source of undercounted
+volume in any pipeline built on these APIs, including prior work that
+doesn't mention checking for it.
+
+**Done 2026-07-23: `FeedRun`/`update_feed_status` wired into
+`collector_runner.py`.** `BaseCollector.collect()` now sets
+`self.last_error` (still returns `[]` on failure either way, so its public
+contract is unchanged) instead of only logging and discarding the
+exception. `collector_runner.py` reads `last_error` after each `collect()`
+call to tell a real failure apart from a legitimate zero, and persists
+both: `FeedRun` (new `error` column added) as an immutable per-run history
+row (`feed_source_id`, `status`, `indicators_collected`, `error`,
+`completed_at`) via `record_feed_run()`, and `Feed`/`update_feed_status` as
+the latest-status snapshot, same as before. `FeedSource` rows are now
+created on first sight of a feed name (`get_or_create_feed_source()`).
+Verified live end-to-end via `run_collectors()` against all five real
+feeds: all five recorded `status="success"` in both tables with correct
+counts and `error=None`; a synthetic failing collector in tests correctly
+persists `status="failed"` with the real error string, and one failing
+collector no longer blocks the others from running or being recorded.
+This is what makes "collection reliability per feed across runs" a
+reportable result rather than something only visible in log lines —
+`FeedRun` rows accumulate every run, so success rate / failure reasons
+over time can be queried directly for the paper.
 
 **Combined live stats across all five feeds** (2026-07-23, default config):
 
@@ -317,10 +336,16 @@ an empty result.
 **Cross-feed value overlap:** only **4 distinct values** out of 22,618 total
 distinct values appeared in more than one feed (2 shared OTX/ThreatFox, 1
 MalwareBazaar/ThreatFox, 1 ThreatFox/URLhaus). Feeds are almost entirely
-disjoint at this snapshot — cross-feed corroboration as a confidence signal
-will have very little to work with unless volume increases substantially or
-overlap is measured after enrichment/normalization (e.g. same domain behind
-different URLs) rather than on raw value equality.
+disjoint at this snapshot. **This number understates true overlap and needs
+re-measuring in item 7, not now** — it was computed on raw string equality,
+which misses: the same domain appearing as a bare domain in one feed and
+embedded in a URL in another; the same host appearing as a plain IP in one
+feed and as an `ip:port` entry in another (ThreatFox alone had 983 of these,
+see item 2.4); and trivial formatting differences (scheme, trailing slash,
+case) that normalization already exists to handle
+(`normalization_service.py`) but that raw overlap counting bypassed. Redo
+this after enrichment/normalization, not on raw values, before concluding
+feeds are actually this disjoint.
 
 ---
 
@@ -332,9 +357,13 @@ different URLs) rather than on raw value equality.
    2026-07-23: added URLhaus as a fifth collector (labels OpenPhish's URL
    population), plus a collector-layer audit that found and fixed a real
    silent-failure bug shared by ThreatFox/MalwareBazaar (`query_status` never
-   checked) — see §5. Open, unfixed: `FeedRun`/`update_feed_status` exist but
-   are never called from `collector_runner.py`, so no collector failure is
-   persisted or queryable — needs a scoping decision.
+   checked) — see §5. Also **done 2026-07-23**: wired `FeedRun`/
+   `update_feed_status` into `collector_runner.py` — per-feed success,
+   failure reason, and counts are now persisted per run, not just logged.
+   Also fixed the same day: `model_registry.py`/`lifespan.py` were
+   committed without the actual model imports, so a fresh clone would have
+   hit the same silent table-registration failure CONTEXT.md already
+   documented once (§7) — see git history.
 3. Wire `CampaignDetector` in, retire Jaccard as a baseline — half day
 4. Dedup constraint — 1 hour
 5. Parallel enrichment + DNS cache — 1 day

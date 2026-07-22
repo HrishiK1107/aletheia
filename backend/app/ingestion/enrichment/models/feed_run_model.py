@@ -14,6 +14,8 @@ class FeedRun(Base):
 
     indicators_collected = Column(Integer, default=0, nullable=False)
 
+    error = Column(String, nullable=True)
+
     started_at = Column(DateTime(timezone=True), server_default=func.now())
 
     completed_at = Column(DateTime(timezone=True), nullable=True)
