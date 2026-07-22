@@ -6,6 +6,7 @@ def test_threatfox_parse():
     collector = ThreatFoxCollector()
 
     sample_data = {
+        "query_status": "ok",
         "data": [
             {"ioc": "1.2.3.4", "ioc_type": "ip"},
             {
@@ -78,9 +79,10 @@ def test_threatfox_parse_logs_unrecognized_ioc_types(caplog):
     collector = ThreatFoxCollector()
 
     sample_data = {
+        "query_status": "ok",
         "data": [
             {"ioc": "abcd1234", "ioc_type": "md5_hash"},
-        ]
+        ],
     }
 
     with caplog.at_level("WARNING"):
@@ -88,3 +90,25 @@ def test_threatfox_parse_logs_unrecognized_ioc_types(caplog):
 
     assert indicators[0]["type"] == "md5_hash"
     assert any("md5_hash" in record.message for record in caplog.records)
+
+
+def test_threatfox_parse_logs_and_returns_empty_on_query_error(caplog):
+    """
+    ThreatFox returns HTTP 200 with query_status != "ok" on request errors
+    (e.g. an out-of-range `days`), and "data" becomes a human-readable
+    string rather than a list. Iterating over that string used to crash
+    with a bare AttributeError instead of surfacing the real reason.
+    """
+
+    collector = ThreatFoxCollector()
+
+    sample_data = {
+        "query_status": "illegal_days",
+        "data": "Invalid value for parameter days (must be digit between 1 or 7)",
+    }
+
+    with caplog.at_level("WARNING"):
+        indicators = collector.parse(sample_data)
+
+    assert indicators == []
+    assert any("illegal_days" in record.message for record in caplog.records)

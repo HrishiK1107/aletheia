@@ -98,6 +98,14 @@ Same problem: MalwareBazaar returns `signature`; OTX pulse IDs are campaign grou
 Without these there is no evaluation and no paper.
 **Fix:** carry a `labels: dict` through the schema, persist into
 `raw_indicators.raw_payload` (already a JSON column), build the evaluation set from it.
+**Update 2026-07-23:** done for ThreatFox, OTX, MalwareBazaar. Added URLhaus as a
+fifth source specifically to label OpenPhish's URL population (OpenPhish itself
+carries no labels at all — 0% usable, see §5). URLhaus's label quality is weaker
+than the other three: its bulk endpoint has no clean, separate malware-family
+field — family names, when present, are unstructured strings mixed into `tags`
+alongside architecture/format noise (`ua-wget`, `opendir`, `censys`, `ascii` are
+not families). A clean per-payload `signature` exists only via the single-URL
+lookup endpoint, at a cost of one API call per URL (~900+/run) — not implemented.
 
 **1.3 Clustering is not connected components.**
 `InfrastructureEngine.detect_clusters` compares every candidate against the seed
@@ -188,7 +196,8 @@ intervals, more infrastructure overlap, and a dataset a reviewer takes seriously
 | ThreatFox | 373 | `{"query": "get_iocs"}` with no `days` param defaults to 1 day | ~~add `"days": 90` (API max)~~ **corrected 2026-07-22:** the live API rejects anything outside 1–7 (`"illegal_days"`); 90 was never valid. `days: 7` verified live → 4,019 IOCs. There is no larger single-call window — higher volume needs the same accumulate-over-time strategy as OpenPhish below. | 4,019/week (verified), not 20,000–40,000 |
 | OTX | 0 | hits `/indicators/export`, a bulk endpoint that times out at 20s | use `/api/v1/pulses/subscribed?limit=50&page=N` with pagination — **pulses are pre-grouped by campaign = free ground truth**. **Corrected 2026-07-22:** page size caps at 50 server-side regardless of requested `limit`; the account had 8,821 subscribed pulses (~220k indicators) at verification time, so pulled bounded by `otx_max_pages` (config, default 10 → 500 pulses). Also fixed: collector was reading `os.getenv("OTX_API_KEY")` directly, which is never populated (the key only exists in `.env`, loaded by `settings`, not by the process environment) — silently sent `X-OTX-API-KEY: None` on every request. | 18,056 from 500 pulses (verified, default config) |
 | MalwareBazaar | 0 | `get_recent` + `selector: "time"` returns the last hour, often empty | `selector: "100"`. **Corrected 2026-07-22:** the deeper bug was `json=payload` — the API requires form-encoded (`data=payload`); JSON body returned `"missing_query"` regardless of `selector`, which is what actually caused the empty results, not just the 1-hour window. | 100/call (verified), 61% with non-null `signature`, 19 families |
-| OpenPhish | 300 | free feed is capped at ~500 most recent, refreshes every 12h — hard ceiling | accumulate: poll every 12h over several days | 4,000+ over a week |
+| OpenPhish | 300 | free feed is capped at ~500 most recent, refreshes every 12h — hard ceiling | accumulate: poll every 12h over several days. **No fix needed** — the cap is a provider limit, not a bug. OpenPhish carries no labels at all (0% usable); URLhaus (below) closes that gap for the URL population. | 4,000+ over a week |
+| URLhaus | 0 (new) | didn't exist as a collector | added 2026-07-23: `GET /v1/urls/recent/`, labels = `threat_type`/`tags`/`reporter`/`date_added` | 935/pull (verified, ~3-day window per abuse.ch, cap 1,000) |
 
 **Done: ThreatFox `days: 7` (verified max) + labels captured.** Live `days=7` pull
 returned 4,019 IOCs, 100% with non-null `malware`, 81 distinct families. Top families:
@@ -235,13 +244,97 @@ or `get_siginfo` queried per known family name (not implemented — CONTEXT.md's
 original "query by signature for family-labelled batches" suggestion assumes
 a list of target families, which we don't have yet).
 
+**Done: URLhaus collector added** (`app/ingestion/collectors/urlhaus_collector.py`),
+registered in `feed_registry.py`. Live pull: 935 URLs, `threat` is uniformly
+`"malware_download"` (not a useful discriminator on its own), 95.9% have
+non-null `tags`. Sampling the non-arch tag values shows both real malware
+families (`Mozi` 280, `mirai` 199, `Tsunami` 62, `ClearFake` 26) and clearly
+non-family infrastructure/scanner tags (`ua-wget` 282, `opendir` 115, `censys`
+70, `ascii` 83, `botnetdomain` 23) mixed in the same list with no field
+separating them — see the 1.2 update above. **Not attempting to heuristically
+split family-vs-noise tags here** — that's exactly the kind of ad-hoc
+classifier this project is trying to avoid; raw `tags` is stored as-is and
+family extraction (if wanted) belongs in the eval harness (item 7), done
+transparently and reported as a method, not hidden in the collector.
+
+**Collector-layer audit (2026-07-23), all five collectors, three checks:**
+auth read from `settings` not `os.getenv`; request encoding matches what
+each API expects; no collector silently swallows an error that looks like
+an empty result.
+
+- **OTX** (already fixed in this session): was `os.getenv("OTX_API_KEY")`,
+  never populated since the key only lives in `.env` (loaded by `settings`,
+  not the process env) — now `settings.otx_api_key`. Encoding (GET + query
+  params) was already correct. Error handling: `raise_for_status()` on each
+  page surfaces HTTP failures clearly (e.g. 401) — no query_status-style
+  hidden-error convention on this API, so no further gap found.
+- **ThreatFox / MalwareBazaar — real bug found and fixed:** both abuse.ch
+  APIs return **HTTP 200 even on request errors**, signaling failure only
+  via a `query_status` field in the JSON body. Neither collector checked
+  it. ThreatFox's `data["data"]` becomes a *string* on error (confirmed:
+  `{"query_status": "illegal_days", "data": "Invalid value for parameter
+  days..."}`) — the old `if "data" not in data` guard didn't catch this
+  (the key *is* present), so `for item in data["data"]` iterated the
+  string's characters and crashed on the first `.get()` call. This is
+  exactly how the `days: 90` mistake earlier in this session surfaced: as
+  an opaque `AttributeError`, not a readable API error. MalwareBazaar's
+  error shape omits `data` entirely (confirmed for `unknown_selector` and
+  `missing_query`), so the old guard didn't crash, but it also logged
+  nothing — a real API failure looked identical to a quiet collection
+  cycle. Both now check `query_status == "ok"` before touching `data`, and
+  log a clear warning with the actual status/detail otherwise.
+- **URLhaus:** built with the same `query_status` check from the start.
+- **OpenPhish:** no auth (public feed), plain-text response, no JSON
+  encoding to get wrong, `raise_for_status()` covers the only failure mode.
+  No issue found.
+- **Systemic finding, not fixed (flagging for a decision):** `FeedRun`
+  (`feed_run_model.py`) and `update_feed_status`/`Feed.status`
+  (`feed_service.py`) exist specifically to record per-feed success/failure
+  and indicator counts, but **`collector_runner.py` never calls either
+  one.** Combined with `base_collector.collect()`'s blanket
+  `except Exception: log + return []`, every collector failure of any
+  kind — auth, encoding, network timeout, malformed response — collapses
+  into "0 indicators, one text log line," with nothing persisted and no
+  distinction from a genuinely quiet feed. The query_status fixes above
+  make the *log line* honest; nothing currently makes that failure
+  queryable or alertable. Wiring `FeedRun`/`update_feed_status` into
+  `collector_runner.py` would close this, but touches the collection
+  entrypoint rather than a single collector — not done here, pending a
+  decision on whether it's in scope now or belongs with item 7's
+  reporting infrastructure.
+
+**Combined live stats across all five feeds** (2026-07-23, default config):
+
+| Feed | Indicators | Usable-labelled | Distinct label classes |
+|---|---|---|---|
+| ThreatFox | 4,036 | 4,036 (100%) | 81 families (excl. `Unknown malware`) |
+| OTX | 18,056 | 18,056 (100%) | 489 pulses |
+| MalwareBazaar | 100 | 56 (56%) | 13 signatures (this pull) |
+| OpenPhish | 300 | 0 (0%) | none — no labels at all |
+| URLhaus | 935 | 897 (95.9% have tags; not pure family labels) | 105 distinct raw tag values |
+| **Total** | **23,427** | **23,045 (98.4%)** | |
+
+**Cross-feed value overlap:** only **4 distinct values** out of 22,618 total
+distinct values appeared in more than one feed (2 shared OTX/ThreatFox, 1
+MalwareBazaar/ThreatFox, 1 ThreatFox/URLhaus). Feeds are almost entirely
+disjoint at this snapshot — cross-feed corroboration as a confidence signal
+will have very little to work with unless volume increases substantially or
+overlap is measured after enrichment/normalization (e.g. same domain behind
+different URLs) rather than on raw value equality.
+
 ---
 
 ## 6. Work order — target one week
 
 1. ~~ThreatFox `days: 90`~~ ThreatFox `days: 7` (verified max) + capture labels —
    **done 2026-07-22**, see §5
-2. ~~Fix OTX and MalwareBazaar endpoints~~ **done 2026-07-22**, see §5
+2. ~~Fix OTX and MalwareBazaar endpoints~~ **done 2026-07-22**, see §5. Extended
+   2026-07-23: added URLhaus as a fifth collector (labels OpenPhish's URL
+   population), plus a collector-layer audit that found and fixed a real
+   silent-failure bug shared by ThreatFox/MalwareBazaar (`query_status` never
+   checked) — see §5. Open, unfixed: `FeedRun`/`update_feed_status` exist but
+   are never called from `collector_runner.py`, so no collector failure is
+   persisted or queryable — needs a scoping decision.
 3. Wire `CampaignDetector` in, retire Jaccard as a baseline — half day
 4. Dedup constraint — 1 hour
 5. Parallel enrichment + DNS cache — 1 day

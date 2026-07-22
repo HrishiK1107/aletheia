@@ -49,7 +49,15 @@ class ThreatFoxCollector(BaseCollector):
         indicators = []
         unrecognized_types = {}
 
-        if "data" not in data:
+        # ThreatFox returns HTTP 200 even on request errors (bad params,
+        # auth issues, ...), signaled only via query_status. On error,
+        # "data" is a human-readable string, not a list -- iterating over
+        # it silently produces garbage (or crashes) instead of a clear log.
+        if data.get("query_status") != "ok":
+            logger.warning(
+                f"threatfox query did not return ok: "
+                f"query_status={data.get('query_status')!r} detail={data.get('data')!r}"
+            )
             return indicators
 
         for item in data["data"]:
