@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from app.core.logging import get_logger
+from app.db import model_registry  # noqa: F401
 from app.db.base import Base
 from app.db.neo4j import driver
 from app.db.postgres import engine
