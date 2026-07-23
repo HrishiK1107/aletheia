@@ -9,9 +9,14 @@ class CampaignDetector:
     Algorithm parameters (from paper, Section 3.5)
     -----------------------------------------------
     d = 2   Maximum traversal depth through infrastructure nodes.
-            Depth 1 reaches IOCs connected via a single shared infra node
-            (e.g. IOC → IP).  Depth 2 reaches IOCs connected through two
-            infrastructure hops (e.g. IOC → IP → ASN).
+            The query's WHERE clause requires the far endpoint to itself be
+            a URL/Domain/IP node, so attribute-typed nodes (ASN,
+            HostingProvider, etc.) can only appear as an intermediate hop,
+            never as the final connected node. Depth 1 reaches IOCs directly
+            linked to another IOC-typed node (e.g. Domain -RESOLVES_TO_IP->
+            IP). Depth 2 additionally reaches IOCs that share exactly one
+            attribute node in common (e.g. two Domains REGISTERED_WITH the
+            same ASN).
     k = 3   Minimum cluster size.  Singleton and pair groupings are dropped
             as they are more likely to reflect coincidental co-hosting than
             coordinated campaign activity.
