@@ -36,6 +36,40 @@ def test_ari_matches_known_sklearn_value():
     assert abs(ari - 0.2424242424242424) < 1e-9
 
 
+def test_ari_degenerate_both_all_singletons_returns_one():
+    """
+    adjusted_rand_index()'s denom==0 branch, previously untested (audit
+    fix A3, CONTEXT.md audit-fixes entry). Every item is its own true
+    label AND its own predicted cluster: sum_comb_a = sum_comb_b = 0, so
+    max_index == expected == 0 and the formula's normal division would be
+    0/0. This is the exact shape of the already-flagged production case
+    (ThreatFox 6-10 size band, weighted, n_labelled=2: ARI=1.0000 despite
+    precision=recall=0.0000) -- confirms it's the degenerate branch
+    firing, not a bug in the main formula.
+    """
+    true_labels = {"a": "fam1", "b": "fam2"}
+    pred_labels = {"a": 0, "b": 1}
+
+    assert adjusted_rand_index(true_labels, pred_labels) == 1.0
+
+    precision, recall = pairwise_precision_recall(true_labels, pred_labels)
+    assert precision == 0.0
+    assert recall == 0.0
+
+
+def test_ari_degenerate_both_all_one_cluster_returns_one():
+    """
+    The other side of the denom==0 branch: every item shares the one
+    true label AND the one predicted cluster (sum_comb_a = sum_comb_b =
+    max possible = C(n,2), same degenerate max_index == expected shape
+    as the all-singletons case, but from the opposite extreme).
+    """
+    true_labels = {"a": "fam1", "b": "fam1", "c": "fam1"}
+    pred_labels = {"a": 0, "b": 0, "c": 0}
+
+    assert adjusted_rand_index(true_labels, pred_labels) == 1.0
+
+
 def test_pairwise_precision_recall_perfect():
     true_labels = {"a": "fam1", "b": "fam1", "c": "fam2"}
     pred_labels = {"a": 0, "b": 0, "c": 1}
