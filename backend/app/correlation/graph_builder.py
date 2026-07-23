@@ -155,6 +155,67 @@ class GraphBuilder:
                     session.run(query, domain=domain, nameserver=ns)
 
     # ------------------------------------------------
+    # IP Infrastructure (IP-type indicators' own enrichment)
+    # ------------------------------------------------
+
+    def create_ip_infrastructure_relationship(
+        self,
+        ip: str,
+        enrichment: IndicatorEnrichment,
+    ):
+        """
+        Wires an IP-type indicator's own ASN/hosting_provider enrichment
+        into the graph -- the gap found 2026-07-23 (CONTEXT.md item 2.9):
+        ingest_indicator()'s "ip" branch previously only MERGEd the bare
+        :IP node, never creating RESOLVES_TO_ASN/HOSTED_BY edges the way
+        create_domain_infrastructure_relationship() does for domains/URLs.
+        Confirmed graph-wide: zero such edges touched any of 8,120 :IP
+        nodes before this fix, for the entire history of the graph -- any
+        :IP node with nonzero degree had it purely incidentally, via some
+        unrelated domain's RESOLVES_TO_IP edge.
+
+        Only asn/hosting_provider, not the full domain set (registrar,
+        nameservers): build_enrichment_data()'s "ip" branch never
+        populates registrar/nameservers/resolved_ips for an IP-type
+        indicator (those require DNS/WHOIS on a domain, not applicable to
+        a bare IP), so there is nothing else to wire.
+        """
+        query = """
+        MATCH (i:IP {value:$ip})
+
+        FOREACH (_ IN CASE WHEN $hosting_provider IS NOT NULL THEN [1] ELSE [] END |
+            MERGE (hp:HostingProvider {name:$hosting_provider})
+            MERGE (i)-[:HOSTED_BY]->(hp)
+        )
+        """
+
+        with self.driver.session() as session:
+            session.run(
+                query,
+                ip=ip,
+                hosting_provider=enrichment.hosting_provider,
+            )
+
+        # asn is comma-separated when a lookup source reports more than one
+        # (item 2.3's pattern) -- one RESOLVES_TO_ASN edge per value, same
+        # split-and-loop as the domain path uses.
+        if enrichment.asn:
+            for asn in enrichment.asn.split(","):
+                asn = asn.strip()
+
+                if not asn:
+                    continue
+
+                query = """
+                MATCH (i:IP {value:$ip})
+                MERGE (asn:ASN {value:$asn})
+                MERGE (i)-[:RESOLVES_TO_ASN]->(asn)
+                """
+
+                with self.driver.session() as session:
+                    session.run(query, ip=ip, asn=asn)
+
+    # ------------------------------------------------
     # Domain → IP Pivot
     # ------------------------------------------------
 
@@ -244,6 +305,9 @@ class GraphBuilder:
 
                 with self.driver.session() as session:
                     session.run(query, ip=indicator.value)
+
+                if enrichment and (enrichment.asn or enrichment.hosting_provider):
+                    self.create_ip_infrastructure_relationship(indicator.value, enrichment)
 
         except Neo4jError as e:
             raise RuntimeError(f"Neo4j graph ingestion failed: {e}")
