@@ -47,7 +47,7 @@ def _canonical_key(value: str, indicator_type: str) -> str:
 
 def build_threatfox_labels(db: Session) -> dict[str, str]:
     """indicator value (canonical, matching Indicator.value) -> malware family, ThreatFox rows only."""
-    rows = db.query(RawIndicator).filter(RawIndicator.source == "threatfox").all()
+    rows = db.query(RawIndicator).filter(RawIndicator.source == "threatfox").order_by(RawIndicator.id).all()
 
     labels: dict[str, str] = {}
     for row in rows:
@@ -95,10 +95,13 @@ def build_otx_labels(db: Session, exclude_pulse_id: str | None = None) -> dict[s
     exclude_pulse_id: drop indicators belonging to this pulse -- for the
     with/without-outlier ARI comparison §5 flagged as an open decision.
     An indicator belonging to more than one pulse keeps whichever row the
-    query returns last; cross-pulse membership is rare enough (§5's overlap
-    analysis) not to warrant a multi-label scheme here.
+    query returns last, and rows are now fetched in a fixed `ORDER BY id`
+    so "last" is a stable, reproducible choice rather than whatever order
+    an unordered query happened to return this time (CONTEXT.md §6k).
+    Cross-pulse membership is rare enough (§5's overlap analysis) not to
+    warrant a multi-label scheme here.
     """
-    rows = db.query(RawIndicator).filter(RawIndicator.source == "otx").all()
+    rows = db.query(RawIndicator).filter(RawIndicator.source == "otx").order_by(RawIndicator.id).all()
 
     labels: dict[str, str] = {}
     for row in rows:

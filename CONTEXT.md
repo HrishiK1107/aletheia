@@ -3000,6 +3000,23 @@ instances" / "seven times") — a command (a "verify anyway, it's free"
 docstring re-run) that surfaced a real defect precisely because it wasn't
 skipped as obviously safe.
 
+**A2 (`ground_truth.py`: add `ORDER BY id` to `build_threatfox_labels()`
+and `build_otx_labels()`), applied and verified immediately after §6j's
+fix — the one change in the audit's fix list explicitly flagged as able
+to move numbers (up to 4 labels, from the 2 ThreatFox + 2 OTX genuinely
+conflicting collision keys documented in §6b/§6h). It didn't: all four
+flagged keys (`23.94.197.120`, `141.11.243.110`,
+`http://api.keensie.com:5198`, `cosmosmusic.com`) resolve to the same
+label before and after, and `evaluation_table.json`/`bfs_clusters.json`/
+both fingerprint dicts/the achievable-vs-actual table are byte-identical
+to the pre-A2 snapshot. `ground_truth_labels.json` differs only in JSON
+key *serialization* order (content confirmed equal by direct dict
+comparison) — the previously-unordered query happened to already return
+rows in ascending-id order, the same "accidentally stable, not
+guaranteed" pattern `jaccard_v1` hit in §6j, just here it happened to
+coincide with what the fix pins. Kept anyway: an accidental match today
+is not a guarantee tomorrow, and the fix is free.
+
 ---
 
 ## 7. Rules for this work
