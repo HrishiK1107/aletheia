@@ -20,6 +20,7 @@ from app.correlation.confidence_scorer import CampaignConfidenceScorer
 from app.correlation.infrastructure_engine import InfrastructureEngine
 from app.db.postgres import SessionLocal
 from app.evaluation.baselines import group_by_feature_prefix, random_baseline
+from app.evaluation.diagnostics import connectivity_threshold_sweep, label_infra_cohesion
 from app.evaluation.ground_truth import (
     build_otx_labels,
     build_threatfox_labels,
@@ -33,6 +34,11 @@ from app.evaluation.metrics import (
 )
 
 CONFIDENCE_THRESHOLD = 40  # CampaignConfidenceScorer.classify_confidence's medium/low boundary
+
+# Matches analysis/final/diagnose_ari.py's original ad hoc sweep (CONTEXT.md
+# §6d) -- same fingerprint choice (weighted) and threshold list, so this
+# wiring reproduces those numbers rather than silently picking new ones.
+DIAGNOSTIC_DEGREE_THRESHOLDS: list[float | None] = [1, 2, 3, 5, 10, 20, 50, 100, 500, None]
 
 
 def evaluate_method(name: str, clusters: list[list[str]], true_labels: dict) -> dict:
@@ -158,6 +164,25 @@ def main():
                 f"  {method_name:32s} n={r['n_clusters']:5d}  "
                 f"ARI={r['ari']:.4f}  P={r['precision']:.4f}  R={r['recall']:.4f}"
             )
+
+    print("\nComputing diagnostics (label/infrastructure cohesion, connectivity-degree-threshold sweep)...", flush=True)
+    results["diagnostics"] = {}
+    for gt_name, gt_labels in [
+        ("threatfox", threatfox_labels),
+        ("otx_with_outlier", otx_labels_with_outlier),
+        ("otx_without_outlier", otx_labels_no_outlier),
+    ]:
+        cohesion = label_infra_cohesion(gt_labels, fp_weighted, top_n=10)
+        sweep = connectivity_threshold_sweep(
+            fp_weighted, degrees, gt_labels, DIAGNOSTIC_DEGREE_THRESHOLDS
+        )
+        results["diagnostics"][gt_name] = {"label_infra_cohesion": cohesion, "connectivity_sweep": sweep}
+        best = max(sweep, key=lambda r: r["ari"])
+        print(
+            f"  {gt_name}: best connectivity-sweep ARI={best['ari']:.4f} "
+            f"at threshold={best['threshold']} (n_components={best['n_components']})",
+            flush=True,
+        )
 
     results["commodity_fp_rate"] = {
         "bfs_all_clusters": sum(commodity_flags_all) / len(bfs_clusters) if bfs_clusters else 0,

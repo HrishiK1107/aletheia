@@ -3019,6 +3019,192 @@ is not a guarantee tomorrow, and the fix is free.
 
 ---
 
+## 6k. Fix sequence — IN PROGRESS, interrupted 2026-07-23
+
+**(Numbered §6k, not §6j, because §6j above already covers the
+determinism-fix entry — this section is a resumability checkpoint for the
+overall audit fix-sequence task, written on interruption, not a new
+research finding.)**
+
+**Protocol in force for this entire fix sequence, restated so it survives
+the interruption:** capture a complete baseline snapshot before touching
+any code; apply the audit's fixes ONE AT A TIME; after each, re-run the
+same measurements and diff against the baseline (or the most recent
+verified snapshot) **programmatically, not by eye**; report "bit-identical"
+or list every value that moved, old vs new; **if anything moved, stop and
+report before applying the next fix** rather than batching. No fix may
+silently move a number in the §8 ledger — a documented defect is
+acceptable, a number that quietly changed is not.
+
+**Baseline snapshot:** `evaluation_runs/baseline_20260723T165406Z/`,
+captured from HEAD at commit `c077c46` (before any fix), committed in
+`861622b`. Every figure in it that overlapped a previously-confirmed
+number reproduced bit-for-bit at capture time. This is the reference
+snapshot; two further snapshots exist as intermediate checkpoints:
+`evaluation_runs/postfix_A1_and_determinism_20260723T172522Z/` (after the
+determinism fix, committed in `4f9859c`) and
+`evaluation_runs/postfix_A2_20260723T172942Z/` (after A2, committed in
+`8801322`) — each subsequent fix should diff against the most recent of
+these, not always against the original baseline.
+
+**Fix-by-fix status:**
+
+| fix | status | verified measurement-neutral? | commit |
+|---|---|---|---|
+| A1 (docstring, `campaign_detector.py`) | **DONE** | yes — bit-identical once the determinism defect below is accounted for | `2009f9f` |
+| Multi-membership + `PYTHONHASHSEED` determinism fix (found via A1's re-run, not on the original list) | **DONE** | yes, with disclosed exceptions — see below | `4f9859c` |
+| A2 (`ORDER BY id`, `ground_truth.py`) | **DONE** | yes — zero labels changed, zero numbers moved | `8801322` |
+| A3 (test for `adjusted_rand_index()`'s `denom==0` branch) | **DONE** | test-only, no source change | `275d2eb` |
+| B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **IN PROGRESS, uncommitted** | **not yet verified — blocked** | none |
+| B2 (decide fate of `commodity_fp_rate()`/`size_band()`) | **NOT STARTED** | — | — |
+| B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **NOT STARTED, blocked on same issue as B1** | — | — |
+| C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **NOT STARTED** | — | — |
+
+**B1's current state, exactly:** the code change itself is additive-only
+as instructed — two new imports
+(`connectivity_threshold_sweep`, `label_infra_cohesion` from
+`app.evaluation.diagnostics`), a `DIAGNOSTIC_DEGREE_THRESHOLDS` constant
+matching `analysis/final/diagnose_ari.py`'s original sweep
+(`[1, 2, 3, 5, 10, 20, 50, 100, 500, None]`, same `fp_weighted` +
+`degrees` choice, so this wiring is intended to reproduce the historical
+"0.2194"-class numbers from §6d rather than silently pick new ones), and
+a new `results["diagnostics"]` block computed per ground truth, inserted
+before the existing `results["commodity_fp_rate"]` block. No existing
+line was modified. **But this has not been run successfully even once**
+— `python -m app.evaluation.run_evaluation`, invoked from `backend/`
+with the project venv active, fails immediately:
+```
+Traceback (most recent call last):
+  File ".../backend/app/evaluation/run_evaluation.py", line 18, in <module>
+    from app.correlation.campaign_detector import CampaignDetector
+ModuleNotFoundError: No module named 'app'
+```
+This is a **top-level import failure at module load**, before B1's added
+code or even `main()` runs, so it is very likely a pre-existing
+environment/invocation defect unrelated to the B1 diff itself — all of
+this session's other DB-touching scripts worked around the same class of
+problem with an explicit `sys.path.insert(0, '.')`, which
+`run_evaluation.py` itself does not have. **Not yet root-caused or
+fixed.** Do not assume it's the same "wrong venv" defect from §6a
+(interpreter was verified active); more likely a missing
+`app/__init__.py`, a `-m`/cwd interaction, or a project install
+(`pip install -e .`) that other entrypoints implicitly rely on. B1's
+"verify existing outputs are unchanged" step cannot proceed until this is
+resolved and the entrypoint runs at all.
+
+**BFS: confirmed zero movement across every fix applied so far.** Checked
+explicitly, not assumed, after the determinism fix: every BFS row
+(weighted/unweighted, all-clusters/reported, all three ground truths) is
+byte-identical to the pre-fix baseline, matching the expectation that BFS
+clusters are non-overlapping by construction.
+
+**Multi-membership fix — full numeric impact, every cell that moved,
+old vs new (also summarized less completely in §6j above; this is the
+complete table for resumability):**
+
+| ground truth | method | metric | old | new |
+|---|---|---|---|---|
+| threatfox | jaccard_v1 | ari_full | 0.0513524407 | 0.0515746649 |
+| threatfox | jaccard_v1 | p_full | 0.9279514576 | 0.9282411057 |
+| threatfox | jaccard_v1 | r_full | 0.0320277536 | 0.0321670681 |
+| threatfox | jaccard_v1 | ari_scoped | 0.1113273649 | 0.1118005924 |
+| threatfox | jaccard_v1 | p_scoped | 0.9279514576 | 0.9282411057 |
+| threatfox | jaccard_v1 | r_scoped | 0.0744568255 | 0.0747806980 |
+| threatfox | jaccard_v1__reported | ari_full | 0.0408821990 | 0.0409247006 |
+| threatfox | jaccard_v1__reported | p_full | 0.9272243472 | 0.9272944773 |
+| threatfox | jaccard_v1__reported | r_full | 0.0253834562 | 0.0254098622 |
+| threatfox | jaccard_v1__reported | ari_scoped | 0.0890564611 | 0.0891478169 |
+| threatfox | jaccard_v1__reported | p_scoped | 0.9272243472 | 0.9272944773 |
+| threatfox | jaccard_v1__reported | r_scoped | 0.0590104317 | 0.0590718193 |
+| otx_with_outlier | jaccard_v1 | ari_full | 0.0106536757 | 0.0113829465 |
+| otx_with_outlier | jaccard_v1 | p_full | 0.5437135047 | 0.5569003874 |
+| otx_with_outlier | jaccard_v1 | r_full | 0.0062148624 | 0.0066184753 |
+| otx_with_outlier | jaccard_v1 | ari_scoped | 0.0072991816 | 0.0079277491 |
+| otx_with_outlier | jaccard_v1 | p_scoped | 0.5437135047 | 0.5569003874 |
+| otx_with_outlier | jaccard_v1 | r_scoped | 0.0067947393 | 0.0072360113 |
+| otx_with_outlier | jaccard_v1__reported | ari_full | 0.0084187901 | 0.0108131271 |
+| otx_with_outlier | jaccard_v1__reported | p_full | 0.5057377049 | 0.5596700698 |
+| otx_with_outlier | jaccard_v1__reported | r_full | 0.0049623312 | 0.0062789265 |
+| otx_with_outlier | jaccard_v1__reported | ari_scoped | 0.0054608414 | 0.0075540482 |
+| otx_with_outlier | jaccard_v1__reported | p_scoped | 0.5057377049 | 0.5596700698 |
+| otx_with_outlier | jaccard_v1__reported | r_scoped | 0.0054253408 | 0.0068647809 |
+| otx_with_outlier | group_by_resolved_ip | ari_full | 0.0025473572 | 0.0025549522 |
+| otx_with_outlier | group_by_resolved_ip | p_full | 0.8601825442 | 0.8589925606 |
+| otx_with_outlier | group_by_resolved_ip | r_full | 0.0013939714 | 0.0013983163 |
+| otx_with_outlier | group_by_resolved_ip | ari_scoped | 0.0021608148 | 0.0021663121 |
+| otx_with_outlier | group_by_resolved_ip | p_scoped | 0.8601825442 | 0.8589925606 |
+| otx_with_outlier | group_by_resolved_ip | r_scoped | 0.0015240357 | 0.0015287860 |
+| otx_with_outlier | group_by_resolved_ip__reported | ari_full | 0.0024720848 | 0.0024796805 |
+| otx_with_outlier | group_by_resolved_ip__reported | p_full | 0.8569755869 | 0.8557692308 |
+| otx_with_outlier | group_by_resolved_ip__reported | r_full | 0.0013532034 | 0.0013575483 |
+| otx_with_outlier | group_by_resolved_ip__reported | ari_scoped | 0.0020944539 | 0.0020999515 |
+| otx_with_outlier | group_by_resolved_ip__reported | p_scoped | 0.8569755869 | 0.8557692308 |
+| otx_with_outlier | group_by_resolved_ip__reported | r_scoped | 0.0014794638 | 0.0014842141 |
+| otx_without_outlier | jaccard_v1 | ari_full | 0.0561565893 | 0.0563063669 |
+| otx_without_outlier | jaccard_v1 | p_full | 0.3579122710 | 0.3583784811 |
+| otx_without_outlier | jaccard_v1 | r_full | 0.0312685372 | 0.0313544664 |
+| otx_without_outlier | jaccard_v1 | ari_scoped | 0.1771977093 | 0.1776324425 |
+| otx_without_outlier | jaccard_v1 | p_scoped | 0.3579122710 | 0.3583784811 |
+| otx_without_outlier | jaccard_v1 | r_scoped | 0.1245796452 | 0.1249220031 |
+| otx_without_outlier | jaccard_v1__reported | ari_full | 0.0377685525 | 0.0378240625 |
+| otx_without_outlier | jaccard_v1__reported | p_full | 0.2916949448 | 0.2918183931 |
+| otx_without_outlier | jaccard_v1__reported | r_full | 0.0208489253 | 0.0208808023 |
+| otx_without_outlier | jaccard_v1__reported | ari_scoped | 0.1223233045 | 0.1224845684 |
+| otx_without_outlier | jaccard_v1__reported | p_scoped | 0.2916949448 | 0.2918183931 |
+| otx_without_outlier | jaccard_v1__reported | r_scoped | 0.0830659812 | 0.0831929850 |
+| otx_without_outlier | group_by_resolved_ip | ari_full | 0.0341120492 | 0.0341193734 |
+| otx_without_outlier | group_by_resolved_ip | p_full | 0.9221971297 | 0.9216100153 |
+| otx_without_outlier | group_by_resolved_ip | r_full | 0.0175448079 | 0.0175489658 |
+| otx_without_outlier | group_by_resolved_ip | ari_scoped | 0.1277463813 | 0.1277674327 |
+| otx_without_outlier | group_by_resolved_ip | p_scoped | 0.9221971297 | 0.9216100153 |
+| otx_without_outlier | group_by_resolved_ip | r_scoped | 0.0699017654 | 0.0699183311 |
+| otx_without_outlier | group_by_resolved_ip__reported | ari_full | 0.0332768577 | 0.0332841984 |
+| otx_without_outlier | group_by_resolved_ip__reported | p_full | 0.9206443914 | 0.9200447094 |
+| otx_without_outlier | group_by_resolved_ip__reported | r_full | 0.0171082320 | 0.0171123899 |
+| otx_without_outlier | group_by_resolved_ip__reported | ari_scoped | 0.1247608797 | 0.1247821425 |
+| otx_without_outlier | group_by_resolved_ip__reported | p_scoped | 0.9206443914 | 0.9200447094 |
+| otx_without_outlier | group_by_resolved_ip__reported | r_scoped | 0.0681623660 | 0.0681789317 |
+
+No cell for any other method (`random_baseline`, `group_by_asn`,
+`group_by_hosting_provider`, any BFS row) moved at all — only
+`jaccard_v1` and `group_by_resolved_ip` have overlapping clusters, so
+only they were exposed to the defect.
+
+**Spine 4's ~1.7× ratio claims: re-checked, both hold.**
+- ThreatFox, BFS vs. next-best (`jaccard_v1`, reported/scoped): old
+  1.712×/1.729× (weighted/unweighted) → new **1.710×/1.727×**.
+- OTX-with-outlier, BFS vs. next-best (`group_by_hosting_provider`,
+  reported/scoped): old 1.713×/1.730× → new **1.713×/1.730×**, exactly
+  unchanged — that comparator has zero multi-membership.
+
+**OTX-without-outlier's contradiction ("`jaccard_v1` and
+`group_by_resolved_ip` both beat BFS"): shape unchanged, margin widens
+negligibly.** BFS weighted/unweighted scoped: 0.0874/0.0963 (unchanged).
+`jaccard_v1` scoped 0.1223→0.1225 (margin over BFS-weighted widens
+0.0349→0.0351), `group_by_resolved_ip` scoped 0.1248→0.1248 (margin
+0.0373→0.0374). **The "2 of 3 confirm, 1 contradicts" framing does not
+need restating.**
+
+**Next step, exactly, for whoever resumes this:** do not touch A1/A2/A3
+or the determinism fix again — they are done, committed, and verified.
+First, root-cause and fix the `ModuleNotFoundError` blocking
+`python -m app.evaluation.run_evaluation` (check for a missing
+`app/__init__.py`, whether other entrypoints rely on an editable install,
+or a `-m`/cwd interaction) — this is a prerequisite for B1's own
+verification, not a new audit item, so fixing it doesn't need a separate
+one-fix-at-a-time cycle, but DO re-run the full measurement suite and
+diff against `evaluation_runs/postfix_A2_20260723T172942Z/` once the
+entrypoint runs, to confirm B1's wiring changed nothing outside the new
+`results["diagnostics"]` key. Only after B1 is verified: commit it, then
+proceed to B2 (decide `commodity_fp_rate()`/`size_band()` — wire or
+delete, checking `analysis/` for importers first), then B3 (confirm the
+now-working entrypoint reproduces §8's numbers end to end), then C1 (the
+N+1 fix, flagged as highest-risk — verify by exact dict equality, not
+size). Same protocol throughout: one fix at a time, diff programmatically,
+stop and report on any movement.
+
+---
+
 ## 7. Rules for this work
 
 - **Persist every run.** The previous evaluation was lost because nothing was saved
