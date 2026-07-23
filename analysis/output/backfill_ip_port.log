@@ -1,0 +1,13 @@
+found 977 Indicator rows with type=ip:port
+existing plain-ip indicators: 225
+updated 498 rows to type=ip; 479 collisions with an existing plain-ip indicator (left as ip:port); 0 unparseable (left as ip:port)
+deleted 498 stale enrichment rows for updated indicators
+prep done in 0.1s, running enrichment batch...
+Traceback (most recent call last):
+  File [35m"/home/itzhrixhi/.claude/jobs/4923b6c2/tmp/backfill_ip_port.py"[0m, line [35m52[0m, in [35m<module>[0m
+    from app.workers.enrichment_worker import run_enrichment_batch
+  File [35m"/home/itzhrixhi/Documents/CyberProjects/aletheia/backend/app/workers/enrichment_worker.py"[0m, line [35m9[0m, in [35m<module>[0m
+    from app.ingestion.enrichment.asn_lookup import lookup_asn
+  File [35m"/home/itzhrixhi/Documents/CyberProjects/aletheia/backend/app/ingestion/enrichment/asn_lookup.py"[0m, line [35m5[0m, in [35m<module>[0m
+    import geoip2.database
+[1;35mModuleNotFoundError[0m: [35mNo module named 'geoip2'[0m

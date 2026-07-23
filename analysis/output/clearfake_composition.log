@@ -1,0 +1,21 @@
+loaded in 20.8s
+
+16 clusters touch >=1 js.clearfake member
+
+cluster size   clearfake members   clearfake %   non-clearfake members
+        1849                 295         16.0%                    1554
+        1073                  82          7.6%                     991
+        1054                 127         12.0%                     927
+         258                  12          4.7%                     246
+         231                  38         16.5%                     193
+         196                 124         63.3%                      72
+          98                  79         80.6%                      19
+          85                   1          1.2%                      84
+          58                   6         10.3%                      52
+          17                  12         70.6%                       5
+           8                   1         12.5%                       7
+           7                   1         14.3%                       6
+           5                   1         20.0%                       4
+           3                   1         33.3%                       2
+           3                   1         33.3%                       2
+           3                   1         33.3%                       2

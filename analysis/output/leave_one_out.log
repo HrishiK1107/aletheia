@@ -1,0 +1,30 @@
+loaded in 7.3s
+unrestricted components: 75, largest=10832
+
+baseline (all 4108 labels): ARI=0.2194 P=0.3610 R=0.2860
+
+=== leave-one-family-out ===
+  held out win.metastealer      (n= 997)  ARI=0.2931  delta=+0.0736
+  held out js.clearfake         (n= 908)  ARI=0.0302  delta=-0.1892
+  held out unknown              (n= 662)  ARI=0.2905  delta=+0.0711
+  held out win.cobalt_strike    (n= 257)  ARI=0.2107  delta=-0.0088
+  held out win.vidar            (n= 247)  ARI=0.2380  delta=+0.0186
+  held out win.adaptix_c2       (n= 144)  ARI=0.2131  delta=-0.0063
+  held out js.kongtuke          (n= 121)  ARI=0.2469  delta=+0.0274
+  held out win.asyncrat         (n=  69)  ARI=0.2163  delta=-0.0031
+  held out js.iclickfix         (n=  58)  ARI=0.2315  delta=+0.0120
+  held out elf.aisuru           (n=  54)  ARI=0.2167  delta=-0.0028
+
+=== solo (evaluated using only that family's members) ===
+  solo win.metastealer      (n= 997)  ARI=0.0000  P=1.0000  R=0.0000
+  solo js.clearfake         (n= 908)  ARI=0.0000  P=1.0000  R=0.7416
+  solo unknown              (n= 662)  ARI=0.0000  P=1.0000  R=0.1377
+  solo win.cobalt_strike    (n= 257)  ARI=0.0000  P=0.0000  R=0.0000
+  solo win.vidar            (n= 247)  ARI=0.0000  P=1.0000  R=0.1319
+  solo win.adaptix_c2       (n= 144)  ARI=0.0000  P=0.0000  R=0.0000
+  solo js.kongtuke          (n= 121)  ARI=1.0000  P=1.0000  R=1.0000
+  solo win.asyncrat         (n=  69)  ARI=0.0000  P=0.0000  R=0.0000
+  solo js.iclickfix         (n=  58)  ARI=0.0000  P=1.0000  R=0.7114
+  solo elf.aisuru           (n=  54)  ARI=0.0000  P=0.0000  R=0.0000
+
+total runtime: 7.4s

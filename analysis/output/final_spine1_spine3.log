@@ -1,0 +1,44 @@
+clusters=1334, setup done in 59.9s
+
+=== TASK 1: Spine 1 baseline (commodity hub bridging), current 1334-cluster set ===
+clusters touching a recurring hub value: 441/1334 (33.1%)
+
+top HostingProvider bridge counts:
+  hosting:Cloudflare, Inc.                 70
+  hosting:Hostinger International Limited  32
+  hosting:IONOS SE                         31
+  hosting:Amazon.com, Inc.                 18
+  hosting:Unified Layer                    16
+  hosting:WHG Hosting Services Ltd         14
+  hosting:Network Solutions, LLC           11
+  hosting:DigitalOcean, LLC                10
+  hosting:OVH SAS                          9
+  hosting:Oracle Corporation               9
+
+top ASN bridge counts:
+  asn:AS13335                              76
+  asn:AS47583                              31
+  asn:AS8560                               31
+  asn:AS16509                              19
+  asn:AS46606                              16
+  asn:AS19871                              11
+  asn:AS14061                              10
+  asn:AS16276                              9
+  asn:AS31898                              9
+  asn:AS209242                             9
+
+clusters with ASN shared but not HostingProvider (or vice versa): 4/1334
+ASN values mapping to >1 HostingProvider: 4/741
+HostingProvider values mapping to >1 ASN: 34/693
+
+=== TASK 2: Spine 3 R(C) gradient, current 1334-cluster set ===
+  low      n= 219 (16.4%)  R_before=0.6856  R_after=0.2613  drop=61.9%
+  medium   n= 229 (17.2%)  R_before=0.6185  R_after=0.1694  drop=72.6%
+  high     n= 299 (22.4%)  R_before=0.6642  R_after=0.1309  drop=80.3%
+  none     n= 587 (44.0%)  R_before=0.0000  R_after=0.0000  drop=0.0%
+
+=== TASK 3: the largest cluster, current graph ===
+largest cluster size: 1849
+members with asn:AS13335: 1743/1849 (94.3%)
+
+total runtime: 60.1s

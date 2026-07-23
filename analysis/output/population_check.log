@@ -1,0 +1,19 @@
+setup done in 43.0s
+
+=== Population comparison ===
+Postgres connectivity population (achievable side): 11600
+Neo4j BFS population (actual side, all clusters): 13825
+Neo4j BFS population (actual side, reported/weighted): 8456
+intersection (postgres ∩ neo4j-all): 11002
+only in Postgres connectivity, not in any BFS cluster: 598
+only in BFS clusters, not in Postgres connectivity (>=2): 2823
+
+=== Per-family: full achievable/actual vs. intersection-restricted ===
+family                achievable(full)  actual(full)   |   achievable(int)   actual(int)
+unknown                         0.7822        0.0428   |            0.8878        0.0589   (n_int=450/528)
+js.clearfake                    0.7435        0.1405   |            0.9974        0.1885   (n_int=784/908)
+win.cobalt_strike               0.6695        0.1186   |            0.8319        0.1474   (n_int=79/88)
+win.vidar                       0.5973        0.0224   |            0.9635        0.0516   (n_int=163/247)
+win.adaptix_c2                  0.4941        0.0287   |            0.6768        0.0414   (n_int=45/54)
+
+total runtime: 43.1s

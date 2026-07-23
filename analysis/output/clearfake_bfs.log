@@ -1,0 +1,22 @@
+js.clearfake labelled members: 908
+BFS: 1396 raw clusters, loaded in 42.2s
+
+-- raw BFS, all 1,396 clusters (d=2,k=3, no confidence filter) --
+  clusters touching >=1 js.clearfake member: 16
+  js.clearfake members captured in those clusters: 782 / 908
+  cluster sizes (touching only), largest 10: [1849, 1073, 1054, 258, 231, 196, 98, 85, 58, 17]
+  ARI=0.0000  P=1.0000  R=0.1609
+
+-- BFS reported-only, UNWEIGHTED (confidence>=40) --
+  clusters touching >=1 js.clearfake member: 10
+  js.clearfake members captured in those clusters: 605 / 908
+  cluster sizes (touching only), largest 10: [1849, 1073, 1054, 258, 98, 85, 58, 8, 3, 3]
+  ARI=0.0000  P=1.0000  R=0.1405
+
+-- BFS reported-only, WEIGHTED (confidence>=40) --
+  clusters touching >=1 js.clearfake member: 8
+  js.clearfake members captured in those clusters: 603 / 908
+  cluster sizes (touching only), largest 10: [1849, 1073, 1054, 258, 98, 85, 58, 3]
+  ARI=0.0000  P=1.0000  R=0.1405
+
+total runtime: 42.3s

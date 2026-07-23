@@ -1,0 +1,26 @@
+labels: 3628
+clustering+fingerprints done in 68.8s (1334 BFS clusters)
+scope condition: 2169/3628 labelled indicators carry >=1 enriched attribute (59.8%)
+
+confidence-filtering done in 68.9s
+
+=== ALL CLUSTERS (unfiltered) -- full-population vs. scoped ARI ===
+method                             n   ARI(full)  ARI(scoped)   P(full)   R(full)
+random_baseline                 1334     -0.0000      -0.0001    0.1642    0.0007
+group_by_asn                     290      0.0535       0.0846    0.3145    0.0648
+group_by_resolved_ip             579      0.0107       0.0238    0.9969    0.0065
+group_by_hosting_provider        277      0.0534       0.0843    0.3140    0.0648
+jaccard_v1                      1331      0.0514       0.1113    0.9280    0.0320
+bfs_all_clusters                1334      0.0904       0.1776    0.5685    0.0692
+
+=== REPORTED (confidence>=40, unweighted scoring except BFS-weighted row) -- full-population vs. scoped ARI ===
+method                             n   ARI(full)  ARI(scoped)   P(full)   R(full)
+random_baseline__reported       1334     -0.0000      -0.0001    0.1642    0.0007
+group_by_asn__reported           275      0.0535       0.0846    0.3145    0.0648
+group_by_resolved_ip__reported   549      0.0105       0.0233    0.9968    0.0063
+group_by_hosting_provider__reported   260      0.0534       0.0843    0.3140    0.0648
+jaccard_v1__reported            1189      0.0409       0.0891    0.9272    0.0254
+bfs_all_clusters__reported       673      0.0785       0.1540    0.5387    0.0612
+bfs_weighted__reported           333      0.0777       0.1525    0.5371    0.0606
+
+total runtime: 69.0s

@@ -1,0 +1,34 @@
+clusters=1334, BFS done in 23.2s
+total (cluster_idx, member) pairs: 13825
+query returned 28024 rows in 138.1s
+
+=== Spine 1, Neo4j-graph-based (matching original methodology), 1334 clusters ===
+clusters touching a recurring hub value: 838/1334 (62.8%)
+
+top HostingProvider bridge counts:
+  Cloudflare, Inc.                         223
+  Hostinger International Limited          130
+  Amazon.com, Inc.                         47
+  IONOS SE                                 33
+  Cloudflare Pages                         32
+  WHG Hosting Services Ltd                 17
+  Unified Layer                            16
+  Network Solutions, LLC                   13
+  Oracle Corporation                       11
+  Google LLC                               11
+
+top ASN bridge counts:
+  AS13335                                  255
+  AS47583                                  130
+  AS16509                                  41
+  AS8560                                   33
+  AS46606                                  16
+  AS14618                                  13
+  AS19871                                  13
+  AS63949                                  11
+  AS31898                                  11
+  AS16276                                  11
+
+clusters with ASN shared but not HostingProvider (or vice versa): 0/1334
+
+total runtime: 161.3s

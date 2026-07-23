@@ -1,0 +1,29 @@
+labels+fingerprints loaded in 6.8s
+achievable ceilings (unchanged, Postgres-only): {'unknown': 0.7822, 'win.cobalt_strike': 0.6695, 'js.clearfake': 0.7435, 'win.vidar': 0.5973, 'win.adaptix_c2': 0.4941}
+BFS d=2,k=3 (rebuilt graph): 1334 clusters
+
+=== PART A: ThreatFox ARI, rebuilt graph ===
+  bfs_all_clusters                 n= 1334  ARI=0.0904  P=0.5685  R=0.0692
+  bfs_reported_unweighted          n=  673  ARI=0.0785  P=0.5387  R=0.0612
+  bfs_reported_weighted            n=  333  ARI=0.0777  P=0.5371  R=0.0606
+  weighted-unweighted delta: -0.0008
+
+=== PART B: achievable vs actual (BFS reported, weighted), rebuilt graph ===
+  unknown              n= 528  achievable=0.7822  actual=0.0428  gap=+0.7394
+  win.cobalt_strike    n=  88  achievable=0.6695  actual=0.1186  gap=+0.5509
+  js.clearfake         n= 908  achievable=0.7435  actual=0.1405  gap=+0.6030
+  win.vidar            n= 247  achievable=0.5973  actual=0.0224  gap=+0.5749
+  win.adaptix_c2       n=  54  achievable=0.4941  actual=0.0287  gap=+0.4654
+
+=== PART C: d/k sweep, raw BFS, rebuilt graph ===
+d=1 k=2  n= 6483  elapsed=0.6s  unknown=0.0019  cobalt_strike=0.0000  clearfake=0.0002  vidar=0.0054  adaptix_c2=0.0000
+d=1 k=3  n= 3180  elapsed=0.3s  unknown=0.0036  cobalt_strike=0.0000  clearfake=0.0002  vidar=0.0040  adaptix_c2=0.0000
+d=1 k=5  n=  306  elapsed=0.1s  unknown=0.0037  cobalt_strike=0.0000  clearfake=0.0001  vidar=0.0039  adaptix_c2=0.0000
+d=2 k=2  n= 4544  elapsed=25.1s  unknown=0.0442  cobalt_strike=0.1217  clearfake=0.1609  vidar=0.0333  adaptix_c2=0.0468
+d=2 k=3  n= 1334  elapsed=19.0s  unknown=0.0442  cobalt_strike=0.1217  clearfake=0.1609  vidar=0.0333  adaptix_c2=0.0468
+d=2 k=5  n=  419  elapsed=27.0s  unknown=0.0433  cobalt_strike=0.1212  clearfake=0.1609  vidar=0.0334  adaptix_c2=0.0440
+d=3 k=2  n= 1697  elapsed=82.0s  unknown=0.1049  cobalt_strike=0.1217  clearfake=0.1609  vidar=0.0770  adaptix_c2=0.0468
+d=3 k=3  n=  782  elapsed=87.3s  unknown=0.1049  cobalt_strike=0.1217  clearfake=0.1609  vidar=0.0770  adaptix_c2=0.0468
+d=3 k=5  n=  356  elapsed=88.8s  unknown=0.1048  cobalt_strike=0.1212  clearfake=0.1609  vidar=0.0770  adaptix_c2=0.0440
+
+total runtime: 363.4s

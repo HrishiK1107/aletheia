@@ -1,0 +1,11 @@
+d=1 k=2  n_clusters= 6483  elapsed=1.4s  unknown=0.0019  cobalt_strike=0.0000  clearfake=0.0002  vidar=0.0054  adaptix_c2=0.0000
+d=1 k=3  n_clusters= 3180  elapsed=0.4s  unknown=0.0036  cobalt_strike=0.0000  clearfake=0.0002  vidar=0.0040  adaptix_c2=0.0000
+d=1 k=5  n_clusters=  306  elapsed=0.2s  unknown=0.0037  cobalt_strike=0.0000  clearfake=0.0001  vidar=0.0039  adaptix_c2=0.0000
+d=2 k=2  n_clusters= 4938  elapsed=21.8s  unknown=0.0429  cobalt_strike=0.0000  clearfake=0.1609  vidar=0.0306  adaptix_c2=0.0000
+d=2 k=3  n_clusters= 1396  elapsed=22.4s  unknown=0.0429  cobalt_strike=0.0000  clearfake=0.1609  vidar=0.0300  adaptix_c2=0.0000
+d=2 k=5  n_clusters=  407  elapsed=22.4s  unknown=0.0420  cobalt_strike=0.0000  clearfake=0.1609  vidar=0.0301  adaptix_c2=0.0000
+d=3 k=2  n_clusters= 1684  elapsed=86.2s  unknown=0.1035  cobalt_strike=0.0000  clearfake=0.1609  vidar=0.0743  adaptix_c2=0.0000
+d=3 k=3  n_clusters=  744  elapsed=85.7s  unknown=0.1035  cobalt_strike=0.0000  clearfake=0.1609  vidar=0.0736  adaptix_c2=0.0000
+d=3 k=5  n_clusters=  334  elapsed=91.4s  unknown=0.1034  cobalt_strike=0.0000  clearfake=0.1609  vidar=0.0736  adaptix_c2=0.0000
+
+total runtime: 332.3s

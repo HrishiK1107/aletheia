@@ -1,0 +1,78 @@
+loading labels + fingerprints...
+  done in 8.2s
+
+=== PART 1: ThreatFox top-10 families, in-family infra cohesion ===
+  win.metastealer      n= 997  enriched=  0.2%  cohesion_among_enriched=100.0%  cohesion_overall=  0.2%
+  js.clearfake         n= 908  enriched= 86.2%  cohesion_among_enriched= 99.1%  cohesion_overall= 85.5%
+  unknown              n= 662  enriched= 37.5%  cohesion_among_enriched= 94.4%  cohesion_overall= 35.3%
+  win.cobalt_strike    n= 257  enriched=  0.0%  cohesion_among_enriched=  0.0%  cohesion_overall=  0.0%
+  win.vidar            n= 247  enriched= 37.7%  cohesion_among_enriched= 91.4%  cohesion_overall= 34.4%
+  win.adaptix_c2       n= 144  enriched=  0.0%  cohesion_among_enriched=  0.0%  cohesion_overall=  0.0%
+  js.kongtuke          n= 121  enriched=100.0%  cohesion_among_enriched=100.0%  cohesion_overall=100.0%
+  win.asyncrat         n=  69  enriched=  2.9%  cohesion_among_enriched=  0.0%  cohesion_overall=  0.0%
+  js.iclickfix         n=  58  enriched= 93.1%  cohesion_among_enriched= 63.0%  cohesion_overall= 58.6%
+  elf.aisuru           n=  54  enriched=  0.0%  cohesion_among_enriched=  0.0%  cohesion_overall=  0.0%
+
+=== PART 2: OTX top-10 pulses (incl. outlier), in-pulse infra cohesion ===
+  6a0d971608b49dfc89267777     n= 4497  enriched= 84.9%  cohesion_among_enriched= 98.0%  cohesion_overall= 83.1% <-- outlier pulse
+  6a512b20f12a5adf6bf2c1b3     n=  577  enriched= 42.5%  cohesion_among_enriched= 89.4%  cohesion_overall= 38.0%
+  69e8c2ea19756cc9d2899dea     n=  566  enriched=  1.4%  cohesion_among_enriched= 87.5%  cohesion_overall=  1.2%
+  6a2c7a1d041f52879495ac3e     n=  240  enriched= 26.7%  cohesion_among_enriched= 96.9%  cohesion_overall= 25.8%
+  6a2ac312c98386d398eab284     n=  226  enriched= 12.4%  cohesion_among_enriched= 75.0%  cohesion_overall=  9.3%
+  6a3447ad5cdebd92116d1c01     n=  211  enriched= 88.2%  cohesion_among_enriched=100.0%  cohesion_overall= 88.2%
+  6a57b1d61379f5309f46131d     n=  211  enriched= 98.6%  cohesion_among_enriched= 99.5%  cohesion_overall= 98.1%
+  69c59f7c558966eff3015d95     n=  172  enriched= 17.4%  cohesion_among_enriched= 86.7%  cohesion_overall= 15.1%
+  6a4d89812b006d2839a4dc49     n=  165  enriched=  2.4%  cohesion_among_enriched=100.0%  cohesion_overall=  2.4%
+  6a42d46fe5317e409adbaaa3     n=  141  enriched= 74.5%  cohesion_among_enriched=100.0%  cohesion_overall= 74.5%
+
+=== PART 2b: OTX top-10 pulses EXCLUDING outlier ===
+  6a512b20f12a5adf6bf2c1b3     n=  577  enriched= 42.5%  cohesion_among_enriched= 89.4%  cohesion_overall= 38.0%
+  69e8c2ea19756cc9d2899dea     n=  566  enriched=  1.4%  cohesion_among_enriched= 87.5%  cohesion_overall=  1.2%
+  6a2c7a1d041f52879495ac3e     n=  240  enriched= 26.7%  cohesion_among_enriched= 96.9%  cohesion_overall= 25.8%
+  6a2ac312c98386d398eab284     n=  226  enriched= 12.4%  cohesion_among_enriched= 75.0%  cohesion_overall=  9.3%
+  6a3447ad5cdebd92116d1c01     n=  211  enriched= 88.2%  cohesion_among_enriched=100.0%  cohesion_overall= 88.2%
+  6a57b1d61379f5309f46131d     n=  211  enriched= 98.6%  cohesion_among_enriched= 99.5%  cohesion_overall= 98.1%
+  69c59f7c558966eff3015d95     n=  172  enriched= 17.4%  cohesion_among_enriched= 86.7%  cohesion_overall= 15.1%
+  6a4d89812b006d2839a4dc49     n=  165  enriched=  2.4%  cohesion_among_enriched=100.0%  cohesion_overall=  2.4%
+  6a42d46fe5317e409adbaaa3     n=  141  enriched= 74.5%  cohesion_among_enriched=100.0%  cohesion_overall= 74.5%
+  69fb97e43f09a3b9ae3a39b9     n=  140  enriched= 83.6%  cohesion_among_enriched= 98.3%  cohesion_overall= 82.1%
+
+=== PART 3: theoretical ceiling -- connectivity sweep by degree threshold ===
+
+-- vs ThreatFox --
+  threshold=1              n_components=     0  largest=     0  ARI=0.0000  P=0.0000  R=0.0000
+  threshold=2              n_components=   974  largest=    93  ARI=0.0000  P=0.8800  R=0.0000
+  threshold=3              n_components=  1104  largest=   170  ARI=0.0001  P=0.7901  R=0.0001
+  threshold=5              n_components=  1018  largest=   844  ARI=0.0005  P=0.2735  R=0.0005
+  threshold=10             n_components=   784  largest=  2496  ARI=0.0025  P=0.2052  R=0.0043
+  threshold=20             n_components=   586  largest=  4110  ARI=0.0051  P=0.1971  R=0.0099
+  threshold=50             n_components=   417  largest=  5770  ARI=0.0091  P=0.1990  R=0.0176
+  threshold=100            n_components=   342  largest=  6648  ARI=0.0097  P=0.1858  R=0.0239
+  threshold=500            n_components=   120  largest=  9667  ARI=0.1282  P=0.3115  R=0.1645
+  threshold=unrestricted   n_components=    75  largest= 10832  ARI=0.2194  P=0.3610  R=0.2860
+
+-- vs OTX (with outlier) --
+  threshold=1              n_components=     0  largest=     0  ARI=0.0000  P=0.0000  R=0.0000
+  threshold=2              n_components=   974  largest=    93  ARI=0.0007  P=0.9451  R=0.0004
+  threshold=3              n_components=  1104  largest=   170  ARI=0.0022  P=0.9194  R=0.0012
+  threshold=5              n_components=  1018  largest=   844  ARI=0.0083  P=0.2748  R=0.0058
+  threshold=10             n_components=   784  largest=  2496  ARI=0.0632  P=0.2924  R=0.0479
+  threshold=20             n_components=   586  largest=  4110  ARI=0.1709  P=0.3378  R=0.1503
+  threshold=50             n_components=   417  largest=  5770  ARI=0.2248  P=0.2947  R=0.2631
+  threshold=100            n_components=   342  largest=  6648  ARI=0.2370  P=0.2756  R=0.3216
+  threshold=500            n_components=   120  largest=  9667  ARI=0.2663  P=0.2423  R=0.5788
+  threshold=unrestricted   n_components=    75  largest= 10832  ARI=0.2691  P=0.2367  R=0.6498
+
+-- vs OTX (without outlier) --
+  threshold=1              n_components=     0  largest=     0  ARI=0.0000  P=0.0000  R=0.0000
+  threshold=2              n_components=   974  largest=    93  ARI=0.0005  P=0.7113  R=0.0002
+  threshold=3              n_components=  1104  largest=   170  ARI=0.0010  P=0.5320  R=0.0005
+  threshold=5              n_components=  1018  largest=   844  ARI=0.0085  P=0.0595  R=0.0054
+  threshold=10             n_components=   784  largest=  2496  ARI=0.0134  P=0.0281  R=0.0149
+  threshold=20             n_components=   586  largest=  4110  ARI=0.0120  P=0.0199  R=0.0235
+  threshold=50             n_components=   417  largest=  5770  ARI=0.0127  P=0.0174  R=0.0492
+  threshold=100            n_components=   342  largest=  6648  ARI=0.0191  P=0.0207  R=0.0830
+  threshold=500            n_components=   120  largest=  9667  ARI=0.0152  P=0.0172  R=0.1608
+  threshold=unrestricted   n_components=    75  largest= 10832  ARI=0.0139  P=0.0163  R=0.1797
+
+total runtime: 10.1s
