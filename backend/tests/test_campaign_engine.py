@@ -12,7 +12,7 @@ def test_campaign_engine_detects_clusters():
     engine.campaign_detector.find_connected_clusters = MagicMock(
         return_value=[["evil.com", "evil2.com"]]
     )
-    engine.infrastructure_engine.build_fingerprints = MagicMock(return_value={})
+    engine.infrastructure_engine.build_weighted_fingerprints = MagicMock(return_value={})
 
     campaigns = engine.detect_campaigns(db)
 
@@ -34,7 +34,7 @@ def test_campaign_engine_uses_bfs_detector_not_jaccard():
     db = MagicMock()
 
     engine.campaign_detector.find_connected_clusters = MagicMock(return_value=[])
-    engine.infrastructure_engine.build_fingerprints = MagicMock(return_value={})
+    engine.infrastructure_engine.build_weighted_fingerprints = MagicMock(return_value={})
     engine.infrastructure_engine.detect_clusters = MagicMock(
         side_effect=AssertionError("Jaccard detect_clusters should not be called")
     )
@@ -49,7 +49,9 @@ def test_campaign_engine_scoring_uses_postgres_fingerprints():
     """
     Fingerprints (for R(C)/E(C)) still come from InfrastructureEngine's
     Postgres enrichment data regardless of which algorithm produced the
-    clusters -- clustering and scoring are independent.
+    clusters -- clustering and scoring are independent. Item 6: the live
+    engine uses the degree-weighted fingerprint builder, not the unmerged
+    one that feeds the retained Jaccard baseline.
     """
 
     engine = CampaignEngine()
@@ -59,11 +61,11 @@ def test_campaign_engine_scoring_uses_postgres_fingerprints():
     engine.campaign_detector.find_connected_clusters = MagicMock(
         return_value=[["evil.com", "evil2.com"]]
     )
-    engine.infrastructure_engine.build_fingerprints = MagicMock(
-        return_value={"evil.com": {"asn:1234"}, "evil2.com": {"asn:1234"}}
+    engine.infrastructure_engine.build_weighted_fingerprints = MagicMock(
+        return_value={"evil.com": {"org:1234"}, "evil2.com": {"org:1234"}}
     )
 
     campaigns = engine.detect_campaigns(db)
 
-    engine.infrastructure_engine.build_fingerprints.assert_called_once_with(db)
+    engine.infrastructure_engine.build_weighted_fingerprints.assert_called_once_with(db)
     assert campaigns[0]["size"] == 2

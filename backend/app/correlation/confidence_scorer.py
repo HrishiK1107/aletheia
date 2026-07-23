@@ -72,6 +72,35 @@ class CampaignConfidenceScorer:
         shared = sum(1 for count in feature_counts.values() if count >= 2)
         return min(shared / len(indicators), 1.0)
 
+    def _infrastructure_reuse_ratio_weighted(
+        self, indicators: list, fingerprints: dict, degrees: dict
+    ) -> float:
+        """
+        R(C), degree-weighted (CONTEXT.md item 6 / 2.2): a feature shared by
+        >=2 cluster members contributes 1/degree(feature) instead of a flat
+        1, where degree is the feature's GLOBAL frequency
+        (InfrastructureEngine.compute_feature_degrees) -- not its in-cluster
+        count. A nameserver shared by 3 domains total across the whole run
+        contributes ~0.33; an ASN shared by 2,048 (the Cloudflare hub
+        documented in CONTEXT.md item 2.1) contributes ~0.0005. This is the
+        self-suppression mechanism item 2.1 describes -- no blocklist, the
+        commodity feature just stops mattering to the score.
+        """
+        if not fingerprints or not indicators:
+            return 0.0
+
+        in_cluster_counts: Counter = Counter()
+        for ind in indicators:
+            for feat in fingerprints.get(ind, set()):
+                in_cluster_counts[feat] += 1
+
+        weighted_sum = sum(
+            1.0 / degrees.get(feat, 1)
+            for feat, count in in_cluster_counts.items()
+            if count >= 2
+        )
+        return min(weighted_sum / len(indicators), 1.0)
+
     def _enrichment_completeness(self, indicators: list, fingerprints: dict) -> float:
         """E(C): fraction of cluster members with ≥1 enrichment attribute resolved."""
         if not fingerprints or not indicators:
@@ -88,6 +117,7 @@ class CampaignConfidenceScorer:
         campaign: dict,
         fingerprints: dict | None = None,
         max_cluster_size: int | None = None,
+        degrees: dict | None = None,
     ) -> int:
         """
         Compute a 0–100 confidence score for a campaign cluster.
@@ -97,12 +127,20 @@ class CampaignConfidenceScorer:
         campaign : dict
             Must contain keys ``indicators`` (list[str]) and ``size`` (int).
         fingerprints : dict, optional
-            Mapping of indicator value → set of infrastructure feature strings,
-            as produced by ``InfrastructureEngine.build_fingerprints()``.
-            Required for non-zero R(C) and E(C) components.
+            Mapping of indicator value → set of infrastructure feature strings.
+            Pass ``InfrastructureEngine.build_fingerprints()`` output for the
+            unweighted baseline, or ``build_weighted_fingerprints()`` output
+            when also passing ``degrees``. Required for non-zero R(C) and
+            E(C) components.
         max_cluster_size : int, optional
             Largest cluster observed in this collection run, used to normalise
             N(C).  Defaults to the campaign's own size when not supplied.
+        degrees : dict, optional
+            Global per-feature degree, as produced by
+            ``InfrastructureEngine.compute_feature_degrees()``. When given,
+            R(C) uses the degree-weighted formula (item 6); when omitted,
+            R(C) falls back to the original flat-count formula (the
+            unweighted BFS baseline row in CONTEXT.md §3's results table).
         """
         indicators = campaign["indicators"]
         size = campaign["size"]
@@ -112,7 +150,11 @@ class CampaignConfidenceScorer:
 
         N = self._normalised_size(size, effective_max)
         D = self._type_diversity(indicators)
-        R = self._infrastructure_reuse_ratio(indicators, fp)
+        R = (
+            self._infrastructure_reuse_ratio_weighted(indicators, fp, degrees)
+            if degrees is not None
+            else self._infrastructure_reuse_ratio(indicators, fp)
+        )
         E = self._enrichment_completeness(indicators, fp)
 
         raw = self.ALPHA * N + self.BETA * D + self.GAMMA * R + self.DELTA * E
@@ -131,9 +173,10 @@ class CampaignConfidenceScorer:
         campaign: dict,
         fingerprints: dict | None = None,
         max_cluster_size: int | None = None,
+        degrees: dict | None = None,
     ) -> dict:
         """Return campaign dict extended with ``confidence`` and ``strength`` keys."""
-        score = self.compute_score(campaign, fingerprints, max_cluster_size)
+        score = self.compute_score(campaign, fingerprints, max_cluster_size, degrees)
         return {
             **campaign,
             "confidence": score,
@@ -144,6 +187,7 @@ class CampaignConfidenceScorer:
         self,
         campaigns: list,
         fingerprints: dict | None = None,
+        degrees: dict | None = None,
     ) -> list:
         """
         Score a list of campaign candidates.
@@ -154,4 +198,4 @@ class CampaignConfidenceScorer:
         if not campaigns:
             return []
         max_size = max(c["size"] for c in campaigns)
-        return [self.score_campaign(c, fingerprints, max_size) for c in campaigns]
+        return [self.score_campaign(c, fingerprints, max_size, degrees) for c in campaigns]

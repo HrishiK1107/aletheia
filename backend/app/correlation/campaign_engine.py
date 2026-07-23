@@ -24,15 +24,27 @@ class CampaignEngine:
     exact defect this fixed (paper describes one algorithm, pipeline runs
     another).
 
-    `InfrastructureEngine.build_fingerprints()` (Postgres enrichment data)
-    is still used here, independent of which algorithm produced the
-    clusters, because CampaignConfidenceScorer's R(C)/E(C) components need
-    per-indicator enrichment features regardless of clustering method.
+    `InfrastructureEngine.build_weighted_fingerprints()` (Postgres
+    enrichment data, merged org/asn feature per CONTEXT.md item 2.1) is used
+    here, independent of which algorithm produced the clusters, because
+    CampaignConfidenceScorer's R(C)/E(C) components need per-indicator
+    enrichment features regardless of clustering method.
 
     Confidence scoring uses CampaignConfidenceScorer, implementing the
     weighted additive formula described in the paper:
 
         score(C) = α·N(C) + β·D(C) + γ·R(C) + δ·E(C)
+
+    R(C) is degree-weighted (CONTEXT.md item 6, "the contribution"):
+    per-feature global degree comes from
+    ``InfrastructureEngine.compute_feature_degrees()`` and is passed into
+    the scorer, so this is the live pipeline's actual proposed method, not
+    a side experiment -- matching item 1.1's precedent of running the
+    paper's real algorithm rather than a dead-code stand-in.
+    `InfrastructureEngine.build_fingerprints()` (unmerged, unweighted) and
+    `CampaignConfidenceScorer.score_campaigns(..., degrees=None)` remain
+    directly callable to reproduce the "BFS d=2, unweighted" baseline row
+    for the §3 results table -- deliberately not wired in here.
     """
 
     def __init__(self):
@@ -54,7 +66,8 @@ class CampaignEngine:
         """
         # Clusters come from the Neo4j BFS traversal (paper algorithm).
         # Fingerprints come from Postgres enrichment, used only for scoring.
-        fingerprints = self.infrastructure_engine.build_fingerprints(db)
+        fingerprints = self.infrastructure_engine.build_weighted_fingerprints(db)
+        degrees = self.infrastructure_engine.compute_feature_degrees(fingerprints)
         clusters = self.campaign_detector.find_connected_clusters()
 
         # Assemble raw campaign dicts
@@ -68,7 +81,9 @@ class CampaignEngine:
         ]
 
         # Score all campaigns together so N(C) is normalised across the full batch
-        scored_campaigns = self.scorer.score_campaigns(raw_campaigns, fingerprints=fingerprints)
+        scored_campaigns = self.scorer.score_campaigns(
+            raw_campaigns, fingerprints=fingerprints, degrees=degrees
+        )
 
         result = []
 
