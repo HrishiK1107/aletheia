@@ -1,0 +1,68 @@
+venv packages: 62, system packages: 755
+in venv, NOT in system: 11
+   black==26.3.0
+   cfgv==3.5.0
+   geoip2==5.3.0
+   identify==2.6.17
+   maxminddb==3.1.1
+   mypy_extensions==1.1.0
+   nodeenv==1.10.0
+   pre_commit==4.5.1
+   psycopg2-binary==2.9.10
+   pytokens==0.4.1
+   ruff==0.15.5
+
+in BOTH but version differs: 30
+   aiohttp: venv=3.14.2  system=3.14.1
+   certifi: venv=2026.2.25  system=2026.6.17
+   charset-normalizer: venv=3.4.9  system=3.4.7
+   click: venv=8.3.1  system=8.1.8
+   fastapi: venv=0.135.1  system=0.135.3
+   filelock: venv=3.25.0  system=3.29.7
+   greenlet: venv=3.5.4  system=3.3.2
+   idna: venv=3.11  system=3.18
+   iniconfig: venv=2.3.0  system=2.1.0
+   multidict: venv=6.7.1  system=6.4.3
+   neo4j: venv=6.1.0  system=5.2.dev0
+   packaging: venv=26.0  system=26.2
+   platformdirs: venv=4.9.4  system=4.10.0
+   pydantic: venv=2.12.5  system=2.13.4
+   pydantic-settings: venv=2.13.1  system=2.14.2
+   pydantic_core: venv=2.41.5  system=2.46.4
+   pygments: venv=2.19.2  system=2.20.0
+   pytest: venv=9.0.2  system=9.0.3
+   python-dateutil: venv=2.9.0.post0  system=2.9.0
+   python-discovery: venv=1.1.1  system=1.4.2
+   python-dotenv: venv=1.0.1  system=1.2.1
+   python-whois: venv=0.9.6  system=0.9.3
+   pytz: venv=2026.2  system=2025.2
+   redis: venv=5.0.4  system=6.4.0
+   sqlalchemy: venv=2.0.41  system=2.0.48
+   starlette: venv=0.52.1  system=1.1.0
+   typing_extensions: venv=4.15.0  system=4.16.0
+   uvicorn: venv=0.41.0  system=0.38.0
+   virtualenv: venv=21.1.0  system=21.5.1
+   yarl: venv=1.24.5  system=1.23.0
+
+in BOTH, same version: 21
+   aiohappyeyeballs==2.7.1
+   aiosignal==1.4.0
+   annotated-doc==0.0.4
+   annotated-types==0.7.0
+   anyio==4.12.1
+   attrs==26.1.0
+   colorama==0.4.6
+   distlib==0.4.0
+   dnspython==2.8.0
+   frozenlist==1.8.0
+   h11==0.16.0
+   httpcore==1.0.9
+   httpx==0.28.1
+   pathspec==1.0.4
+   pluggy==1.6.0
+   propcache==0.5.2
+   pyyaml==6.0.3
+   requests==2.32.5
+   six==1.17.0
+   typing-inspection==0.4.2
+   urllib3==2.7.0
