@@ -195,4 +195,7 @@ def main():
 
 
 if __name__ == "__main__":
+    from app.core.hash_safety import ensure_deterministic_hashing
+
+    ensure_deterministic_hashing()
     sys.exit(main())

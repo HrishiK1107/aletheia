@@ -2865,6 +2865,143 @@ belongs in the paper.**
 
 ---
 
+## 6j. Second determinism defect found by the re-run-and-diff discipline, 2026-07-23 — evaluation-harness fix applied under the audit's measurement-neutral protocol
+
+**Context: this was found mid-way through applying the code audit's fixes,
+specifically while verifying fix A1 (a pure docstring change in
+`campaign_detector.py`, expected and confirmed to have zero runtime
+effect).** The audit's protocol requires re-running the full measurement
+suite and diffing programmatically after every fix, even ones expected to
+be no-ops — "it's free and it confirms the harness is deterministic." It
+was not: two independent runs of the *exact same* committed code (A1's
+docstring edit touches nothing on this code path) produced different
+`group_by_resolved_ip` figures. That is the seventh instance of Spine 5's
+pattern, and finding it is itself evidence the discipline works — a fix
+that was assumed safe surfaced a real, unrelated latent bug purely because
+the protocol insisted on re-measuring instead of trusting the "docstring
+only" assumption.
+
+**Root cause, confirmed by 5 repeated runs (3 with default hash
+randomization producing 3 different values, 2 with `PYTHONHASHSEED=0`
+producing identical values):** Python randomizes string hashing per
+process by default, which changes `set` iteration order between runs.
+`group_by_feature_prefix()` (`baselines.py`) iterates a per-indicator
+feature `set` to build a `feat -> [values]` dict; the *order* of the
+returned cluster list depends on that iteration order whenever an
+indicator has more than one feature under the same prefix (multi-IP
+indicators, from item 2.3's fix). `build_predicted_labels()`
+(`metrics.py`) resolved multi-cluster membership by unconditional
+overwrite — "last cluster in the list wins" — so which predicted cluster
+a multi-IP indicator landed in depended on iteration order that varies
+run to run.
+
+**A second source of the same defect class was found while investigating
+the first, not from the original audit list: `jaccard_v1`
+(`InfrastructureEngine.detect_clusters()`) also returns overlapping
+clusters — 141 of 8,810 distinct values appear in more than one cluster,
+max multiplicity 50 — and was exposed to the identical
+`build_predicted_labels()` overwrite-order defect.** It had not visibly
+misbehaved before now only because its cluster order came from a Postgres
+query with no explicit `ORDER BY`, which happened to return rows in a
+stable order across the runs actually performed to date — an accident of
+an unchanging table and no concurrent writes, not a guarantee. Confirmed
+by the multi-membership audit before any fix was applied:
+
+| method | clusters | distinct values | values in >1 cluster | max multiplicity |
+|---|---|---|---|---|
+| `bfs_all_clusters` | 1,334 | 13,825 | 0 | 0 |
+| `jaccard_v1` | 1,331 | 8,810 | 141 | 50 |
+| `group_by_asn` | 290 | 8,534 | 0 | 0 |
+| `group_by_hosting_provider` | 277 | 8,577 | 0 | 0 |
+| `group_by_resolved_ip` | 579 | 2,556 | 838 | 10 |
+| `random_baseline` | 1,334 | 22,637 | 0 | 0 |
+
+**Two fixes applied, treated as separate causes rather than one patch
+masking the other, per explicit instruction:**
+
+1. **`build_predicted_labels()` (`metrics.py`)** now sorts `clusters` into
+   a canonical order (by each cluster's own sorted membership) before
+   assigning ids, and the first cluster in that order to claim a
+   multiply-assigned value keeps it. The predicted partition is now a
+   pure function of cluster *content*, independent of whatever order the
+   caller happened to build the clusters list in. This is the semantic
+   fix — it would still be correct even if Python's hashing were made
+   deterministic by some other means.
+2. **`app/core/hash_safety.py`: `ensure_deterministic_hashing()`**, wired
+   into `run_evaluation.py`'s `__main__` block, re-execs the process with
+   `PYTHONHASHSEED=0` if not already set. Defence in depth against any
+   other code path — present or future — that implicitly depends on
+   `set`/`dict` iteration order, following the same "raise/guard loudly
+   at entrypoint start" pattern already established by
+   `ensure_correct_interpreter()` (§6a) and
+   `ensure_distinct_databases()`/`ensure_distinct_redis_targets()`.
+
+**Verification, per the audit's protocol — 3 runs post-fix, diffed
+pairwise and against the pre-fix baseline snapshot
+(`evaluation_runs/baseline_20260723T165406Z/`, committed before any fix
+was applied):**
+
+- **3/3 post-fix runs are bit-identical** across every file, including
+  `feature_degrees.json` (whose key order was itself non-deterministic
+  pre-fix, purely a serialization artefact of the same hash-randomization
+  root cause — now also fixed).
+- **BFS: zero movement, confirmed rather than assumed.** All BFS rows
+  (weighted/unweighted, all-clusters/reported, every ground truth)
+  bit-identical to the pre-fix baseline — expected, since BFS clusters
+  are non-overlapping by construction, and now verified directly rather
+  than inferred.
+- **`group_by_resolved_ip`: moves, magnitude negligible everywhere**
+  (5th significant digit or beyond on every cell, every ground truth) —
+  the pre-authorized case; the old value was never anything but
+  incidental.
+- **`jaccard_v1`: moves, negligible on ThreatFox and OTX-without-outlier
+  (matches every cited 4-decimal value), but material on
+  OTX-with-outlier** — the smallest scoped population of the three, so
+  the same handful of reassigned multi-IP indicators move it
+  proportionally further:
+
+  | metric | old (cited, §6h) | new | relative |
+  |---|---|---|---|
+  | ARI (full) | 0.0084 | 0.0108 | +29% |
+  | P (full) | 0.5057 | 0.5597 | +11% |
+  | R (full) | 0.0050 | 0.0063 | +26% |
+  | ARI (scoped) | 0.0055 | 0.0076 | +37% |
+  | R (scoped) | 0.0054 | 0.0069 | +26% |
+
+  **The §6h table at that row (OTX-with-outlier, `jaccard_v1`) is now
+  stale and should be read as: ARI (full) 0.0108, ARI (scoped) 0.0076, P
+  (full) 0.5597, R (full) 0.0063, R (scoped) 0.0069 — n unchanged at
+  1,189. Old values left in place there, not edited, per this project's
+  standing convention of leaving a superseded number visible alongside
+  its correction rather than silently rewriting it.**
+
+**Every §8 claim that cites these baselines was re-checked against the
+new numbers before writing this entry, not assumed safe:**
+
+- ThreatFox, BFS vs. next-best (`jaccard_v1`): 1.712×/1.729× (old) →
+  **1.710×/1.727×** (new). Holds.
+- OTX-with-outlier, BFS vs. next-best (`group_by_hosting_provider`):
+  1.713×/1.730× → **1.713×/1.730×**, exactly unchanged — that comparator
+  has zero multi-membership and was never exposed to this defect.
+- OTX-without-outlier, "`jaccard_v1` (0.1223) and `group_by_resolved_ip`
+  (0.1248) both beat BFS (0.0874–0.0963)": new values 0.1225 and 0.1248
+  respectively, margin over BFS-weighted widens by 0.0002 and 0.0001.
+  **The "2 of 3 confirm, 1 contradicts" framing is unchanged and does not
+  need restating** — checked explicitly rather than assumed, since this
+  is the one ground-truth configuration where the paper's own headline
+  claim doesn't hold and any tightening or loosening of that margin
+  needed to be seen before going in the ledger.
+
+**No number in the §8 ledger's prose claims moved. The only stale
+artefact is the raw §6h OTX-with-outlier table cell for `jaccard_v1`,
+corrected above.** This is the seventh instance of Spine 5's pattern
+(§7's rule bullet and the Spine 5 list below should be updated to "7
+instances" / "seven times") — a command (a "verify anyway, it's free"
+docstring re-run) that surfaced a real defect precisely because it wasn't
+skipped as obviously safe.
+
+---
+
 ## 7. Rules for this work
 
 - **Persist every run.** The previous evaluation was lost because nothing was saved
@@ -2888,19 +3025,25 @@ belongs in the paper.**
   confirm `which python` / `sys.prefix` points at the repo's `.venv`
   before trusting output from either.
 - **A silently-degenerate check reads exactly like a legitimate negative
-  result — check for this pattern specifically, it recurred four times in
+  result — check for this pattern specifically, it recurred seven times in
   one work session.** Item 2.7 (rate-limited ASN API returning empty-body
   200/429, indistinguishable from "genuinely no ASN" until logging was
   added); the venv defect (§6a: wrong interpreter ran silently instead of
   failing, because `2>/dev/null` masked the activation error); the
   ground-truth join-key bug (§6b: 18.6% of labels silently absent from
   every join, read as "cohesion is low" rather than "the join is broken");
-  and a Cypher query bug found investigating item 2.9 (§6e: a non-optional
+  a Cypher query bug found investigating item 2.9 (§6e: a non-optional
   `MATCH` that finds nothing still returns one aggregation row reading
   `count=0`, indistinguishable from "node exists with zero edges" without
-  an explicit `OPTIONAL MATCH ... IS NOT NULL` check). In every case the
-  code ran to completion, returned a plausible-looking number, and was
-  believed until something else forced a second look. When a measurement
+  an explicit `OPTIONAL MATCH ... IS NOT NULL` check); the Spine 1
+  re-verification's Postgres-vs-Neo4j methodology mismatch (§6i, a
+  spurious ~3× discrepancy caught before being reported); and `git add
+  analysis/` silently dropping 17 `.log` files matched by `*.log` in
+  `.gitignore` while exiting 0 and printing nothing wrong (§8's Spine 5,
+  caught only by diffing the committed tree against the filesystem
+  afterward). In every case the command ran to completion, returned or
+  did a plausible-looking amount, and was believed until something else
+  forced a second look. When a measurement
   comes back as a clean zero, a suspiciously round number, or a result
   that would be very convenient, check whether the *absence* of a value is
   actually distinguishable in that code path from a *genuine* value of
@@ -3060,20 +3203,31 @@ open.
 
 ### Spine 5 — methodological findings (report as part of the paper's contribution, not just as caveats)
 
-- **5 instances of "confident wrong number from a silently-degenerate
+- **7 instances of "confident wrong number from a silently-degenerate
   check"** in one session: item 2.7 (rate-limited API, empty-body
   200/429 indistinguishable from "no ASN"), the venv defect (§6a),
   the ground-truth join-key bug (§6b, 18.6% of labels silently dropped),
   the Cypher aggregation bug (§6e, non-optional `MATCH` on nothing still
-  returns one `count=0` row), and the Spine 1 re-verification's own
+  returns one `count=0` row), the Spine 1 re-verification's own
   Postgres-vs-Neo4j methodology mismatch (§6i, caught within the same
-  task before being reported, produced a spurious ~3× discrepancy). Each
-  is a **fix or a caught-and-corrected measurement, verified once**, not a
-  comparative statistic — done, not pending re-confirmation.
-- **Discipline point, now with a fifth instance to cite:** every one of
+  task before being reported, produced a spurious ~3× discrepancy),
+  `git add analysis/` (2026-07-23, post-§8) silently dropping all 17
+  `.log` files matched by the repo's own `*.log` gitignore rule —
+  the command printed nothing wrong and exited 0, and the omission was
+  only caught by diffing the committed tree against the filesystem
+  afterward — and `build_predicted_labels()`'s overwrite-order dependency
+  on Python's per-process hash randomization (§6j, 2026-07-23), found
+  only because a fix expected to be a complete no-op was re-measured
+  anyway and two runs of identical code disagreed. Same pattern as the
+  other six: a command that succeeded while doing less than it appeared
+  to. Each is a **fix or a caught-and-corrected measurement, verified
+  once**, not a comparative statistic — done, not pending
+  re-confirmation.
+- **Discipline point, now with a seventh instance to cite:** every one of
   the above was caught by re-running a result under changed conditions,
-  cross-checking against an independent method, or reproducing a prior
-  number exactly and noticing when it didn't reproduce — never by
+  cross-checking against an independent method, reproducing a prior
+  number exactly and noticing when it didn't reproduce, or diffing an
+  action's claimed effect against its actual effect — never by
   inspection alone. The practice of re-running rather than assuming is
   itself part of what this session demonstrates, worth a line in the
   paper's methodology section, and the Spine 1 catch (§6i) is the

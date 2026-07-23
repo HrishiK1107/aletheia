@@ -28,13 +28,26 @@ def build_predicted_labels(clusters: list[list[str]], universe: set) -> dict[str
     method that fails to group two same-labelled items is correctly
     penalised by ARI/recall instead of those items being silently dropped
     from the comparison.
+
+    Some baselines (e.g. GROUP BY on a multi-valued feature, or Jaccard)
+    deliberately return overlapping clusters -- a value with two resolved
+    IPs lands in both IP groups. `clusters` is therefore sorted into a
+    canonical order (by each cluster's own sorted membership) before ids
+    are assigned, and the first cluster in that order to claim a value
+    keeps it. This makes the resulting partition a pure function of
+    cluster *content*, not of whatever order the caller's clusters
+    happened to be built in -- which otherwise varies run to run when that
+    order comes from iterating a Python `set` (hash-randomized per
+    process, see CONTEXT.md's audit-fixes entry).
     """
     labels: dict[str, int] = {}
     next_id = 0
 
-    for cluster in clusters:
+    ordered_clusters = sorted(clusters, key=lambda cluster: sorted(cluster))
+
+    for cluster in ordered_clusters:
         for value in cluster:
-            if value in universe:
+            if value in universe and value not in labels:
                 labels[value] = next_id
         next_id += 1
 

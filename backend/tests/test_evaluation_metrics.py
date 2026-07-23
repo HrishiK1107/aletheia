@@ -68,6 +68,41 @@ def test_build_predicted_labels_gives_singletons_to_unclustered_items():
     assert labels["c"] != labels["a"]
 
 
+def test_build_predicted_labels_multi_membership_is_order_independent():
+    """
+    CONTEXT.md §6j (2026-07-23): overlapping baselines (GROUP BY,
+    Jaccard) can put one value in more than one cluster. This used to be
+    resolved by unconditional overwrite -- "last cluster in `clusters`
+    wins" -- so the predicted partition depended on whatever order the
+    caller's `clusters` list happened to be built in. That order came
+    from iterating a Python `set` upstream (group_by_feature_prefix's
+    per-value feature set), which is hash-randomized per process, so two
+    runs of identical code could disagree. Regression test: the same
+    overlapping input, in three different list orders, must produce the
+    exact same partition every time -- a pure function of cluster
+    content, not of input order. (This covers only the Python-layer
+    resolution; it doesn't test whatever upstream order Postgres/Neo4j
+    actually return rows in, same scope limitation as
+    test_campaign_detector.py's determinism test.)
+    """
+    universe = {"a", "b", "c", "d", "e"}
+    clusters_order_1 = [["a", "b", "c"], ["a", "d", "e"]]
+    clusters_order_2 = [["a", "d", "e"], ["a", "b", "c"]]
+    clusters_order_3 = list(reversed(clusters_order_1))
+
+    def partition(labels):
+        groups: dict = {}
+        for value, label in labels.items():
+            groups.setdefault(label, set()).add(value)
+        return frozenset(frozenset(g) for g in groups.values())
+
+    labels_1 = build_predicted_labels(clusters_order_1, universe)
+    labels_2 = build_predicted_labels(clusters_order_2, universe)
+    labels_3 = build_predicted_labels(clusters_order_3, universe)
+
+    assert partition(labels_1) == partition(labels_2) == partition(labels_3)
+
+
 def test_size_band_boundaries():
     assert size_band(3) == "3-5"
     assert size_band(5) == "3-5"
