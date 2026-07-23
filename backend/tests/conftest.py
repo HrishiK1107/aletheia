@@ -1,12 +1,19 @@
 import pytest
 from app.core.config import settings
 from app.core.db_safety import ensure_distinct_databases, ensure_distinct_redis_targets
+from app.core.venv_safety import ensure_correct_interpreter
 from app.db import model_registry  # noqa: F401 -- registers all models on Base.metadata
 from app.db.base import Base
 from app.db.redis import redis_client
 from redis import Redis
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+# Guard rail: fail immediately if this session isn't running under the
+# project's own venv (found 2026-07-23 -- see venv_safety.py for the
+# incident this closes off) -- before any of the checks below, which
+# themselves depend on this being the right interpreter to mean anything.
+ensure_correct_interpreter()
 
 # Guard rail: setup_database (below) drops and recreates every table in
 # test_database_url on every test session. Fail at collection time, before

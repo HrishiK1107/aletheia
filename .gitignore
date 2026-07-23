@@ -44,3 +44,4 @@ neo4j_data/
 
 # Redis dump
 dump.rdb
+data/*.mmdb

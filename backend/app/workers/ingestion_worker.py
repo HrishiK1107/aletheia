@@ -108,4 +108,7 @@ def run_worker():
 
 
 if __name__ == "__main__":
+    from app.core.venv_safety import ensure_correct_interpreter
+
+    ensure_correct_interpreter()
     run_worker()
