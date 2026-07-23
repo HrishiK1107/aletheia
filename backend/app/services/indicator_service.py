@@ -4,7 +4,7 @@ from app.ingestion.enrichment.models.indicator_models import Indicator
 from app.ingestion.enrichment.models.rejected_indicator_model import RejectedIndicator
 from app.ingestion.validation.validator import validate_indicator
 from app.schemas.indicator_schema import IndicatorCreate
-from app.services.normalization_service import normalize_indicator
+from app.services.normalization_service import canonicalize_indicator_type, normalize_indicator
 from sqlalchemy.orm import Session
 
 
@@ -12,6 +12,13 @@ def create_indicator(db: Session, indicator: IndicatorCreate) -> Indicator | Non
     """
     Create indicator with validation, normalization and deduplication.
     """
+
+    # Phase 0 -- canonicalize source-reported pseudo-types (e.g. ThreatFox's
+    # "ip:port") into a real type before validation ever sees them, so
+    # validate_indicator/normalize_indicator/enrichment all operate on the
+    # corrected (value, type) rather than an unrecognized passthrough.
+    canonical_value, canonical_type = canonicalize_indicator_type(indicator.value, indicator.type)
+    indicator = indicator.model_copy(update={"value": canonical_value, "type": canonical_type})
 
     # Phase 3 — validation
     valid, reason = validate_indicator(indicator.value, indicator.type)
