@@ -2724,7 +2724,7 @@ in §6l).
 **Finding 1 — the settled non-result generalizes cleanly, on both OTX
 variants.** Weighted vs. unweighted BFS: with outlier, 0.0386 vs. 0.0390
 (Δ -0.0004, scoped); without outlier, 0.0874 vs. 0.0963 (Δ -0.0089,
-scoped) — larger in magnitude than ThreatFox's ~-0.0008 but the *same
+scoped) — larger in magnitude than ThreatFox's ~-0.0015 but the *same
 direction* every single time, now across two independent datasets and
 five total measurement configurations. **Degree weighting never once
 beats unweighted BFS on ARI, in any configuration run this session.**
@@ -4007,7 +4007,7 @@ thresholds:**
    variance again, so ±10pp is the pre-declared band.
 
 2. **Weighted-vs-unweighted BFS ARI delta (ThreatFox, scoped).** Window 1:
-   **-0.0008** point-estimate delta (0.1525 weighted vs. 0.1540
+   **-0.0015** point-estimate delta (0.1525 weighted vs. 0.1540
    unweighted); this session's bootstrap (Task 1, above) found the 95%
    pivotal CIs of these two rows overlap in every one of 6 configurations
    tested — the actual finding is "no statistically distinguishable
@@ -4310,12 +4310,12 @@ be cited as measured, not as guaranteed constants.
   (degree used to both bucket and score) — the external check below is
   what actually validates the method, not this gradient.
 - **Weighted vs. unweighted BFS ARI on ThreatFox: flat, no improvement.
-  Final number: 0.1525 vs. 0.1540 (reported, scoped) — Δ -0.0008.**
+  Final number: 0.1525 vs. 0.1540 (reported, scoped) — Δ -0.0015.**
   **6 independent confirmations**, each on progressively more correct
   data: (1) original run, Δ -0.0004 (0.0716 vs 0.0712); (2) post-join-fix,
   §6c, Δ -0.0007 (0.0777 vs 0.0770); (3) post-graph-rebuild, §6f, Δ -0.0008
   (0.0785 vs 0.0777); (4) scoped/apples-to-apples with every baseline
-  confidence-filtered identically, §6g, Δ -0.0008 (0.1540 vs 0.1525,
+  confidence-filtered identically, §6g, Δ -0.0015 (0.1540 vs 0.1525,
   scoped); (5) OTX with outlier, §6h, Δ -0.0004 (0.0390 vs 0.0386,
   scoped); (6) OTX without outlier, §6h, Δ -0.0089 (0.0963 vs 0.0874,
   scoped) — same direction, larger magnitude, plausibly sampling noise
@@ -4541,7 +4541,7 @@ point-estimate-exclusion cells, so this comparison carries no additional
 caveat.
 
 **Question (b): do BFS weighted and BFS unweighted CIs overlap — expected
-yes, since the point-estimate delta is -0.0008?** **Yes — they overlap in
+yes, since the point-estimate delta is -0.0015?** **Yes — they overlap in
 every one of the four configurations tested** (ThreatFox full/scoped, OTX-
 with-outlier full/scoped; OTX-without-outlier checked separately below
 since its own delta is larger, -0.0089, §8's Spine 3):
@@ -4557,7 +4557,7 @@ since its own delta is larger, -0.0089, §8's Spine 3):
 
 (*near-total overlap; the two intervals are almost coincident.) **Per the
 task's own framing, this strengthens rather than weakens the non-result:**
-it is not just that the point estimates are close (Δ -0.0008 to -0.0098
+it is not just that the point estimates are close (Δ -0.0015 to -0.0098
 across configurations) — the confidence intervals substantially overlap in
 every single configuration tested, meaning the data cannot statistically
 distinguish weighted from unweighted BFS on ARI at all. Combined with §8's
@@ -4607,7 +4607,7 @@ believed for a while).
 
 ### Spine 5 — methodological findings (report as part of the paper's contribution, not just as caveats)
 
-- **11 instances of "confident wrong number from a silently-degenerate
+- **12 instances of "confident wrong number from a silently-degenerate
   check"** in one session: item 2.7 (rate-limited API, empty-body
   200/429 indistinguishable from "no ASN"), the venv defect (§6a),
   the ground-truth join-key bug (§6b, 18.6% of labels silently dropped),
@@ -4705,7 +4705,40 @@ believed for a while).
   CI was ever computed at scale or reported anywhere. The gate held on the
   first try — worth recording as evidence the discipline works
   prospectively, not only in hindsight.
-- **Discipline point, now with an eleventh instance to cite:** every one of
+- **12th instance, the Δ -0.0008/-0.0015 transcription error, caught
+  2026-07-25 — the same failure shape as instance 11, but this time the
+  gate did *not* hold.** §8 Spine 3's own chronology (item 3, §6f) correctly
+  computed Δ -0.0008 for the full-population weighted-vs-unweighted BFS
+  comparison (0.0777 vs. 0.0785). When item 4 was written to describe the
+  newly-added *scoped* comparison (§6g, 0.1525 vs. 0.1540), that same
+  Δ -0.0008 was carried over instead of recomputed — the correct scoped
+  delta is Δ -0.0015 (full precision -0.001508, confirmed against
+  `bootstrap_ci_20260724T175706Z.json` and against §6g's own table, both
+  independent of the erroneous copy). Both numbers were always individually
+  correct measurements; the error was pairing -0.0008 with the wrong
+  comparison. From that single mistranscription in §8's ledger, the wrong
+  figure was then copied forward — not independently re-derived, just
+  re-cited — into six locations: §8 Spine 3's headline bullet, §8 Spine 3's
+  item-4 line, §6p's pre-registration block (quantity 2, committed to git as
+  `b316c83` *before* window 2's collector ran), the bootstrap CI writeup's
+  question-(b) framing (twice), and the window-2 four-quantity comparison
+  table. **What makes this different from instance 11, stated plainly
+  rather than filed as another clean save: nothing caught this at the
+  point of transcription, or at any of the next five copies.** It was only
+  caught when window 2's own independently-recomputed delta (-0.0007) was
+  checked against window 1's cited figure for the same quantity and the
+  arithmetic didn't reconcile with the underlying point estimates —
+  reconciliation triggered by an external request, after the wrong number
+  had already propagated into a document (§6p) whose entire methodological
+  value rests on being fixed and correct *before* new data exists. The
+  discipline did eventually catch it — six citations later, one full
+  collection window later, on request rather than by a built-in gate. That
+  is the less flattering half of the same pattern instance 11 illustrated
+  the flattering half of: re-running and cross-checking works, but only
+  when something actually triggers it, and inspection alone (the copy
+  looked exactly like the kind of number that belongs there) missed it six
+  times in a row.
+- **Discipline point, now with a twelfth instance to cite:** every one of
   the above was caught by re-running a result under changed conditions,
   cross-checking against an independent method, reproducing a prior
   number exactly and noticing when it didn't reproduce, or diffing an
@@ -4719,7 +4752,14 @@ believed for a while).
   complementary illustration, worth keeping alongside it rather than
   merged in: a required, pre-declared verification *step* — not a
   post-hoc re-run prompted by suspicion — caught the same class of
-  problem before a wrong number was ever produced at all.
+  problem before a wrong number was ever produced at all. The 12th
+  instance is the honest counterweight to both: no gate and no suspicion
+  caught it either — a request to reconcile two windows' arithmetic did,
+  after the wrong figure had already been cited six times, including
+  inside a pre-registration block. Keep all three side by side in the
+  paper's methodology section rather than only the flattering two: the
+  discipline demonstrably works when something triggers it, and just as
+  demonstrably does not trigger itself.
 
 ### Window 2 — second collection window (Task 2), 2026-07-24/25
 
@@ -4751,7 +4791,7 @@ own cited figures (18.3 min / 11.4–20.5 min). Postgres and Neo4j dumped
 | Quantity | Window 1 | Window 2 | Threshold (declared in §6p) | Verdict |
 |---|---|---|---|---|
 | Commodity-touching cluster % | 62.8% (838/1,334) | **67.4% (939/1,393)** | [52.8%, 72.8%] | **Reproduces** |
-| Weighted-vs-unweighted BFS ARI delta (ThreatFox, scoped) | point Δ (as cited in §8) -0.0008; CIs overlap in 6/6 tested configs | point Δ **-0.0007** (0.1750 weighted vs. 0.1757 unweighted); pivotal CIs `[0.1479, 0.1965]` (weighted) vs. `[0.1486, 0.1972]` (unweighted) — **overlap almost entirely** | CIs overlap | **Reproduces** |
+| Weighted-vs-unweighted BFS ARI delta (ThreatFox, scoped) | point Δ (as cited in §8) -0.0015; CIs overlap in 6/6 tested configs | point Δ **-0.0007** (0.1750 weighted vs. 0.1757 unweighted); pivotal CIs `[0.1479, 0.1965]` (weighted) vs. `[0.1486, 0.1972]` (unweighted) — **overlap almost entirely** | CIs overlap | **Reproduces** |
 | BFS-vs-best-baseline ratio (ThreatFox, scoped) | ~1.71× (0.1525/0.0891); CIs disjoint | **1.90×** (0.1750/0.0921); pivotal CIs `[0.1479, 0.1965]` (BFS weighted) vs. `[0.0769, 0.1016]` (jaccard_v1) — **disjoint** | CIs disjoint AND ratio > 1.0× | **Reproduces** |
 | Top-hub bridge share (Cloudflare/AS13335) | `Cloudflare, Inc.` 223/1,334 (16.7%), #1 HostingProvider; `AS13335` 255/1,334 (19.1%), #1 ASN | `Cloudflare, Inc.` **205/1,393 (14.7%)**, still #1 HostingProvider (next: Hostinger, 138); `AS13335` **313/1,393 (22.5%)**, still #1 ASN (next: AS47583, 139) | remains #1 by identity AND share in [8%, 30%] | **Reproduces** |
 
@@ -4766,22 +4806,30 @@ estimates, exact agreement), `analysis/final/window2_bootstrap_targeted.py`
 42-cell grid, per §6p).
 
 **A pre-existing ledger inconsistency, noticed while pulling window 1's
-number for this comparison, flagged rather than fixed (hard constraint:
-no existing §8 figure may change).** §8's Spine 3 cites "0.1525 vs. 0.1540
-(reported, scoped) — Δ -0.0008" for window 1. The arithmetic difference of
-those two cited 4-decimal values is actually -0.0015, not -0.0008 (and the
-full-precision source values, 0.152464 vs. 0.153971 from
-`bootstrap_ci_20260724T175706Z.json`, give -0.001507 — confirms this
-isn't a rounding-direction artifact). This looks like a stale figure
-carried forward from an earlier, different pair in the same paragraph's
-list (e.g. "(3) post-graph-rebuild, §6f, Δ -0.0008" cites a different,
-full-population pair) rather than a re-derivation error introduced here —
-not investigated further, since it doesn't change any conclusion: the
-pre-registered reproduction criterion for this quantity was CI overlap,
-not a numeric match on the point-estimate delta, and both windows'
-weighted/unweighted CIs overlap heavily regardless of which delta value is
-correct. §8's existing entry is left exactly as committed, per the hard
-constraint; this paragraph is the disclosure.
+number for this comparison, was investigated and corrected 2026-07-25 —
+see Spine 5's 12th instance for the full account.** §8's Spine 3 had cited
+"0.1525 vs. 0.1540 (reported, scoped) — Δ -0.0008" for window 1. The
+arithmetic difference of those two cited 4-decimal values is actually
+-0.0015, not -0.0008 (full-precision source values, 0.152464 vs. 0.153971
+from `bootstrap_ci_20260724T175706Z.json`, give -0.001507 — confirms this
+isn't a rounding-direction artifact). Root cause traced: Δ -0.0008 is a
+correct measurement, but of a *different* pair — the full-population
+(unscoped) weighted-vs-unweighted comparison at the same post-graph-rebuild
+stage (§6f, 0.0777 vs. 0.0785, full precision -0.000765) — that got carried
+forward into the scoped citation instead of being recomputed. Both point
+estimates (0.1525, 0.1540) were always correct; only the paired delta label
+was wrong. Corrected at all six sites it had propagated to: §8 Spine 3's
+headline and item-4 lines, §6p's pre-registration block, the bootstrap CI
+question-(b) framing (twice), and this section's own four-quantity table
+above (now reads -0.0015). This does not retroactively violate the "no
+existing §8 figure may change" constraint from Task 1/2 — that constraint
+protected against tuning a figure to fit a new result; this is a
+transcription-error correction, explicitly requested and traced to source
+before being applied, with both the wrong and right values disclosed here
+for auditability. It also does not change any reproduction verdict: the
+pre-registered criterion for this quantity was CI overlap, not a
+point-estimate-delta match, and both windows' weighted/unweighted CIs
+overlap heavily regardless of which delta value is correct.
 
 **Descriptive-only reporting (not gated on a threshold, per the task's own
 instruction), 2026-07-25:**
