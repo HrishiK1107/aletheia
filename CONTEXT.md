@@ -4071,6 +4071,10 @@ before any analysis touches window 2's data (§7's persist-every-run rule).
 Window 1's existing `aletheia` Postgres database and Neo4j `neo4j` database
 are not read from, written to, or reset at any point in this task.
 
+**Committed as `b316c83`, 2026-07-24, before any window-2 collector ran.**
+That commit's timestamp/hash is the record that these four thresholds
+predate the data they'll be checked against.
+
 ---
 
 ## 7. Rules for this work
