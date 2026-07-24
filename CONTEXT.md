@@ -3058,7 +3058,8 @@ these, not always against the original baseline.
 | `-m` re-exec fix, `hash_safety.py` (found while verifying B1, not on the original list) | **DONE** | yes — see below | `1a15b14` |
 | B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **DONE** | **yes — see below** | `8858cf9` (wiring), `1a15b14` (verification) |
 | B2 (decide fate of `commodity_fp_rate()`/`size_band()`) | **DONE — deleted both** | yes — bit-identical output | `3d99363` |
-| B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **DONE — within scope, see caveat below** | yes, for everything this entrypoint computes; `_scoped` metrics and most of Spine 1/2/4 are out of this entrypoint's scope entirely, not a defect introduced by this fix sequence | n/a (no code change) |
+| B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **DONE — scope caveat below, later closed for `_scoped`/Spine 4 in §6l** | yes | n/a (no code change) |
+| `_scoped` metrics + Spine 4 achievable-vs-actual port (§6l, requested as a follow-up after B3) | **DONE** | yes — bit-identical to `scoped_pr.py` (exact `==`) and to §6g/§8's cited figures; regression-checked against the C1 snapshot, zero movement | pending commit |
 | C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **DONE** | yes — verified by exact dict equality, not size | `32b2d18` |
 
 **B1's current state, exactly:** the code change itself is additive-only
@@ -3305,7 +3306,14 @@ programmatically against the B1-verified snapshot
 runs.
 
 **B3, 2026-07-24 — done, with an honest scope caveat rather than a clean
-"§8 reproduces" claim.** `run_evaluation.py`'s own docstring scopes it to
+"§8 reproduces" claim.** *(Updated same day, §6l: the `_scoped` gap this
+entry identifies below was subsequently closed — the project owner asked
+for it to be ported, it was, and it's verified bit-identical to
+`scoped_pr.py` and the §6g table. Spine 1/2/4's remaining gaps are
+addressed precisely in §6l/§6m too, not left as the open question this
+entry originally posed. Left as originally written below for the
+historical record of what B3 found before that follow-up.)*
+`run_evaluation.py`'s own docstring scopes it to
 "item 7: builds the §3 results table" — i.e. this harness was always the
 ARI/precision/recall/by-size-band/commodity-FP-rate table plus (as of B1)
 the connectivity diagnostics, not a re-implementation of every analysis
@@ -3390,11 +3398,215 @@ scope), and committed.** No number in the §8 ledger moved at any step
 that touched already-shipped code; the two numbers that *did* move
 (`jaccard_v1`/`group_by_resolved_ip` under the multi-membership fix) were
 pre-authorized, disclosed, and already reflected in this ledger before
-this session began. The one open item that is a genuine design decision
+this session began. The one open item that was a genuine design decision
 rather than a bug — porting `scoped_pr.py`'s restriction into
-`run_evaluation.py` so the documented entrypoint can reproduce the
-`_scoped` numbers actually cited in the paper (B3, above) — is left for
-the project owner to decide, not resolved unilaterally here.
+`run_evaluation.py` — was decided by the project owner (below) rather
+than resolved unilaterally.
+
+---
+
+## 6l. `_scoped` metrics and Spine 4's achievable-vs-actual table ported into `run_evaluation.py`, 2026-07-24
+
+**Requested explicitly: close B3's `_scoped` gap, additive only, verify
+against `scoped_pr.py` and the §6g table by exact equality, and either
+port or precisely document Spine 1/2/4's graph-traversal analyses.**
+
+**What was ported, and how it was verified:**
+
+1. **The `_scoped` metric variant (§6g's scope condition).** Two new
+   functions, `restrict_to_scope()` and `evaluate_method_scoped()`, added
+   alongside the existing `evaluate_method()` — which is byte-for-byte
+   unchanged. For every ground truth, `main()` now computes
+   `scoped_labels = restrict_to_scope(gt_labels, fp_weighted)` once and
+   attaches `r["scoped"] = evaluate_method_scoped(clusters, scoped_labels)`
+   to each method's existing result dict as an added key, after calling
+   the unmodified `evaluate_method()`. The scope condition itself is
+   exactly §6g's: an indicator is in scope iff
+   `build_weighted_fingerprints()` returns it a non-empty feature set.
+2. **The apples-to-apples "reported" extension (§6g/`final_table.py`).**
+   `_scoped` is only a meaningful comparison across methods if every
+   baseline gets the same confidence-filtered treatment the two BFS rows
+   already had — before this port, `run_evaluation.py`'s `methods` dict
+   had confidence-filtered variants for BFS only. Added five more,
+   additive keys to the dict (`random_baseline__reported`,
+   `group_by_asn__reported`, `group_by_resolved_ip__reported`,
+   `group_by_hosting_provider__reported`, `jaccard_v1__reported`), same
+   `fp_unweighted`/`degrees=None` convention `bfs_unweighted_reported`
+   already used. The original eight `methods` keys are untouched.
+3. **Spine 4's achievable-vs-actual table (`population_check.py`).** New
+   function `achievable_vs_actual_by_family()`: for each of the five
+   families, the achievable ceiling
+   (`connectivity_components(fp_weighted, degrees, max_degree=None)`,
+   already available via the `diagnostics` module B1 wired in) vs. the
+   actual pairwise recall (the already-computed `bfs_weighted_reported`
+   clusters), both full-population and restricted to the explicit
+   Postgres/Neo4j population intersection. ThreatFox-only, matching the
+   reference script. Stored under `results["spine4_achievable_vs_actual"]`.
+
+**Verification — every check run programmatically, not by eye:**
+
+- **Full test suite: 155/155 pass.**
+- **Regression check: every one of the original eight methods' `ari`,
+  `precision`, `recall`, `n_clusters`, `n_members`, `by_size_band`, plus
+  the entire `diagnostics` and `commodity_fp_rate` blocks, diffed against
+  the C1-verified snapshot (`item7_eval_20260724T085214Z.json`) —
+  bit-identical, zero cells moved.** Confirms the port is additive in
+  fact, not just in intent.
+- **Against §6g's cited table, ThreatFox:** every cell matched exactly
+  *except* `jaccard_v1`/`jaccard_v1__reported`'s `ari`/`precision`/`recall`
+  (both full and scoped) — and those differences are not a defect: they
+  match §6j/§6k's already-disclosed, already-committed (`4f9859c`)
+  multi-membership fix to full precision (checked to 5e-8), which
+  post-dates §6g's table and was explicitly flagged there as leaving
+  `jaccard_v1`'s cited numbers stale. Every other method (`random_baseline`,
+  both `group_by_*`, both BFS rows, both the "all clusters" and "reported"
+  tables) matched §6g's cited 4-decimal figures exactly, including the
+  ThreatFox scope condition itself (2,169/3,628, 59.8%, exact).
+- **Against `analysis/final/scoped_pr.py`, re-run live for this
+  verification:** wrote a byte-for-byte copy of its logic that dumps full
+  double precision instead of only printing 4 decimals, ran it fresh
+  against the current database, and compared every method's `n`,
+  `ari_full`, `p_full`, `r_full`, `ari_scoped`, `p_scoped`, `r_scoped`
+  against `run_evaluation.py`'s new output by exact `==`, not rounded —
+  **bit-identical on all seven methods, no exceptions.**
+- **Against §8's Spine 4 table:** populations (Postgres 11,600 / Neo4j
+  13,825 / intersection 11,002) and all five families' achievable/actual/
+  gap figures matched exactly (`js.clearfake` achievable 0.9974489...,
+  actual 0.1884757..., matching the cited 0.9974/0.1885 to 4 decimals;
+  same for the other four families and both population-mismatch counts).
+
+**A genuine finding, surfaced rather than glossed over: §6g's claim that
+"precision is exactly identical between the full and scoped columns for
+every method" is true for every infrastructure-driven method but wrong
+for `random_baseline`.** `random_baseline`'s clusters are arbitrary
+shuffled groupings spanning the *entire* fingerprinted population, not
+groupings driven by shared infrastructure — so an out-of-scope
+(no-enrichment) indicator *can* be a genuine multi-member of a random
+predicted cluster, unlike every other method here, where "no enrichment"
+necessarily means "no shared feature, therefore always a singleton." Both
+the entrypoint's own output and the live `scoped_pr.py` re-run agree
+exactly: `precision_full=0.16418232879671635`,
+`precision_scoped=0.1894673123486683` for `random_baseline` — a real,
+reproducible ~15% difference, not a rounding artifact or a
+run-to-run-variance bug (confirmed deterministic: two independent
+invocations, exact same value). §6g's tables never surfaced this because
+they printed one shared "Precision" column and never separately checked
+`random_baseline`'s scoped side against its full side. Doesn't affect any
+headline claim (`random_baseline` is the ARI floor, never a comparison
+point in its own right) but is recorded here so it isn't silently
+mis-cited later.
+
+**Spine 1/2/4's graph-traversal analyses — closed, partially closed, or
+explicitly not closed, stated precisely rather than left ambiguous:**
+
+- **Spine 1 (commodity hub bridging, 838/1,334 clusters, Cloudflare 223,
+  AS13335 255, the 1,849-cluster's 100% AS13335 coverage) — NOT ported,
+  and should not be.** CONTEXT.md §6i found, the hard way, that computing
+  this via Postgres fingerprint prefix-sharing (what `final_spine1_spine3.py`'s
+  Task 1 does) and via genuine Neo4j multi-hop graph traversal
+  (`analysis/final/spine1_neo4j_correct.py`'s `UNWIND ... MATCH (n)-[:HOSTS|
+  RESOLVES_TO_IP|RESOLVES_TO_ASN|HOSTED_BY|REGISTERED_WITH|USES_NS*1..2]-(attr)`
+  query) give measurably different answers — the Postgres version produced
+  a spurious ~3× drop and was the 5th Spine 5 instance this session. The
+  currently-cited numbers are the Neo4j-graph-traversal ones. Porting this
+  into `run_evaluation.py` would mean adding a new class of multi-hop
+  Cypher query this entrypoint has never needed (it only uses Neo4j via
+  `CampaignDetector.find_connected_clusters()`'s BFS, a completely
+  different query shape), and re-verifying it against the exact
+  already-corrected methodology — real, non-trivial new work with a
+  demonstrated history of silently producing the wrong answer if done
+  slightly wrong. Scripts of record: `analysis/final/spine1_neo4j_correct.py`
+  (the 838/223/255/collinearity figures) and
+  `analysis/final/big_cluster_recheck.py` (the 1,849-cluster/AS13335
+  check).
+- **Spine 2 (Cloudflare's own nameserver pool bridging ~160 members of
+  the 1,849-cluster) — NOT ported, and has no script of record at all.**
+  Grepped `analysis/` for the specific hostnames cited
+  (`harlee.ns.cloudflare.com`, `tosana.ns.cloudflare.com`) — no match.
+  This was a one-off manual illustration, not an automated check, and §8
+  itself describes it as "1 measurement, mechanism-level finding...not a
+  comparative statistic subject to re-confirmation." There is nothing to
+  port; reproducing it would mean re-deriving the illustration from
+  scratch, which is out of scope here.
+- **Spine 4's five-family achievable-vs-actual table — PORTED (above).**
+  **Spine 4's `d`/`k` traversal sweep — deliberately NOT ported.**
+  Technically portable (every building block — `CampaignDetector` with
+  `MAX_DEPTH`/`MIN_CLUSTER` overrides, `connectivity_components`,
+  `build_predicted_labels`/`pairwise_precision_recall` — already exists or
+  is already imported), but it re-runs full BFS clustering 9 times
+  (`d` in `{1,2,3}` × `k` in `{2,3,5}`), each costing roughly what the
+  one default-parameter BFS run this entrypoint already does (~20s+),
+  for a conclusion CONTEXT.md's own Spine 4 write-up calls settled and
+  explicitly says not to re-test "without a new reason to." Adding a
+  ~10×-slower BFS re-run to every routine invocation of the results-table
+  entrypoint, for a diagnostic that isn't expected to change, was judged
+  not worth it. Script of record: `analysis/final/dk_sweep_corrected.py`.
+
+**Commands, `python -m app.evaluation.run_evaluation` from `backend/`
+with the project venv active, `.venv/bin/activate`d and the Docker
+containers up:** this now covers Spine 3 in full (full and scoped), the
+B1 diagnostics, `commodity_fp_rate`, and Spine 4's achievable-vs-actual
+table. See "Final reproduction instructions" immediately below for the
+complete, numbered mapping of every §8 figure to the exact command that
+regenerates it.
+
+---
+
+## 6m. Final reproduction instructions — every §8 figure, mapped to the exact command
+
+**Prerequisite for every command below:** Docker containers up
+(`docker compose up`, or confirm `aletheia-postgres`/`aletheia-neo4j`/
+`aletheia-redis` are already running), the project venv active
+(`source .venv/bin/activate` from the repo root — confirm with
+`which python`/`sys.prefix`, per §7's rule below), current working
+directory `backend/` for anything invoked with `python -m`, repo root for
+anything invoked as `python analysis/final/<script>.py` (each of those
+scripts has its own `sys.path.insert(0, '.')`).
+
+**One command now covers most of the ledger:**
+
+```
+cd backend && python -m app.evaluation.run_evaluation
+```
+
+This reproduces, end to end, in one ~65s run, writing a timestamped
+`evaluation_runs/item7_eval_<UTC timestamp>.json`:
+
+- **Spine 3, in full:** every method's full-population *and* scoped
+  ARI/precision/recall, for all three ground truths (ThreatFox,
+  OTX-with-outlier, OTX-without-outlier) — the weighted-vs-unweighted BFS
+  comparison, the ~1.7× BFS-vs-baseline margins, the
+  OTX-without-outlier contradiction, all of it.
+- **The B1 connectivity-degree-threshold diagnostic sweep** (the
+  "0.2194"/"0.0962"-class numbers, §6c/§6d) and `label_infra_cohesion`,
+  per ground truth.
+- **`commodity_fp_rate`** (BFS-cluster commodity-only fraction, all/
+  reported-unweighted/reported-weighted).
+- **Spine 4's five-family achievable-vs-actual population-corrected
+  table** (§6l, this session) — populations, and per-family achievable/
+  actual/gap, both full and intersection-restricted.
+
+**Everything else, one script each, exactly as before this session —
+not superseded, not duplicated by the entrypoint above:**
+
+| §8 figure | Script |
+|---|---|
+| Spine 1: 838/1,334 clusters touching a recurring hub, Cloudflare 223, AS13335 255, ASN/HostingProvider collinearity | `python analysis/final/spine1_neo4j_correct.py` |
+| Spine 1: the 1,849-member cluster, AS13335 100% coverage | `python analysis/final/big_cluster_recheck.py` |
+| Spine 1: AS13335 global degree (2,048/7,439 domains) | No single saved script prints this exact pair (checked by grep — neither figure appears in any `analysis/*.py` file). The numerator (`degrees["org:AS13335"]` = 2,048) is one line from any script that already calls `ie.compute_feature_degrees(fp_weighted)`, which `run_evaluation.py` does; the denominator (7,439 domains with any ASN edge) needs an ad hoc count over `fp_weighted` restricted to domain-type indicators, not currently in any committed script |
+| Spine 2: Cloudflare nameserver-pool illustration (~160 members) | No script of record — one-off manual illustration, not reproducible by any committed script (§6l) |
+| Spine 3: monotonic `R(C)` gradient by commodity-exposure band (61.9%/72.6%/80.3%) | `python analysis/final/degree_bucket_final.py` |
+| Spine 3: determinism (live BFS re-run, exact list equality) | Automated: `pytest backend/tests/test_campaign_engine.py -k deterministic`; live-query-level double-check was a manual re-run, not a standing script |
+| Spine 4: `d`/`k` traversal sweep (settled; only re-run with a new reason) | `python analysis/final/dk_sweep_corrected.py` |
+| Spine 5: multi-membership audit, hash-seed determinism | Covered by `pytest backend/tests` (regression test) + `run_evaluation.py` above (which now runs under `PYTHONHASHSEED=0` automatically via the `-m`-aware re-exec, §6k) |
+
+**Everything in the left column above requires either genuine Neo4j
+multi-hop graph traversal (Spine 1) or is explicitly a one-time,
+already-settled diagnostic not meant to be re-run routinely (Spine 4's
+sweep), or has no script at all because it was never more than a manual
+illustration (Spine 2) — none of these are silently-unreproducible; each
+is named precisely so nobody has to guess or re-derive which command
+produced which number.**
 
 ---
 
