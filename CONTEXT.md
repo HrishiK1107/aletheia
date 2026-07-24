@@ -3593,8 +3593,8 @@ not superseded, not duplicated by the entrypoint above:**
 |---|---|
 | Spine 1: 838/1,334 clusters touching a recurring hub, Cloudflare 223, AS13335 255, ASN/HostingProvider collinearity | `python analysis/final/spine1_neo4j_correct.py` |
 | Spine 1: the 1,849-member cluster, AS13335 100% coverage | `python analysis/final/big_cluster_recheck.py` |
-| Spine 1: AS13335 global degree (2,048/7,439 domains) | No single saved script prints this exact pair (checked by grep — neither figure appears in any `analysis/*.py` file). The numerator (`degrees["org:AS13335"]` = 2,048) is one line from any script that already calls `ie.compute_feature_degrees(fp_weighted)`, which `run_evaluation.py` does; the denominator (7,439 domains with any ASN edge) needs an ad hoc count over `fp_weighted` restricted to domain-type indicators, not currently in any committed script |
-| Spine 2: Cloudflare nameserver-pool illustration (~160 members) | No script of record — one-off manual illustration, not reproducible by any committed script (§6l) |
+| Spine 1: AS13335 global degree (2,048/7,439 domains, 27.5%) | `python analysis/final/spine1_as13335_degree.py` — closed 2026-07-24 (§6n). Neo4j graph traversal (`Domain-[:RESOLVES_TO_ASN]->ASN`, 1 hop), not the Postgres `fp_weighted` approach this row previously speculated would work: that approach was tried and confirmed wrong first (`degrees["org:AS13335"]` doesn't exist in `fp_weighted` at all — `weighted_fingerprint()` prefers `hosting_provider` over the `asn` fallback, so AS13335 shows up as `org:Cloudflare, Inc.` instead, degree 2,360, a different number for a different reason). Verified exact match to §8: 2,048/7,439/27.5%. |
+| Spine 2: Cloudflare nameserver-pool illustration (~160 members) + population generalisation | `python analysis/final/spine2_ns_pool_census.py` — closed 2026-07-24 (§6n). Turns the manual illustration into a measurement (full shared-feature census of the 1,849-cluster, in-cluster count vs. global degree, confirms harlee/tosana at 161/160) and generalises it across all 1,334 clusters: only 18/670 (1.3% of all clusters) of clusters classified by a type-level check as having "additional non-org evidence" have that evidence supplied *entirely* by features with global degree >100 (5/1,334, 0.4%, at >500) — the illustrated mechanism is real but does not generalise broadly at the population level; see §6n for the full breakdown. |
 | Spine 3: monotonic `R(C)` gradient by commodity-exposure band (61.9%/72.6%/80.3%) | `python analysis/final/degree_bucket_final.py` |
 | Spine 3: determinism (live BFS re-run, exact list equality) | Automated: `pytest backend/tests/test_campaign_engine.py -k deterministic`; live-query-level double-check was a manual re-run, not a standing script |
 | Spine 4: `d`/`k` traversal sweep (settled; only re-run with a new reason) | `python analysis/final/dk_sweep_corrected.py` |
@@ -3603,10 +3603,89 @@ not superseded, not duplicated by the entrypoint above:**
 **Everything in the left column above requires either genuine Neo4j
 multi-hop graph traversal (Spine 1) or is explicitly a one-time,
 already-settled diagnostic not meant to be re-run routinely (Spine 4's
-sweep), or has no script at all because it was never more than a manual
-illustration (Spine 2) — none of these are silently-unreproducible; each
-is named precisely so nobody has to guess or re-derive which command
-produced which number.**
+sweep) — none of these are silently-unreproducible; each is named
+precisely so nobody has to guess or re-derive which command produced
+which number. As of §6n, every row in this table has a script of
+record; the two gaps this table used to document (Spine 1's AS13335
+global degree, Spine 2's nameserver-pool illustration) are closed.**
+
+---
+
+## 6n. Spine 1/2's remaining script-of-record gaps, closed, 2026-07-24
+
+**Requested: close the two `analysis/*.py`-less rows §6m's table still
+carried — Spine 1's AS13335 global degree and Spine 2's Cloudflare
+nameserver-pool illustration — small, additive, no existing code
+touched.**
+
+**`analysis/final/spine1_as13335_degree.py`.** §6m's table entry had
+speculated the fix was one line via `ie.compute_feature_degrees(fp_weighted)`
+(Postgres). Tried that first and it's wrong: `"org:AS13335"` never
+appears as a key in `fp_weighted` at all, because `weighted_fingerprint()`
+prefers `hosting_provider` over the `asn` fallback whenever both are
+set, which they are for essentially every Cloudflare-fronted domain in
+this graph — AS13335 shows up as `org:Cloudflare, Inc.` instead, degree
+2,360, a different feature entirely, not a rounding difference. Rebuilt
+the script around the same Neo4j graph-traversal methodology §6i already
+established as correct for Spine 1 (the Postgres-fingerprint approach
+was previously caught giving a spurious ~3× error on the "touching
+clusters" figure, for the same underlying reason: fingerprint-based
+counts and graph-edge-based counts are not interchangeable here).
+`MATCH (d:Domain)-[:RESOLVES_TO_ASN]->(a:ASN)`, one hop, counted per ASN
+value and as a distinct-domain total. **Verified exact match to §8:
+`degrees` 2,048 for AS13335, 7,439 domains with any ASN edge, ratio
+27.5%** — no mismatch.
+
+**`analysis/final/spine2_ns_pool_census.py`.** Two parts:
+
+1. **The illustration, measured.** Extends `big_cluster_recheck.py`'s
+   query (same 1..2-hop traversal pattern, same `n:URL OR n:Domain OR
+   n:IP` restriction) from `HostingProvider`/`ASN` only to also include
+   `Registrar`/`Nameserver`, giving a full census of every shared
+   feature touching the 1,849-member cluster (1,025 distinct attrs), each
+   with its in-cluster member count and its global degree (a second bulk
+   query, same traversal pattern, unrestricted to cluster membership).
+   Confirms the illustration exactly: `AS13335` 1,849/1,849 (100%),
+   `Cloudflare, Inc.` 1,808/1,849 (97.8%), `harlee.ns.cloudflare.com`
+   161, `tosana.ns.cloudflare.com` 160 — global degrees 6,083, 5,930,
+   483, and 481 respectively (this traversal's "global degree" is a
+   different, broader count than script 1's — includes URL/IP nodes and
+   2-hop reach, not just direct 1-hop Domain edges — so the two scripts'
+   AS13335 numbers, 2,048 vs. 6,083, are both correct but not
+   comparable to each other; each is internally consistent with its own
+   in-cluster methodology).
+2. **The generalisation — the number the project owner asked to see
+   before deciding how to write this section.** Across all 1,334
+   clusters, using the item-6 weighted-fingerprint feature set
+   (`org`/`registrar`/`ns`/`ip`): **670/1,334 (50.2%) of clusters are
+   classified by a type-level check as having "additional non-org
+   evidence."** Of those 670: only **18 (2.7% of the bucket, 1.3% of all
+   1,334 clusters)** have that additional evidence supplied *entirely*
+   by features whose global degree exceeds 100; only **5 (0.7% / 0.4%)**
+   at the 500 threshold. The softer "at least one high-degree feature"
+   version is larger but still a minority: 205/670 (15.4% of all
+   clusters) at >100, 64/670 (4.8% of all clusters) at >500.
+
+**Honest reading, not massaged: Spine 2's mechanism is real (the
+1,849-cluster census confirms it exactly) but does not generalise
+broadly at the population level.** The type-level-check-undercounts
+phenomenon that dominates the single 1,849-member cluster is the
+extreme tail, not the typical case — at most ~1–5% of all clusters have
+their "additional evidence" entirely explained away by commodity-degree
+features, depending on threshold. This does not make Spine 2 a
+population-level finding on the "ONLY" criterion; it remains closest to
+what §8 already called it — "1 measurement, mechanism-level finding" —
+now with a population denominator attached showing precisely how far
+that mechanism does and does not extend, rather than leaving the reach
+of the illustration unquantified.
+
+**Verification:** both scripts run clean against the live final-state
+graph (1,334 clusters, 1,849-member cluster unchanged — confirms the
+graph state is the same one §8's cited figures describe). No existing
+code touched; both scripts are new, read-only, additive.
+
+Commands added to §6m's table (above). Full test suite not affected
+(no application code changed) — not re-run for this item.
 
 ---
 

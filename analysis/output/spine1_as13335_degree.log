@@ -1,0 +1,6 @@
+=== Spine 1: AS13335 global degree (Neo4j graph traversal) ===
+AS13335 degree (Domain nodes with a RESOLVES_TO_ASN edge to AS13335) = 2048  (expect 2,048)
+domain-type indicators with any ASN feature (any RESOLVES_TO_ASN edge) = 7439  (expect 7,439)
+ratio = 27.5%  (expect 27.5%)
+
+Matches §8 exactly.

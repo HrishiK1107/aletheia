@@ -1,0 +1,6165 @@
+{
+  "n_clusters": 1334,
+  "big_cluster_size": 1849,
+  "big_cluster_census": [
+    {
+      "type": "ASN",
+      "value": "AS13335",
+      "in_cluster_members": 1849,
+      "global_degree": 6083
+    },
+    {
+      "type": "HostingProvider",
+      "value": "Cloudflare, Inc.",
+      "in_cluster_members": 1808,
+      "global_degree": 5930
+    },
+    {
+      "type": "Registrar",
+      "value": "GoDaddy.com, LLC",
+      "in_cluster_members": 196,
+      "global_degree": 2739
+    },
+    {
+      "type": "Nameserver",
+      "value": "harlee.ns.cloudflare.com",
+      "in_cluster_members": 161,
+      "global_degree": 483
+    },
+    {
+      "type": "Nameserver",
+      "value": "tosana.ns.cloudflare.com",
+      "in_cluster_members": 160,
+      "global_degree": 481
+    },
+    {
+      "type": "Registrar",
+      "value": "Gname.com Pte. Ltd.",
+      "in_cluster_members": 135,
+      "global_degree": 712
+    },
+    {
+      "type": "Registrar",
+      "value": "PDR Ltd. d/b/a PublicDomainRegistry.com",
+      "in_cluster_members": 135,
+      "global_degree": 881
+    },
+    {
+      "type": "Registrar",
+      "value": "Global Domain Group LLC",
+      "in_cluster_members": 125,
+      "global_degree": 505
+    },
+    {
+      "type": "Nameserver",
+      "value": "galilea.ns.cloudflare.com",
+      "in_cluster_members": 123,
+      "global_degree": 379
+    },
+    {
+      "type": "Nameserver",
+      "value": "moura.ns.cloudflare.com",
+      "in_cluster_members": 121,
+      "global_degree": 367
+    },
+    {
+      "type": "Registrar",
+      "value": "Unstoppable Domains Inc.",
+      "in_cluster_members": 99,
+      "global_degree": 327
+    },
+    {
+      "type": "Nameserver",
+      "value": "nia.ns.cloudflare.com",
+      "in_cluster_members": 69,
+      "global_degree": 212
+    },
+    {
+      "type": "Nameserver",
+      "value": "quincy.ns.cloudflare.com",
+      "in_cluster_members": 66,
+      "global_degree": 202
+    },
+    {
+      "type": "Registrar",
+      "value": "Gransy, s.r.o.",
+      "in_cluster_members": 64,
+      "global_degree": 281
+    },
+    {
+      "type": "Registrar",
+      "value": "CNOBIN INFORMATION TECHNOLOGY LIMITED",
+      "in_cluster_members": 59,
+      "global_degree": 211
+    },
+    {
+      "type": "Nameserver",
+      "value": "kiki.ns.cloudflare.com",
+      "in_cluster_members": 56,
+      "global_degree": 173
+    },
+    {
+      "type": "Nameserver",
+      "value": "kellen.ns.cloudflare.com",
+      "in_cluster_members": 55,
+      "global_degree": 169
+    },
+    {
+      "type": "Registrar",
+      "value": "NICENIC INTERNATIONAL GROUP CO., LIMITED",
+      "in_cluster_members": 43,
+      "global_degree": 313
+    },
+    {
+      "type": "Registrar",
+      "value": "Web Commerce Communications Limited dba WebNic.cc",
+      "in_cluster_members": 42,
+      "global_degree": 261
+    },
+    {
+      "type": "Registrar",
+      "value": "NameSilo, LLC",
+      "in_cluster_members": 37,
+      "global_degree": 522
+    },
+    {
+      "type": "Nameserver",
+      "value": "mcgrory.ns.cloudflare.com",
+      "in_cluster_members": 35,
+      "global_degree": 110
+    },
+    {
+      "type": "Registrar",
+      "value": "Cloudflare, Inc.",
+      "in_cluster_members": 35,
+      "global_degree": 165
+    },
+    {
+      "type": "HostingProvider",
+      "value": "Cloudflare Pages",
+      "in_cluster_members": 34,
+      "global_degree": 137
+    },
+    {
+      "type": "Registrar",
+      "value": "Tucows Domains Inc.",
+      "in_cluster_members": 34,
+      "global_degree": 425
+    },
+    {
+      "type": "Nameserver",
+      "value": "vida.ns.cloudflare.com",
+      "in_cluster_members": 31,
+      "global_degree": 97
+    },
+    {
+      "type": "Registrar",
+      "value": "Dynadot Inc",
+      "in_cluster_members": 30,
+      "global_degree": 347
+    },
+    {
+      "type": "Registrar",
+      "value": "Dominet (HK) Limited",
+      "in_cluster_members": 25,
+      "global_degree": 103
+    },
+    {
+      "type": "Registrar",
+      "value": "Spaceship, Inc.",
+      "in_cluster_members": 23,
+      "global_degree": 175
+    },
+    {
+      "type": "Registrar",
+      "value": "Hello Internet Corp",
+      "in_cluster_members": 19,
+      "global_degree": 121
+    },
+    {
+      "type": "Registrar",
+      "value": "HOSTINGER operations, UAB",
+      "in_cluster_members": 18,
+      "global_degree": 862
+    },
+    {
+      "type": "Nameserver",
+      "value": "sandra.ns.cloudflare.com",
+      "in_cluster_members": 17,
+      "global_degree": 51
+    },
+    {
+      "type": "Registrar",
+      "value": "Network Solutions, LLC",
+      "in_cluster_members": 17,
+      "global_degree": 196
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.bluehost.com",
+      "in_cluster_members": 14,
+      "global_degree": 227
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.bluehost.com",
+      "in_cluster_members": 14,
+      "global_degree": 227
+    },
+    {
+      "type": "Registrar",
+      "value": "Metaregistrar BV",
+      "in_cluster_members": 13,
+      "global_degree": 64
+    },
+    {
+      "type": "Nameserver",
+      "value": "steven.ns.cloudflare.com",
+      "in_cluster_members": 13,
+      "global_degree": 39
+    },
+    {
+      "type": "Nameserver",
+      "value": "meera.ns.cloudflare.com",
+      "in_cluster_members": 12,
+      "global_degree": 61
+    },
+    {
+      "type": "Nameserver",
+      "value": "nina.ns.cloudflare.com",
+      "in_cluster_members": 11,
+      "global_degree": 47
+    },
+    {
+      "type": "Nameserver",
+      "value": "holly.ns.cloudflare.com",
+      "in_cluster_members": 11,
+      "global_degree": 33
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.fbi.seized.gov",
+      "in_cluster_members": 11,
+      "global_degree": 42
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.fbi.seized.gov",
+      "in_cluster_members": 11,
+      "global_degree": 42
+    },
+    {
+      "type": "Nameserver",
+      "value": "brynne.ns.cloudflare.com",
+      "in_cluster_members": 10,
+      "global_degree": 42
+    },
+    {
+      "type": "Nameserver",
+      "value": "zoe.ns.cloudflare.com",
+      "in_cluster_members": 10,
+      "global_degree": 37
+    },
+    {
+      "type": "Nameserver",
+      "value": "jeremy.ns.cloudflare.com",
+      "in_cluster_members": 10,
+      "global_degree": 32
+    },
+    {
+      "type": "Nameserver",
+      "value": "pat.ns.cloudflare.com",
+      "in_cluster_members": 10,
+      "global_degree": 30
+    },
+    {
+      "type": "Nameserver",
+      "value": "marty.ns.cloudflare.com",
+      "in_cluster_members": 10,
+      "global_degree": 36
+    },
+    {
+      "type": "Nameserver",
+      "value": "clyde.ns.cloudflare.com",
+      "in_cluster_members": 10,
+      "global_degree": 33
+    },
+    {
+      "type": "Registrar",
+      "value": "Name.com, Inc.",
+      "in_cluster_members": 9,
+      "global_degree": 114
+    },
+    {
+      "type": "Nameserver",
+      "value": "paul.ns.cloudflare.com",
+      "in_cluster_members": 9,
+      "global_degree": 30
+    },
+    {
+      "type": "Nameserver",
+      "value": "wally.ns.cloudflare.com",
+      "in_cluster_members": 9,
+      "global_degree": 31
+    },
+    {
+      "type": "Nameserver",
+      "value": "randy.ns.cloudflare.com",
+      "in_cluster_members": 9,
+      "global_degree": 27
+    },
+    {
+      "type": "Nameserver",
+      "value": "clay.ns.cloudflare.com",
+      "in_cluster_members": 9,
+      "global_degree": 45
+    },
+    {
+      "type": "Nameserver",
+      "value": "violet.ns.cloudflare.com",
+      "in_cluster_members": 9,
+      "global_degree": 28
+    },
+    {
+      "type": "Registrar",
+      "value": "TLDS L.L.C. d/b/a SRSPlus",
+      "in_cluster_members": 9,
+      "global_degree": 42
+    },
+    {
+      "type": "Nameserver",
+      "value": "coen.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 31
+    },
+    {
+      "type": "Registrar",
+      "value": "ENOM, INC.",
+      "in_cluster_members": 8,
+      "global_degree": 361
+    },
+    {
+      "type": "Registrar",
+      "value": "1API GmbH",
+      "in_cluster_members": 8,
+      "global_degree": 36
+    },
+    {
+      "type": "Nameserver",
+      "value": "jessica.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 46
+    },
+    {
+      "type": "Nameserver",
+      "value": "paris.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "sean.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 33
+    },
+    {
+      "type": "Nameserver",
+      "value": "emely.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "elle.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 49
+    },
+    {
+      "type": "Nameserver",
+      "value": "duke.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 27
+    },
+    {
+      "type": "Nameserver",
+      "value": "roan.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 29
+    },
+    {
+      "type": "Nameserver",
+      "value": "noah.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 39
+    },
+    {
+      "type": "Registrar",
+      "value": "Internet Domain Service BS Corp.",
+      "in_cluster_members": 8,
+      "global_degree": 60
+    },
+    {
+      "type": "Nameserver",
+      "value": "rita.ns.cloudflare.com",
+      "in_cluster_members": 8,
+      "global_degree": 35
+    },
+    {
+      "type": "Registrar",
+      "value": "Go Get Canada Domain Registrar Ltd.",
+      "in_cluster_members": 7,
+      "global_degree": 26
+    },
+    {
+      "type": "Nameserver",
+      "value": "ray.ns.cloudflare.com",
+      "in_cluster_members": 7,
+      "global_degree": 31
+    },
+    {
+      "type": "Nameserver",
+      "value": "tom.ns.cloudflare.com",
+      "in_cluster_members": 7,
+      "global_degree": 28
+    },
+    {
+      "type": "Nameserver",
+      "value": "evelyn.ns.cloudflare.com",
+      "in_cluster_members": 7,
+      "global_degree": 27
+    },
+    {
+      "type": "Nameserver",
+      "value": "sid.ns.cloudflare.com",
+      "in_cluster_members": 7,
+      "global_degree": 27
+    },
+    {
+      "type": "Nameserver",
+      "value": "burt.ns.cloudflare.com",
+      "in_cluster_members": 7,
+      "global_degree": 21
+    },
+    {
+      "type": "Nameserver",
+      "value": "henry.ns.cloudflare.com",
+      "in_cluster_members": 7,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "mario.ns.cloudflare.com",
+      "in_cluster_members": 7,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "val.ns.cloudflare.com",
+      "in_cluster_members": 7,
+      "global_degree": 26
+    },
+    {
+      "type": "Nameserver",
+      "value": "clark.ns.cloudflare.com",
+      "in_cluster_members": 7,
+      "global_degree": 21
+    },
+    {
+      "type": "Registrar",
+      "value": "Squarespace Domains II LLC",
+      "in_cluster_members": 7,
+      "global_degree": 129
+    },
+    {
+      "type": "Registrar",
+      "value": "Ultahost, Inc.",
+      "in_cluster_members": 7,
+      "global_degree": 51
+    },
+    {
+      "type": "Nameserver",
+      "value": "khloe.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 22
+    },
+    {
+      "type": "Nameserver",
+      "value": "fred.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "heather.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 22
+    },
+    {
+      "type": "Registrar",
+      "value": "NameSilo,LLC",
+      "in_cluster_members": 6,
+      "global_degree": 89
+    },
+    {
+      "type": "Nameserver",
+      "value": "damon.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 26
+    },
+    {
+      "type": "Registrar",
+      "value": "Wild West Domains, LLC",
+      "in_cluster_members": 6,
+      "global_degree": 64
+    },
+    {
+      "type": "Nameserver",
+      "value": "sharon.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 28
+    },
+    {
+      "type": "Registrar",
+      "value": "IONOS SE",
+      "in_cluster_members": 6,
+      "global_degree": 198
+    },
+    {
+      "type": "Nameserver",
+      "value": "jeff.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "amir.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "martin.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 26
+    },
+    {
+      "type": "Nameserver",
+      "value": "earl.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 30
+    },
+    {
+      "type": "Registrar",
+      "value": "Gorni Interactive Ltd",
+      "in_cluster_members": 6,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "nucum.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "aaron.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "braden.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "marge.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "sonia.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "sarah.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 22
+    },
+    {
+      "type": "Registrar",
+      "value": "Porkbun LLC",
+      "in_cluster_members": 6,
+      "global_degree": 129
+    },
+    {
+      "type": "Nameserver",
+      "value": "anirban.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "tani.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "alice.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 19
+    },
+    {
+      "type": "Nameserver",
+      "value": "ursula.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "aida.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 18
+    },
+    {
+      "type": "Registrar",
+      "value": "Realtime Register B.V.",
+      "in_cluster_members": 6,
+      "global_degree": 96
+    },
+    {
+      "type": "Nameserver",
+      "value": "brianna.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "johnathan.ns.cloudflare.com",
+      "in_cluster_members": 6,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "jason.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "ryan.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 18
+    },
+    {
+      "type": "Registrar",
+      "value": "Cloudflare, Inc. [Tag = CLOUDFLARE]",
+      "in_cluster_members": 5,
+      "global_degree": 18
+    },
+    {
+      "type": "Registrar",
+      "value": "Bluehost Inc.",
+      "in_cluster_members": 5,
+      "global_degree": 132
+    },
+    {
+      "type": "Nameserver",
+      "value": "leia.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "sima.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 21
+    },
+    {
+      "type": "Nameserver",
+      "value": "lola.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "brit.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "tara.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "chase.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "hadlee.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "savanna.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "kurt.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "chad.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-c2.googledomains.com",
+      "in_cluster_members": 5,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-c1.googledomains.com",
+      "in_cluster_members": 5,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-c3.googledomains.com",
+      "in_cluster_members": 5,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-c4.googledomains.com",
+      "in_cluster_members": 5,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "rory.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 52
+    },
+    {
+      "type": "Nameserver",
+      "value": "carlane.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "jerome.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "hasslo.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 36
+    },
+    {
+      "type": "Registrar",
+      "value": "Dynadot, LLC",
+      "in_cluster_members": 5,
+      "global_degree": 37
+    },
+    {
+      "type": "Registrar",
+      "value": "TuringSign Inc. d/b/a Cosmotown",
+      "in_cluster_members": 5,
+      "global_degree": 78
+    },
+    {
+      "type": "Nameserver",
+      "value": "dylan.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 33
+    },
+    {
+      "type": "Nameserver",
+      "value": "kai.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 22
+    },
+    {
+      "type": "Nameserver",
+      "value": "julissa.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "kia.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "elinore.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 21
+    },
+    {
+      "type": "HostingProvider",
+      "value": "Webflow",
+      "in_cluster_members": 5,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "gigi.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "hgns2.hostgator.com",
+      "in_cluster_members": 5,
+      "global_degree": 50
+    },
+    {
+      "type": "Nameserver",
+      "value": "hgns1.hostgator.com",
+      "in_cluster_members": 5,
+      "global_degree": 50
+    },
+    {
+      "type": "Registrar",
+      "value": "GoDaddy",
+      "in_cluster_members": 5,
+      "global_degree": 127
+    },
+    {
+      "type": "Nameserver",
+      "value": "ricardo.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "gwen.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "cash.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "amy.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "rosa.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "rosalie.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 31
+    },
+    {
+      "type": "Nameserver",
+      "value": "james.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "kehlani.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "augustus.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 35
+    },
+    {
+      "type": "Registrar",
+      "value": "GoDaddy.com, LLC. [Tag = GODADDY]",
+      "in_cluster_members": 5,
+      "global_degree": 74
+    },
+    {
+      "type": "Nameserver",
+      "value": "connie.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Registrar",
+      "value": "Fewmoretaps OU d/b/a Trustname.com",
+      "in_cluster_members": 5,
+      "global_degree": 47
+    },
+    {
+      "type": "Nameserver",
+      "value": "troy.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 21
+    },
+    {
+      "type": "Registrar",
+      "value": "Dreamscape Networks International Pte Ltd",
+      "in_cluster_members": 5,
+      "global_degree": 29
+    },
+    {
+      "type": "Nameserver",
+      "value": "nolan.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "beau.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 16
+    },
+    {
+      "type": "Registrar",
+      "value": "DropCatch.com 1384 LLC",
+      "in_cluster_members": 5,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "crystal.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "robert.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "saanvi.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 16
+    },
+    {
+      "type": "Registrar",
+      "value": "123-Reg Limited",
+      "in_cluster_members": 5,
+      "global_degree": 34
+    },
+    {
+      "type": "Nameserver",
+      "value": "buck.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "yisroel.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "kolton.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "greg.ns.cloudflare.com",
+      "in_cluster_members": 5,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "arch.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "fonzie.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "olof.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 15
+    },
+    {
+      "type": "Registrar",
+      "value": "LiveDNS Ltd",
+      "in_cluster_members": 4,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "gemma.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "romina.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 22
+    },
+    {
+      "type": "Nameserver",
+      "value": "bryce.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "ariella.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "anuj.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "elisabeth.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "west.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "cloe.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "sterling.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "gerald.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "ulla.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "dawn.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "ernest.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "zahir.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "rihana.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "jimmy.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "morgan.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.dns-parking.com",
+      "in_cluster_members": 4,
+      "global_degree": 1150
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.dns-parking.com",
+      "in_cluster_members": 4,
+      "global_degree": 1150
+    },
+    {
+      "type": "Registrar",
+      "value": "Gandi SAS (http://www.gandi.net)",
+      "in_cluster_members": 4,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "Hosting Ukraine LLC.",
+      "in_cluster_members": 4,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "faye.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "shane.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "elias.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "melody.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Registrar",
+      "value": "Namecheap, Inc. [Tag = NAMECHEAP-INC]",
+      "in_cluster_members": 4,
+      "global_degree": 49
+    },
+    {
+      "type": "Nameserver",
+      "value": "conrad.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 21
+    },
+    {
+      "type": "Nameserver",
+      "value": "jonah.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "aiden.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "jean.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "paloma.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 19
+    },
+    {
+      "type": "Nameserver",
+      "value": "marjory.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "plato.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "eve.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "perla.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 28
+    },
+    {
+      "type": "Nameserver",
+      "value": "paityn.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "clayton.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 27
+    },
+    {
+      "type": "Nameserver",
+      "value": "raegan.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-b4.googledomains.com",
+      "in_cluster_members": 4,
+      "global_degree": 36
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-b2.googledomains.com",
+      "in_cluster_members": 4,
+      "global_degree": 36
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-b1.googledomains.com",
+      "in_cluster_members": 4,
+      "global_degree": 36
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-b3.googledomains.com",
+      "in_cluster_members": 4,
+      "global_degree": 36
+    },
+    {
+      "type": "Nameserver",
+      "value": "harley.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "tricia.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "hank.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "vita.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "pranab.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "itzel.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "megan.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 19
+    },
+    {
+      "type": "Nameserver",
+      "value": "sydney.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-e4.googledomains.com",
+      "in_cluster_members": 4,
+      "global_degree": 32
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-e2.googledomains.com",
+      "in_cluster_members": 4,
+      "global_degree": 32
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-e3.googledomains.com",
+      "in_cluster_members": 4,
+      "global_degree": 32
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-e1.googledomains.com",
+      "in_cluster_members": 4,
+      "global_degree": 32
+    },
+    {
+      "type": "Nameserver",
+      "value": "armfazh.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "nicole.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "frida.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "beth.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 16
+    },
+    {
+      "type": "Registrar",
+      "value": "Porkbun",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "kobe.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "alla.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "aldo.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "amos.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "ram.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "annalise.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "hugh.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "peyton.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "george.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 36
+    },
+    {
+      "type": "Registrar",
+      "value": "Go Daddy Domains Canada, Inc",
+      "in_cluster_members": 4,
+      "global_degree": 50
+    },
+    {
+      "type": "Nameserver",
+      "value": "cris.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "scott.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Registrar",
+      "value": "Hosting Concepts B.V. d/b/a Registrar.eu",
+      "in_cluster_members": 4,
+      "global_degree": 105
+    },
+    {
+      "type": "Nameserver",
+      "value": "dion.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "angelina.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "heidi.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "kay.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "grace.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "simone.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "diva.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "carmelo.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "vivienne.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "matias.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Registrar",
+      "value": "Namecheap",
+      "in_cluster_members": 4,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "naomi.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "aaden.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "alina.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "kira.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "hazel.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 32
+    },
+    {
+      "type": "Nameserver",
+      "value": "norman.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "virginia.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "kaiser.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "ashton.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "courtney.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Registrar",
+      "value": "Domainipr Limited",
+      "in_cluster_members": 4,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "amalia.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "guss.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "jasmine.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "lennon.ns.cloudflare.com",
+      "in_cluster_members": 4,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "jihoon.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "peaches.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "mira.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "desi.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "rodney.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 19
+    },
+    {
+      "type": "Nameserver",
+      "value": "andy.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "dilbert.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "harmony.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "chip.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "dora.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "molly.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "dee.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "nile.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "josh.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "erin.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "zara.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "otto.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "major.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "joaquin.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "drake.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "clara.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "wanda.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "adel.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "ullis.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "graham.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "chelsea.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "edna.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 16
+    },
+    {
+      "type": "Registrar",
+      "value": "Launchpad.com Inc.",
+      "in_cluster_members": 3,
+      "global_degree": 67
+    },
+    {
+      "type": "Nameserver",
+      "value": "hans.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "zelda.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "alan.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "meilani.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "dante.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "marlowe.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 21
+    },
+    {
+      "type": "Nameserver",
+      "value": "lex.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "ingrid.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "penny.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "zac.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "eric.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "isla.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "keaton.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "dell.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Registrar",
+      "value": "mijn.host",
+      "in_cluster_members": 3,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "todd.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "bailey.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "elisa.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Registrar",
+      "value": "Key-Systems GmbH",
+      "in_cluster_members": 3,
+      "global_degree": 77
+    },
+    {
+      "type": "Nameserver",
+      "value": "elaine.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "fatima.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 21
+    },
+    {
+      "type": "Nameserver",
+      "value": "aron.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "aisha.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "nova.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "riya.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Registrar",
+      "value": "Isimtescil Bilisim A.S",
+      "in_cluster_members": 3,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "gabe.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 19
+    },
+    {
+      "type": "Nameserver",
+      "value": "evangeline.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "chan.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "barbara.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "bill.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "ignat.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "etienne.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Registrar",
+      "value": "Gandi SAS",
+      "in_cluster_members": 3,
+      "global_degree": 39
+    },
+    {
+      "type": "Nameserver",
+      "value": "daisy.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "katelyn.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "joel.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "langston.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "sevki.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "piotr.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "andronicus.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "sunny.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "theo.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "margo.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "gail.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "nitin.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "ashley.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "bart.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "nelly.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "tegan.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "ivan.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 13
+    },
+    {
+      "type": "Registrar",
+      "value": "MAT BAO CORPORATION",
+      "in_cluster_members": 3,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "veronica.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 19
+    },
+    {
+      "type": "Nameserver",
+      "value": "ryleigh.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "eva.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "drew.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "noor.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "susan.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "huxley.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "liberty.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "mike.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "maxine.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "trey.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "addilyn.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "laylah.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "lee.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "stanley.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "aryanna.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "rafe.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "cody.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "austin.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "daphne.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "oswald.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "chloe.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "hera.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "renan.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 27
+    },
+    {
+      "type": "Nameserver",
+      "value": "chris.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "adi.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "lila.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "sullivan.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "damiete.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Registrar",
+      "value": "Squarespace Domains LLC",
+      "in_cluster_members": 3,
+      "global_degree": 61
+    },
+    {
+      "type": "Nameserver",
+      "value": "christian.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "dolly.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "alberto.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "marek.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "princess.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "laila.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "shaz.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "newt.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "melissa.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "terin.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "carrera.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "jo.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "giancarlo.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "henrik.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Registrar",
+      "value": "COSMOTOWN, INC.",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "stan.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "ben.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "roman.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "maxim.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "braelyn.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "blair.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "piper.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "sam.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "zariyah.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 17
+    },
+    {
+      "type": "Nameserver",
+      "value": "lennox.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "rob.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "will.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "gina.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "reza.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "brady.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "kate.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "pablo.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "emma.ns.cloudflare.com",
+      "in_cluster_members": 3,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "carioca.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "malavika.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "neil.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "coleman.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "lucy.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "donna.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "patrick.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "june.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "armando.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "salvador.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns3.stackdns.com",
+      "in_cluster_members": 2,
+      "global_degree": 26
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns4.stackdns.com",
+      "in_cluster_members": 2,
+      "global_degree": 26
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.stackdns.com",
+      "in_cluster_members": 2,
+      "global_degree": 26
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.stackdns.com",
+      "in_cluster_members": 2,
+      "global_degree": 26
+    },
+    {
+      "type": "Nameserver",
+      "value": "quinton.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.hover.com",
+      "in_cluster_members": 2,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.hover.com",
+      "in_cluster_members": 2,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "ada.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "dahlia.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "brenda.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "karl.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "nick.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ariadne.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "paislee.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "tate.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "luciane.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "zita.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 30
+    },
+    {
+      "type": "Nameserver",
+      "value": "davina.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "garret.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "BigRock Solutions Ltd.",
+      "in_cluster_members": 2,
+      "global_degree": 37
+    },
+    {
+      "type": "Nameserver",
+      "value": "remy.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "leanna.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "felipe.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "ken.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 13
+    },
+    {
+      "type": "Registrar",
+      "value": "ZXCS",
+      "in_cluster_members": 2,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "kristina.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "mimi.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "bruce.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 12
+    },
+    {
+      "type": "Registrar",
+      "value": "CV. Jogjacamp",
+      "in_cluster_members": 2,
+      "global_degree": 26
+    },
+    {
+      "type": "Nameserver",
+      "value": "elma.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "rosemary.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "coco.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "georgia.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "tanner.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "rodrigo.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Registrar",
+      "value": "InterSpace Ltd",
+      "in_cluster_members": 2,
+      "global_degree": 13
+    },
+    {
+      "type": "Registrar",
+      "value": "Netcom.cm Sarl",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "arya.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "nelci.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "leonidas.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "walt.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "alexis.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "nikon.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "tim.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "ned.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "emerie.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "brian.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "kimora.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "venus.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "cameron.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "angela.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "randall.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "fish.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "osmar.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 26
+    },
+    {
+      "type": "Nameserver",
+      "value": "mitch.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "mckenzie.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "boyd.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "jill.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "kip.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "ed.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "eugene.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "michelle.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "johnny.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "dayana.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "surina.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "OVH, SAS",
+      "in_cluster_members": 2,
+      "global_degree": 56
+    },
+    {
+      "type": "Nameserver",
+      "value": "pam.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Registrar",
+      "value": "Alibaba Cloud Computing (Beijing) Co., Ltd.",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "lady.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns14.domaincontrol.com",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns13.domaincontrol.com",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-a4.googledomains.com",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-a2.googledomains.com",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-a3.googledomains.com",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-cloud-a1.googledomains.com",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Registrar",
+      "value": "Domain.com - Network Solutions, LLC",
+      "in_cluster_members": 2,
+      "global_degree": 40
+    },
+    {
+      "type": "Nameserver",
+      "value": "jake.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "ridge.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "poppy.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "ajay.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "lloyd.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "cora.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Registrar",
+      "value": "DREAMHOST",
+      "in_cluster_members": 2,
+      "global_degree": 33
+    },
+    {
+      "type": "Nameserver",
+      "value": "luke.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "magnolia.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "pearl.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "zod.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "ASN",
+      "value": "AS47583",
+      "in_cluster_members": 2,
+      "global_degree": 1666
+    },
+    {
+      "type": "HostingProvider",
+      "value": "Hostinger International Limited",
+      "in_cluster_members": 2,
+      "global_degree": 1666
+    },
+    {
+      "type": "Nameserver",
+      "value": "colette.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "norm.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "mckinley.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "keenan.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "macy.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "elmo.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Registrar",
+      "value": "Cloudflare, Inc",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "gloria.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "arvind.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 22
+    },
+    {
+      "type": "Nameserver",
+      "value": "phil.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "woz.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "kayden.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "mark.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "leah.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "samara.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "Websupport s.r.o.",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "jamie.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "rudy.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "OwnRegistrar, Inc.",
+      "in_cluster_members": 2,
+      "global_degree": 31
+    },
+    {
+      "type": "Nameserver",
+      "value": "zeus.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "fiona.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "ethan.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "katja.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "colin.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "bingo.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "kyree.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "sloan.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "naya.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "selah.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 15
+    },
+    {
+      "type": "Registrar",
+      "value": "Domain The Net Technologies Ltd",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "nola.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "nico.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "journey.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "Register 365",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "justin.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "isaac.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "benedict.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "aarav.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "adelaide.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "vicente.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "teresa.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "vick.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Registrar",
+      "value": "Dynadot LLC",
+      "in_cluster_members": 2,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "liz.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "Amazon Registrar, Inc.",
+      "in_cluster_members": 2,
+      "global_degree": 40
+    },
+    {
+      "type": "Nameserver",
+      "value": "brenna.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "eloise.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "meg.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "stephane.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "gracie.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "hayes.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "Mesh Digital Limited",
+      "in_cluster_members": 2,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "carter.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "rocky.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "dean.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ligia.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns47.domaincontrol.com",
+      "in_cluster_members": 2,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns48.domaincontrol.com",
+      "in_cluster_members": 2,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "rustam.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "dom.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "rosalyn.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "joyce.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "gabriel.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "lynn.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "thaddeus.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "diana.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "donald.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "Automattic Inc.",
+      "in_cluster_members": 2,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "ivy.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "hassan.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "yew.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "dimitris.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "ziggy.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "alec.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Registrar",
+      "value": "P.A. Viet Nam Company Limited",
+      "in_cluster_members": 2,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "grannbo.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "kanye.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "craig.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "sreeni.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ines.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "felicity.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "REGRU-RU",
+      "in_cluster_members": 2,
+      "global_degree": 32
+    },
+    {
+      "type": "Nameserver",
+      "value": "matteo.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "jade.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "clint.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "NAMECHEAP",
+      "in_cluster_members": 2,
+      "global_degree": 19
+    },
+    {
+      "type": "Nameserver",
+      "value": "ignacio.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 30
+    },
+    {
+      "type": "Nameserver",
+      "value": "oaklyn.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "jaime.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "titan.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "love.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "aragorn.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "cheryl.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "NAMECHEAP INC",
+      "in_cluster_members": 2,
+      "global_degree": 41
+    },
+    {
+      "type": "Registrar",
+      "value": "WHC Online Solutions Inc.",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "melnicoff.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "carlos.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "melinda.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "dan.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "vera.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "denver.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "sierra.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "art.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "casey.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "cecelia.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "stevie.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "yadiel.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "rose.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "louis.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ian.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "jermaine.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "ophelia.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "sri.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "nora.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "tori.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "jewel.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "pedro.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "vin.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "christina.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "jasper.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "elliott.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "NameMart Pte. Ltd.",
+      "in_cluster_members": 2,
+      "global_degree": 35
+    },
+    {
+      "type": "Nameserver",
+      "value": "dale.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "dalary.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "adrian.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "wells.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "seamus.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "tony.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "lorna.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "ollie.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "nero.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "marvin.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "irma.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "magali.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "lara.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "harleigh.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 12
+    },
+    {
+      "type": "Registrar",
+      "value": "Infomaniak Network SA",
+      "in_cluster_members": 2,
+      "global_degree": 33
+    },
+    {
+      "type": "Nameserver",
+      "value": "konnor.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "joan.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "blakely.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 30
+    },
+    {
+      "type": "Nameserver",
+      "value": "candy.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 21
+    },
+    {
+      "type": "Nameserver",
+      "value": "miguel.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "summer.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "pete.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "hal.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "sureena.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "malcolm.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "Wix.com Ltd.",
+      "in_cluster_members": 2,
+      "global_degree": 20
+    },
+    {
+      "type": "Nameserver",
+      "value": "koa.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "veda.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "algin.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "leonard.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "tadeo.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "john.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "trevor.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "miles.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "arturo.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "etta.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "kipp.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "INET CORPORATION",
+      "in_cluster_members": 2,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "NameCheap, Inc (https://www.namecheap.com)",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "garrett.ns.cloudflare.com",
+      "in_cluster_members": 2,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "bethany.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Registrar",
+      "value": "Fasthosts Internet Ltd [Tag = LIVEDOMAINS]",
+      "in_cluster_members": 1,
+      "global_degree": 30
+    },
+    {
+      "type": "Nameserver",
+      "value": "arely.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "leif.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "emerson.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "weston.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Internet Domain Services BS Corp t/a Internet.bs [Tag = IDS-BS]",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "kyle.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "NETIM",
+      "in_cluster_members": 1,
+      "global_degree": 11
+    },
+    {
+      "type": "Registrar",
+      "value": "Cloud Yuqu LLC",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "Hosting Concepts B.V. [Tag = REGISTRAR-EU]",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "rommy.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "jarred.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "meiling.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "leland.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "corey.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "david.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "delilah.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "Sav.com LLC",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "ALSANET-REG",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "ali.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "raina.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "adam.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "tess.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "devin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "alfred.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "lina.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "dara.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "\u0422\u041e\u0412 \"\u041d\u0406\u041a.\u042e\u0415\u0419\"",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "ara.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "cosmin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "anita.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "CAP CONNECT",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.nameserver.net.au",
+      "in_cluster_members": 1,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.nameserver.net.au",
+      "in_cluster_members": 1,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns3.nameserver.net.au",
+      "in_cluster_members": 1,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "max.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "aspen.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "carla.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "GoDaddy.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "cortney.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "GoDaddy Corporate Domains, LLC",
+      "in_cluster_members": 1,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "rajeev.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "C-Soft Oy",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Register.com Inc [Tag = REGISTER]",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "kristin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "eNom, LLC",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "NAMECHEAP, INC.",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns106.ovh.net",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "dns106.ovh.net",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Registrar",
+      "value": "Aruba s.p.a.",
+      "in_cluster_members": 1,
+      "global_degree": 85
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns8524.hostgator.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns8523.hostgator.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns27.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 42
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns28.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 42
+    },
+    {
+      "type": "Nameserver",
+      "value": "maya.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "quentin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "IMMATERIALISM LIMITED",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "chuck.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "cory.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Annulet LLC",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns45.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 30
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns46.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 30
+    },
+    {
+      "type": "Nameserver",
+      "value": "trace.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "agustin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "rohin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "norah.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 11
+    },
+    {
+      "type": "Registrar",
+      "value": "Upperlink Limited",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "houston.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Registrar",
+      "value": "Key-Systems GmbH [Tag = KEY-SYSTEMS-DE]",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "mustafa.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 18
+    },
+    {
+      "type": "Nameserver",
+      "value": "opal.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "robin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "lars.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "daniella.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "iris.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "lilyana.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "Endurance International Group India Private Limited",
+      "in_cluster_members": 1,
+      "global_degree": 29
+    },
+    {
+      "type": "Nameserver",
+      "value": "margaret.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 24
+    },
+    {
+      "type": "Registrar",
+      "value": ".ec DOMINIOS ECUADOR",
+      "in_cluster_members": 1,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "amanda.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "brodie.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Namecheap Inc.",
+      "in_cluster_members": 1,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "elsa.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns8288.hostgator.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns8287.hostgator.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "kim.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "coraline.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "noel.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "tia.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "raphaela.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 19
+    },
+    {
+      "type": "Registrar",
+      "value": "Blacknight Solutions",
+      "in_cluster_members": 1,
+      "global_degree": 13
+    },
+    {
+      "type": "Registrar",
+      "value": "Alibaba Cloud Computing Ltd. d/b/a HiChina (www.net.cn)",
+      "in_cluster_members": 1,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "ainsley.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "bayan.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns59.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 39
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns60.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 39
+    },
+    {
+      "type": "Registrar",
+      "value": "xneelo (Pty) Ltd",
+      "in_cluster_members": 1,
+      "global_degree": 19
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns10.webreus.net",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns11.webreus.net",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.dreamhost.com",
+      "in_cluster_members": 1,
+      "global_degree": 62
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns3.dreamhost.com",
+      "in_cluster_members": 1,
+      "global_degree": 62
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.dreamhost.com",
+      "in_cluster_members": 1,
+      "global_degree": 62
+    },
+    {
+      "type": "Nameserver",
+      "value": "sky.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "nena.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "tessa.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "vasilii.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "everton.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "dana.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "imani.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "wesley.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "thomas.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "phoenix.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns01.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 28
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns02.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 28
+    },
+    {
+      "type": "Nameserver",
+      "value": "ruth.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "alex.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "kinsley.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "TurnCommerce, Inc. DBA NameBright.com",
+      "in_cluster_members": 1,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "aleena.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "isabel.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Hosting Ireland/ Team Blue Internet Services IE Ltd",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "razvan.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Sea Wasp, LLC",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "yahir.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Registrar",
+      "value": "OVH",
+      "in_cluster_members": 1,
+      "global_degree": 36
+    },
+    {
+      "type": "Nameserver",
+      "value": "jack.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "kevin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "kareem.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ace.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "nash.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "brett.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 9
+    },
+    {
+      "type": "Registrar",
+      "value": "Blacknight Internet Solutions Ltd.",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "stella.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "watson.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "natasha.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "maciej.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "nataly.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "memphis.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "serena.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "michael.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "mitchell.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "may.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "MarkMonitor, Inc.",
+      "in_cluster_members": 1,
+      "global_degree": 123
+    },
+    {
+      "type": "Registrar",
+      "value": "Register.mu",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "elliot.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "cullen.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "lewis.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "lauryn.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "marissa.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 15
+    },
+    {
+      "type": "Registrar",
+      "value": "Vautron Rechenzentrum AG",
+      "in_cluster_members": 1,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "milan.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 21
+    },
+    {
+      "type": "Nameserver",
+      "value": "ruben.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "gordon.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "adele.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "dorthy.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "sara.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ganz.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "THNIC",
+      "in_cluster_members": 1,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "vicky.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "kara.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "walk.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "arnold.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Name SRS AB",
+      "in_cluster_members": 1,
+      "global_degree": 24
+    },
+    {
+      "type": "Nameserver",
+      "value": "micah.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "luciana.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "uma.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Registrar of Domain Names REG.RU LLC",
+      "in_cluster_members": 1,
+      "global_degree": 29
+    },
+    {
+      "type": "Nameserver",
+      "value": "fay.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "carl.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "keira.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "anna.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "mack.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Danesco Trading Ltd.",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.crazydomains.com",
+      "in_cluster_members": 1,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.crazydomains.com",
+      "in_cluster_members": 1,
+      "global_degree": 12
+    },
+    {
+      "type": "Nameserver",
+      "value": "harlan.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "hunts.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "kami.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-272.awsdns-34.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-1377.awsdns-44.org",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-1743.awsdns-25.co.uk",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns-649.awsdns-17.net",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "logan.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "brad.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "decker.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "lovisa.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Aceville Pte. Ltd.",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "hattie.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "lily.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "aitana.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Domain Directors Pty Ltd trading as Instra",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Atak Domain Bilgi Teknolojileri A.\u015e.",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "audrey.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "sage.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 11
+    },
+    {
+      "type": "Nameserver",
+      "value": "novalee.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "mallory.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "rick.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "gabriella.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Registrar",
+      "value": "Realtime Register BV t/a Axidomains [Tag = AXIDOMAINS]",
+      "in_cluster_members": 1,
+      "global_degree": 16
+    },
+    {
+      "type": "Nameserver",
+      "value": "porter.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "thea.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 14
+    },
+    {
+      "type": "Nameserver",
+      "value": "venkat.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "cns151.hostgator.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "cns152.hostgator.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "autumn.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "cass.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "kenia.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "Registrar NIC .DO (midominio.do)",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "bonnie.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "QServers.ng",
+      "in_cluster_members": 1,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "maleah.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "reese.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "josephine.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "maria.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Registrar",
+      "value": "\u5e7f\u5dde\u4e91\u8baf\u4fe1\u606f\u79d1\u6280\u6709\u9650\u516c\u53f8",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "suzanne.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "wilson.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "rachel.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "wren.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "\u041f\u041f \"\u0420\u0423\u041b\u0415\u0417\"",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.digitalocean.com",
+      "in_cluster_members": 1,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.digitalocean.com",
+      "in_cluster_members": 1,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns3.digitalocean.com",
+      "in_cluster_members": 1,
+      "global_degree": 23
+    },
+    {
+      "type": "Nameserver",
+      "value": "cesar.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "raquel.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "alaric.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "dns200.anycast.me",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns200.anycast.me",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "OVH sas",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2fhn.name.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns3nrz.name.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns4kmw.name.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1psw.name.com",
+      "in_cluster_members": 1,
+      "global_degree": 2
+    },
+    {
+      "type": "Nameserver",
+      "value": "leo.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "odin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "jen.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "sue.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "Web Commerce Communications (S) Pte Ltd",
+      "in_cluster_members": 1,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "camilo.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "anastasia.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns4.bdm.microsoftonline.com",
+      "in_cluster_members": 1,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns3.bdm.microsoftonline.com",
+      "in_cluster_members": 1,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.bdm.microsoftonline.com",
+      "in_cluster_members": 1,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.bdm.microsoftonline.com",
+      "in_cluster_members": 1,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "jule.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "jakub.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "hope.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "dina.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "jim.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "jay.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "sneh.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "gene.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "dns2.namecheaphosting.com",
+      "in_cluster_members": 1,
+      "global_degree": 377
+    },
+    {
+      "type": "Nameserver",
+      "value": "maeve.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "dns1.namecheaphosting.com",
+      "in_cluster_members": 1,
+      "global_degree": 377
+    },
+    {
+      "type": "Nameserver",
+      "value": "annabel.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "skip.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.ipage.com",
+      "in_cluster_members": 1,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.ipage.com",
+      "in_cluster_members": 1,
+      "global_degree": 13
+    },
+    {
+      "type": "Registrar",
+      "value": "FastDomain Inc.",
+      "in_cluster_members": 1,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "piers.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "julio.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "CSL Computer Service Langenbach GmbH d/b/a joker.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "gannon.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Registrar",
+      "value": "CYBER_FOLKS S.R.L.",
+      "in_cluster_members": 1,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "janet.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "Serverion",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns08.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 22
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns07.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 22
+    },
+    {
+      "type": "Nameserver",
+      "value": "emily.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "deb.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "asa.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "dane.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "damian.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "yevgen.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "vern.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "jacqueline.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "sonny.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "serenity.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "ishaan.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 9
+    },
+    {
+      "type": "Nameserver",
+      "value": "amber.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "lamar.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "lana.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "1st Domains Limited",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "jobs.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "celeste.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "DIAMATRIX C.C.",
+      "in_cluster_members": 1,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "coby.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "aria.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 27
+    },
+    {
+      "type": "Nameserver",
+      "value": "shubhi.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "mariah.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "peter.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "lindsey.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Ligne Web Services SAS dba LWS",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "karsyn.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "Megazone Corp., dba HOSTING.KR",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "yolanda.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "grant.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns58.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 34
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns57.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 34
+    },
+    {
+      "type": "Nameserver",
+      "value": "jocelyn.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "chin.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "howard.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "roxy.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "clarissa.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "Purple IT Ltd",
+      "in_cluster_members": 1,
+      "global_degree": 15
+    },
+    {
+      "type": "Nameserver",
+      "value": "deborah.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "GMO Internet, Inc.",
+      "in_cluster_members": 1,
+      "global_degree": 62
+    },
+    {
+      "type": "Nameserver",
+      "value": "darl.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "amit.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 25
+    },
+    {
+      "type": "Nameserver",
+      "value": "guy.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "apollo.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "yichun.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "syeef.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "jerry.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "karina.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "REG-WEDOS",
+      "in_cluster_members": 1,
+      "global_degree": 13
+    },
+    {
+      "type": "Nameserver",
+      "value": "dns2.registrar-servers.com",
+      "in_cluster_members": 1,
+      "global_degree": 337
+    },
+    {
+      "type": "Nameserver",
+      "value": "dns1.registrar-servers.com",
+      "in_cluster_members": 1,
+      "global_degree": 337
+    },
+    {
+      "type": "Registrar",
+      "value": "Synergy Wholesale Accreditations Pty Ltd",
+      "in_cluster_members": 1,
+      "global_degree": 30
+    },
+    {
+      "type": "Nameserver",
+      "value": "dave.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 8
+    },
+    {
+      "type": "Nameserver",
+      "value": "maisie.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 4
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns1.syd5.hostyourservices.net",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns2.syd5.hostyourservices.net",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Registrar",
+      "value": "Gabia, Inc.",
+      "in_cluster_members": 1,
+      "global_degree": 14
+    },
+    {
+      "type": "Registrar",
+      "value": "1&1 IONOS SE",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "patryk.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "dax.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns10.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 42
+    },
+    {
+      "type": "Nameserver",
+      "value": "ns09.domaincontrol.com",
+      "in_cluster_members": 1,
+      "global_degree": 42
+    },
+    {
+      "type": "Nameserver",
+      "value": "aliza.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "UG Registrar",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Hosting Ukraine LLC",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Nameserver",
+      "value": "kyrie.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "abdullah.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "rayne.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 5
+    },
+    {
+      "type": "Registrar",
+      "value": "Internet Resources Management SRL",
+      "in_cluster_members": 1,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "curt.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Registrar",
+      "value": "Atak Domain Bilgi Teknolojileri AS",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "sofia.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 6
+    },
+    {
+      "type": "Nameserver",
+      "value": "kayleigh.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "doug.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 10
+    },
+    {
+      "type": "Nameserver",
+      "value": "kianchau.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "aurora.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "bristol.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "desiree.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "bella.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 7
+    },
+    {
+      "type": "Nameserver",
+      "value": "gidi.ns.click.press",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "afaf.ns.click.press",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "edo.ns.click.press",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "lee.ns.click.press",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    },
+    {
+      "type": "Nameserver",
+      "value": "matt.ns.cloudflare.com",
+      "in_cluster_members": 1,
+      "global_degree": 3
+    }
+  ],
+  "has_additional_evidence": 670,
+  "commodity_only_evidence_by_threshold": {
+    "100": 18,
+    "500": 5
+  },
+  "commodity_any_evidence_by_threshold": {
+    "100": 205,
+    "500": 64
+  }
+}
