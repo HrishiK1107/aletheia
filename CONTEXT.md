@@ -3,6 +3,15 @@
 Read this at the start of every session. It defines what this project is, what is
 wrong with it, and what "done" looks like.
 
+**`Documentation/Aletheia_Paper_Revised.md` and
+`Documentation/A Deterministic Threat Intelligence Pipeline Built on Graph
+Analysis.docx` are the OBSOLETE pre-item-7 draft, 2026-07-24 — not a source
+for anything.** Both contain retracted figures (the fabricated "~80% ECR"
+claim, item 2.7; the small 977-indicator run; no Tables 6-8, no Spine 1-5,
+no real ThreatFox/OTX evaluation). The current manuscript is maintained
+outside this repo. Do not cite, quote, or edit either file as if it were
+current.
+
 ---
 
 ## 1. What this is
@@ -551,7 +560,30 @@ any trimming is 9.7, but excluding just this one cluster drops it to 8.4.
 - `E(C)` enrichment completeness — 20% of the score measures whether our own
   pipeline succeeded, not whether the campaign is real. Circular.
 
+**Correction, §6o, 2026-07-24 — the `D(C)` line above was never actually
+measured and is wrong, not approximately right. Left in place per this
+project's standing convention; read it as:** `D(C)` — 30% of the score;
+the population it's computed on (1,334 clusters' 13,825 members) is
+**68.1% Domain, 16.4% IP, 15.5% URL, 0% Hash** — URLs are the smallest of
+the three represented types, not ~90% of input. `D(C)` is not literally
+constant (3 distinct values occur: 0.3333/0.6667/1.0, population variance
+0.0314) but is heavily concentrated (71.3% of clusters land on exactly
+0.6667) for a structural reason: Hash-type indicators can never be a
+cluster member at all (`CampaignDetector`'s Cypher restricts clustering
+to `URL`/`Domain`/`IP` nodes only), so the formula's 4th heuristic bucket
+is permanently unreachable on the only population it's ever evaluated
+against — a low-information score for a different, evidenced reason than
+originally claimed. Full measurement, distribution, and per-cluster
+type-set breakdown in §6o.
+
 **Fix:** `D` becomes meaningful once feeds are fixed and hashes/IPs arrive.
+**Correction, §6o: IPs already arrive in volume (16.4% of cluster
+members) and this doesn't move `D(C)` off its concentration — the
+constraint is structural (Hash indicators are never admitted to a
+cluster by `CampaignDetector`'s own Cypher, not withheld by feed
+composition), so "once hashes arrive" will never resolve on its own; it
+would need `find_connected_clusters()`'s node-label filter changed, a
+different and larger fix than "wait for more feed volume."
 `N` → absolute, log-scaled. `R` → mean inverse-degree of shared infrastructure.
 `E` → remove from confidence entirely; report separately as a data-quality metric.
 
@@ -2474,6 +2506,35 @@ not a coincidence):**
 | BFS, unweighted | 673 | 0.0785 | 0.1540 | 0.5387 | 0.0612 | 0.1422 |
 | **BFS, weighted** | 333 | 0.0777 | **0.1525** | 0.5371 | 0.0606 | 0.1409 |
 
+**Both Jaccard v1 rows above predate §6j/§6l's multi-membership fix and are
+now stale at the 4-decimal level — re-run 2026-07-24 via `python -m
+app.evaluation.run_evaluation` (`evaluation_runs/item7_eval_20260724T104249Z.json`),
+confirming the fix has been in effect since `4f9859c` and matching §6k's old/new
+table exactly. Old values left in place per this project's standing convention;
+corrected reading below (n unchanged both rows: 1,331 all-clusters, 1,189
+reported):**
+
+| Row | Metric | Old (this table) | New (current) |
+|---|---|---|---|
+| Jaccard v1 (all clusters) | ARI (full) | 0.0514 | **0.0516** |
+| Jaccard v1 (all clusters) | ARI (scoped) | 0.1113 | **0.1118** |
+| Jaccard v1 (all clusters) | Precision | 0.9280 | **0.9282** |
+| Jaccard v1 (all clusters) | Recall | 0.0320 | **0.0322** |
+| Jaccard v1 (reported) | ARI (full) | 0.0409 | 0.0409 (unchanged) |
+| Jaccard v1 (reported) | ARI (scoped) | 0.0891 | 0.0891 (unchanged) |
+| Jaccard v1 (reported) | Precision | 0.9272 | **0.9273** |
+| Jaccard v1 (reported) | Recall (full) | 0.0254 | 0.0254 (unchanged) |
+| Jaccard v1 (reported) | Recall (scoped) | 0.0590 | **0.0591** |
+
+None of these moves affects any conclusion drawn from this table — BFS still
+beats Jaccard v1 by ~1.7× (reported/scoped: 0.1525/0.1540 vs. **0.0891**,
+unchanged), and the "precision identical full vs. scoped" internal-consistency
+check below still holds exactly (both Jaccard precision cells still move
+together, full and scoped, under the correction). §8's ledger cites only the
+reported/scoped ARI figure (0.0891, unaffected) and the ~1.7× ratio (0.1525/0.0891
+= 1.710 new vs. 1.712 old, 0.1540/0.0891 = 1.727 new vs. 1.729 old — both still
+"~1.7×"), so no change is needed there.
+
 **Why precision is exactly identical between the full and scoped columns
 for every method, not approximately — a clean internal-consistency check,
 not a coincidence.** An out-of-scope indicator (no enrichment) is never
@@ -2550,7 +2611,23 @@ normalization under-measuring commodity exposure in large clusters is
 already a stated, evidenced finding (item 2.2's addendum) — more valuable
 as a documented metric defect than as something quietly patched. `D(C)`
 near-constant given the input mix (~90% URLs) should be reported with the
-actual type distribution, not fixed. `E(C)`'s circularity (scoring
+actual type distribution, not fixed.
+
+**Correction, §6o, 2026-07-24 — this line called for "the actual type
+distribution" to be reported and then that measurement sat undone for the
+rest of the session; it has now been run, and the "~90% URLs" premise it
+was hedging on is wrong.** Left in place per this project's standing
+convention; the measured basis (68.1% Domain / 16.4% IP / 15.5% URL /
+0% Hash on the 13,825 cluster members `D(C)` is actually computed over;
+`D(C)` itself takes 3 distinct values, 71.3% of clusters at exactly
+0.6667, variance 0.0314) is in §6o, along with the corrected reason for
+the concentration (Hash-type indicators structurally excluded from every
+cluster by `CampaignDetector`'s own Cypher, not an artifact of feed
+type-mix). The decision itself — freeze, don't fix, report as a
+limitation — is unchanged; only the evidence behind *why* `D(C)` is weak
+has moved from an unmeasured assumption to a measured, cited fact.
+
+`E(C)`'s circularity (scoring
 whether the pipeline's own enrichment succeeded, not whether the campaign
 is real) should be reported, not fixed. **Fixing any of these changes
 confidence scores, which would invalidate the four-times-confirmed
@@ -2610,6 +2687,40 @@ coverage.
 | BFS, unweighted | 673 | 0.0601 | 0.0963 | 0.0819 | 0.0566 | 0.2255 |
 | BFS, weighted | 333 | 0.0549 | 0.0874 | 0.0762 | 0.0520 | 0.2071 |
 
+**Checked against §6k/§6l's post-multi-membership-fix values, 2026-07-24 —
+both tables above are stale on the two methods exposed to that defect
+(`Jaccard v1`, `GROUP BY resolved IP`; every other row has zero
+multi-membership and is unaffected, confirmed in §6k). Old values left in
+place per this project's standing convention; corrected reading below (n
+unchanged in every row):**
+
+| Table | Row | Metric | Old (above) | New (current) |
+|---|---|---|---|---|
+| With outlier | Jaccard v1 | ARI (full) | 0.0084 | **0.0108** |
+| With outlier | Jaccard v1 | ARI (scoped) | 0.0055 | **0.0076** |
+| With outlier | Jaccard v1 | P | 0.5057 | **0.5597** |
+| With outlier | Jaccard v1 | R (full) | 0.0050 | **0.0063** |
+| With outlier | Jaccard v1 | R (scoped) | 0.0054 | **0.0069** |
+| With outlier | GROUP BY resolved IP | P | 0.8570 | **0.8558** |
+| Without outlier | Jaccard v1 | ARI (full) | 0.0378 | 0.0378 (unchanged) |
+| Without outlier | Jaccard v1 | ARI (scoped) | 0.1223 | **0.1225** |
+| Without outlier | Jaccard v1 | P | 0.2917 | **0.2918** |
+| Without outlier | Jaccard v1 | R (full) | 0.0208 | **0.0209** |
+| Without outlier | Jaccard v1 | R (scoped) | 0.0831 | **0.0832** |
+| Without outlier | GROUP BY resolved IP | P | 0.9206 | **0.9200** |
+
+**11 stale cells, not the 6 originally flagged against this section — the
+larger count includes `GROUP BY resolved_ip`'s precision in both tables (also
+exposed to the defect, per §6k's audit) and four smaller with-outlier cells
+beyond the flagged precision one. Every other displayed cell (both tables,
+every other method) is confirmed unaffected — checked, not assumed.** None of
+Finding 1–3's conclusions below change direction: the weighted/unweighted gap
+(Finding 1) and the full/scoped inversion (Finding 2) involve no
+multi-membership-exposed method; Finding 3's `Jaccard v1 (0.1223)` citation
+(now 0.1225) still trails `GROUP BY resolved_ip` and still beats neither BFS
+row, so "2 of 3 confirm, 1 contradicts" is unchanged (also re-checked directly
+in §6l).
+
 **Finding 1 — the settled non-result generalizes cleanly, on both OTX
 variants.** Weighted vs. unweighted BFS: with outlier, 0.0386 vs. 0.0390
 (Δ -0.0004, scoped); without outlier, 0.0874 vs. 0.0963 (Δ -0.0089,
@@ -2647,10 +2758,12 @@ NOT universally generalize, and must not be stated as if it does.**
 Holds against ThreatFox (§6g) and OTX-with-outlier (0.0390/0.0386 vs.
 next-best `group_by_hosting_provider` 0.0225, ~1.7×) — but **breaks
 down against OTX-without-outlier: `GROUP BY resolved IP` (0.1248) and
-`Jaccard v1` (0.1223) both beat BFS (0.0963/0.0874) on the scoped
+`Jaccard v1` (0.1223, stale — see the correction above, now **0.1225**)
+both beat BFS (0.0963/0.0874) on the scoped
 comparison.** This is exactly the kind of divergence worth finding before
 a reviewer does. Plausible reading: `GROUP BY resolved_ip`'s
-near-perfect precision (0.9206) pays off specifically when the label
+near-perfect precision (0.9206, stale — see the correction above, now
+**0.9200**) pays off specifically when the label
 population is smaller/more fragmented and the outlier's diluting effect
 is removed — but this is offered as a candidate explanation, not a
 checked one, and should not be stated more strongly in the paper than
@@ -3558,10 +3671,42 @@ regenerates it.
 (`docker compose up`, or confirm `aletheia-postgres`/`aletheia-neo4j`/
 `aletheia-redis` are already running), the project venv active
 (`source .venv/bin/activate` from the repo root — confirm with
-`which python`/`sys.prefix`, per §7's rule below), current working
-directory `backend/` for anything invoked with `python -m`, repo root for
-anything invoked as `python analysis/final/<script>.py` (each of those
-scripts has its own `sys.path.insert(0, '.')`).
+`which python`/`sys.prefix`, per §7's rule below). **cwd is not uniform
+across this table, corrected 2026-07-24 — stated precisely per command
+class, not as one blanket rule:**
+- `python -m app....` (the harness entrypoint, `enrichment_worker`,
+  `graph_worker`): cwd **`backend/`**.
+- `python ../analysis/final/<script>.py`: cwd **`backend/`** — each
+  script's own `sys.path.insert(0, '.')` only resolves `from app...` if
+  `.` is `backend/` (`app` is a package under `backend/app`, not the repo
+  root).
+- `pytest backend/tests/...`: cwd **repo root** — the path argument is
+  itself repo-root-relative; run the equivalent `pytest tests/...` instead
+  if invoking from `backend/`.
+
+**Correction, 2026-07-24, in two parts, both caught only by actually
+running commands rather than reading them — see §8's Spine 5 list,
+10th instance, for the full writeup:**
+
+1. **The six `analysis/final/` rows in the table below had the wrong cwd
+   documented (said "repo root", needed `backend/`)** — caught while
+   verifying the new graph-composition script. Confirmed directly:
+   `python analysis/final/big_cluster_recheck.py` from the repo root
+   fails with `ModuleNotFoundError: No module named 'app'`;
+   `python ../analysis/final/big_cluster_recheck.py` from `backend/` runs
+   correctly. All six rows in the table have been corrected to the
+   working form.
+2. **This correction's *own first draft* then overclaimed "every command
+   in the table…was documented with a cwd that doesn't work" — false,
+   and caught only by then actually running the *other* rows to check,
+   not by re-reading the claim.** The `pytest backend/tests/...` rows
+   were, and still are, correctly scoped to repo-root cwd; they never had
+   a cwd problem. What they did have — found in the same verification
+   pass — was a **wrong filename** in the Spine 3 determinism row
+   (`test_campaign_engine.py`, which exists but has no matching test,
+   instead of `test_campaign_detector.py`, which does) — a different bug,
+   with a different root cause, surfaced by the same discipline. Both are
+   now fixed at their respective rows.
 
 **One command now covers most of the ledger:**
 
@@ -3591,23 +3736,37 @@ not superseded, not duplicated by the entrypoint above:**
 
 | §8 figure | Script |
 |---|---|
-| Spine 1: 838/1,334 clusters touching a recurring hub, Cloudflare 223, AS13335 255, ASN/HostingProvider collinearity | `python analysis/final/spine1_neo4j_correct.py` |
-| Spine 1: the 1,849-member cluster, AS13335 100% coverage | `python analysis/final/big_cluster_recheck.py` |
-| Spine 1: AS13335 global degree (2,048/7,439 domains, 27.5%) | `python analysis/final/spine1_as13335_degree.py` — closed 2026-07-24 (§6n). Neo4j graph traversal (`Domain-[:RESOLVES_TO_ASN]->ASN`, 1 hop), not the Postgres `fp_weighted` approach this row previously speculated would work: that approach was tried and confirmed wrong first (`degrees["org:AS13335"]` doesn't exist in `fp_weighted` at all — `weighted_fingerprint()` prefers `hosting_provider` over the `asn` fallback, so AS13335 shows up as `org:Cloudflare, Inc.` instead, degree 2,360, a different number for a different reason). Verified exact match to §8: 2,048/7,439/27.5%. |
-| Spine 2: Cloudflare nameserver-pool illustration (~160 members) + population generalisation | `python analysis/final/spine2_ns_pool_census.py` — closed 2026-07-24 (§6n). Turns the manual illustration into a measurement (full shared-feature census of the 1,849-cluster, in-cluster count vs. global degree, confirms harlee/tosana at 161/160) and generalises it across all 1,334 clusters: only 18/670 (1.3% of all clusters) of clusters classified by a type-level check as having "additional non-org evidence" have that evidence supplied *entirely* by features with global degree >100 (5/1,334, 0.4%, at >500) — the illustrated mechanism is real but does not generalise broadly at the population level; see §6n for the full breakdown. |
-| Spine 3: monotonic `R(C)` gradient by commodity-exposure band (61.9%/72.6%/80.3%) | `python analysis/final/degree_bucket_final.py` |
-| Spine 3: determinism (live BFS re-run, exact list equality) | Automated: `pytest backend/tests/test_campaign_engine.py -k deterministic`; live-query-level double-check was a manual re-run, not a standing script |
-| Spine 4: `d`/`k` traversal sweep (settled; only re-run with a new reason) | `python analysis/final/dk_sweep_corrected.py` |
+| Spine 1: 838/1,334 clusters touching a recurring hub, Cloudflare 223, AS13335 255, ASN/HostingProvider collinearity | `python ../analysis/final/spine1_neo4j_correct.py` |
+| Spine 1: the 1,849-member cluster, AS13335 100% coverage | `python ../analysis/final/big_cluster_recheck.py` |
+| Spine 1: AS13335 global degree (2,048/7,439 domains, 27.5%) | `python ../analysis/final/spine1_as13335_degree.py` — closed 2026-07-24 (§6n). Neo4j graph traversal (`Domain-[:RESOLVES_TO_ASN]->ASN`, 1 hop), not the Postgres `fp_weighted` approach this row previously speculated would work: that approach was tried and confirmed wrong first (`degrees["org:AS13335"]` doesn't exist in `fp_weighted` at all — `weighted_fingerprint()` prefers `hosting_provider` over the `asn` fallback, so AS13335 shows up as `org:Cloudflare, Inc.` instead, degree 2,360, a different number for a different reason). Verified exact match to §8: 2,048/7,439/27.5%. |
+| Spine 2: Cloudflare nameserver-pool illustration (~160 members) + population generalisation | `python ../analysis/final/spine2_ns_pool_census.py` — closed 2026-07-24 (§6n). Turns the manual illustration into a measurement (full shared-feature census of the 1,849-cluster, in-cluster count vs. global degree, confirms harlee/tosana at 161/160) and generalises it across all 1,334 clusters: only 18/670 (1.3% of all clusters) of clusters classified by a type-level check as having "additional non-org evidence" have that evidence supplied *entirely* by features with global degree >100 (5/1,334, 0.4%, at >500) — the illustrated mechanism is real but does not generalise broadly at the population level; see §6n for the full breakdown. |
+| Spine 3: monotonic `R(C)` gradient by commodity-exposure band (61.9%/72.6%/80.3%) | `python ../analysis/final/degree_bucket_final.py` |
+| Spine 3: determinism (live BFS re-run, exact list equality) | Automated: `pytest backend/tests/test_campaign_detector.py -k deterministic` (from repo root) — **corrected 2026-07-24**, was wrongly documented as `test_campaign_engine.py`, a different, real file that does exist but has no test matching `-k deterministic` (3 deselected, 0 selected, exit code 5 — a genuine failure, not a typo caught by inspection). Live-query-level double-check was a manual re-run, not a standing script. |
+| Spine 4: `d`/`k` traversal sweep (settled; only re-run with a new reason) | `python ../analysis/final/dk_sweep_corrected.py` |
 | Spine 5: multi-membership audit, hash-seed determinism | Covered by `pytest backend/tests` (regression test) + `run_evaluation.py` above (which now runs under `PYTHONHASHSEED=0` automatically via the `-m`-aware re-exec, §6k) |
+| Dataset & pipeline scale: graph composition (all 9 node labels, all 7 relationship types) | `python ../analysis/final/graph_composition_final.py` — new this session; previously an ad hoc, uncommitted Cypher query, now a script of record, verified to reproduce all 16 figures exactly |
+| `D(C)` type distribution + distribution/variance across 1,334 clusters (§6o) | `python ../analysis/final/dc_type_diversity_final.py` — new this session; first script of record for this measurement, none existed before |
+| Dataset & pipeline scale: collection volume (23,427/run, five feeds) | **No committed script — live third-party API run, not reproducible byte-for-bit.** Procedure: `python -c "from app.ingestion.collectors.collector_runner import run_collectors; run_collectors()"`, then query `FeedRun`/`Feed`. Cite as a dated snapshot (2026-07-23), not a constant. |
+| Dataset & pipeline scale: pipeline timings (enrichment 18.3 min, graph build 11.4 min / 20.5 min) | **No committed one-shot script — same caveat as collection volume.** `python -m app.workers.enrichment_worker` (interrupt after first batch) for enrichment; `python -m app.workers.graph_worker` (interrupt after first batch) for graph build, both from `backend/`. Timings are wall-clock from specific dated runs against live lookups/DB state, not guaranteed-reproducible constants. |
+| Bootstrap 95% CIs, all 7 methods x 3 ground truths x (full, scoped), point estimate + percentile + pivotal intervals | `python -m app.evaluation.run_bootstrap` (cwd `backend/`, venv active, containers up) — new, peer-review Task 1, 2026-07-24. Does not modify `run_evaluation.py`/`metrics.py`; imports their setup/helpers unmodified. Writes `evaluation_runs/bootstrap_ci_<timestamp>.json`. ~10,000 iterations per cell, seed=42 (recorded in every result and in the output file). Runs its own calibration gate first (`sanity_check_bias_magnitude()`) and exits without writing output if it fails. |
+| Bootstrap percentile-bias scaling diagnostic (n=200→60,000 plateau evidence, §8's Spine 5 11th instance) | `python ../analysis/final/bootstrap_bias_diagnostic.py` (cwd `backend/`) — new, peer-review Task 1, 2026-07-24. Purely synthetic, no DB/Neo4j required. |
 
 **Everything in the left column above requires either genuine Neo4j
 multi-hop graph traversal (Spine 1) or is explicitly a one-time,
 already-settled diagnostic not meant to be re-run routinely (Spine 4's
 sweep) — none of these are silently-unreproducible; each is named
 precisely so nobody has to guess or re-derive which command produced
-which number. As of §6n, every row in this table has a script of
-record; the two gaps this table used to document (Spine 1's AS13335
-global degree, Spine 2's nameserver-pool illustration) are closed.**
+which number. As of §6n, every *graph-derived* row in this table has a
+deterministic script of record; the two gaps this table used to document
+(Spine 1's AS13335 global degree, Spine 2's nameserver-pool illustration)
+are closed, and the graph-composition row added this session closes a
+third. The two rows added this session for collection volume and pipeline
+timings are the exception, disclosed rather than glossed over: both cite a
+real, named, committed command, but the command drives live third-party
+APIs or live network lookups, so it reproduces the *procedure*, not the
+*exact figure* — re-running it will not reproduce 23,427 or 18.3 min
+byte-for-bit, the way every other row in this table does reproduce its
+number exactly.**
 
 **9th Spine 5 instance, found closing the AS13335 row above.** This
 table's own prior entry for that row speculated the fix was one line —
@@ -3709,6 +3868,211 @@ Commands added to §6m's table (above). Full test suite not affected
 
 ---
 
+## 6o. `D(C)` measured directly, 2026-07-24 — "~90% URLs" was never run, and is wrong
+
+**Status, asked directly: this measurement had never been run, by anyone, in
+any prior session.** Not started, not in progress, not silently completed
+and dropped — grepped this entire document for `D(C)` before writing
+anything: two citations of "~90% URLs" (§4.10/item 2.2, §6g's `R(C)`
+freeze decision) and nothing else. The "~90% of input is URLs" figure both
+citations rest on was never measured against this codebase; it reads like
+an assumption carried over from an earlier draft (`D(C)`'s own
+implementation, `CampaignConfidenceScorer._type_diversity()`, isn't even
+a lookup against the enrichment-derived `type` column — it's a string
+heuristic run directly on each cluster member's raw value: `startswith
+"http"` → url; exactly 3 dots, all-digit parts → ip; any other `.` →
+domain; else → hash).
+
+**New script, `analysis/final/dc_type_diversity_final.py`** — read-only,
+runs `CampaignDetector().find_connected_clusters()` (the same 1,334
+clusters/13,825 members cited throughout this document) and, for each
+cluster: classifies every member with `_type_diversity()`'s own heuristic
+(lifted out verbatim, not reimplemented, so this measurement cannot drift
+from what the score actually computes), tallies the population-level type
+distribution, and calls `_type_diversity()` itself per cluster for the
+D(C) distribution.
+
+**1. Indicator type distribution over cluster members (n=13,825, the
+population D(C) is actually computed on — not all 23,135 indicators, and
+not all-indicators-by-Postgres-`type`-column either):**
+
+| Type | Count | % |
+|---|---|---|
+| Domain | 9,408 | 68.1% |
+| IP | 2,272 | 16.4% |
+| URL | 2,145 | 15.5% |
+| Hash | 0 | 0.0% |
+
+**"~90% of input is URLs" is not approximately right — it has the wrong
+type in the majority position.** Domains are 68.1% of cluster membership,
+not URLs; URLs are the *smallest* of the three represented types (15.5%),
+behind IP (16.4%). Hash-type indicators (6,946 nodes graph-wide, §8's
+graph-composition table) are **structurally absent from every cluster**,
+not merely rare: `CampaignDetector.find_connected_clusters()`'s Cypher
+restricts both seed and connected nodes to `URL`/`Domain`/`IP` (§Cypher
+paste, this document), so a Hash-type indicator can never be a cluster
+member regardless of its enrichment or connectivity. `D(C)`'s formula
+divides by 3, not 4, and this is why: the fourth heuristic bucket it
+computes for (`"hash"`) is unreachable on the population it's ever
+actually evaluated against, so the denominator matches the true
+achievable range exactly, not an arbitrary round number.
+
+**2. `D(C)` measured directly across all 1,334 clusters — "near-constant"
+tested against data, not inferred from the (wrong) input-mix premise:**
+
+| D(C) value | Clusters | % |
+|---|---|---|
+| 0.3333 (1 type) | 146 | 10.9% |
+| 0.6667 (2 types) | 951 | **71.3%** |
+| 1.0000 (3 types) | 237 | 17.8% |
+
+**3 distinct values, never 4** (matches the structural absence of Hash
+members above — no cluster ever reaches a 4th type to be capped by the
+`min(...,1.0)`, because no cluster ever *has* a 4th type available).
+Mean 0.6894, population variance **0.0314** (stdev 0.1772) over a formula
+whose full range is `[0.3333, 1.0]` (width 0.6667) — a stdev roughly
+27% of the full possible range, genuinely non-trivial, not the near-zero
+spread "constant" would imply literally.
+
+**Verdict — neither the original claim nor its literal negation is
+correct; state it precisely:** `D(C)` is **not** a constant (3 distinct
+values occur, with real variance) and it is **not** near-constant because
+"~90% of input is URLs" (false on this population, checked directly).
+What the data does support: `D(C)` is **heavily concentrated, for a
+structural reason distinct from the one originally claimed** — 71.3% of
+all clusters land on exactly the same value (0.6667) because most
+multi-hop BFS clusters mix exactly two of the three achievable
+Domain/IP/URL types (most commonly `{domain, ip}`, 439 clusters, 32.9% —
+a Domain resolving to its own IP is the single most common two-hop
+shared-infrastructure pattern), and single-type clusters (10.9%) and
+full-three-type clusters (17.8%) are both comparatively rare. **The
+correct restatement of the defect: `D(C)` discriminates poorly not
+because the input is overwhelmingly one type, but because the formula's
+achievable range collapses to effectively 2 useful buckets in practice
+(89.1% of clusters land on 0.6667 or 1.0 combined) once the 4th
+heuristic bucket is structurally unreachable — the same "low-information
+score" conclusion the original text reached, on a basis the data actually
+supports rather than one it contradicts.** `R(C)`'s freeze decision
+(§6g) is unaffected: this changes *why* `D(C)` is a weak signal, not
+whether fixing the frozen scoring formula is worth its cost.
+
+Per-cluster type-set breakdown, for completeness: `{domain,ip}` 439
+(32.9%), `{ip,url}` 346 (25.9%), `{domain,ip,url}` 237 (17.8%),
+`{domain,url}` 166 (12.4%), `{ip}` 78 (5.8%), `{domain}` 38 (2.8%),
+`{url}` 30 (2.2%), `{hash}`/any set containing `hash`: 0 (0.0%, confirms
+the structural-absence claim directly rather than by inference).
+
+Script of record added to §6m's table below.
+
+---
+
+## 6p. Pre-registration — second collection window (Task 2), committed 2026-07-24, before any collector runs
+
+**Purpose.** The entire evaluation (item 7, Spine 1–5, the bootstrap CIs
+above) rests on one snapshot, 2026-07-23. This section commits, in writing
+and before any window-2 data exists, exactly what will be compared, how,
+and what counts as "reproduces" vs. "does not reproduce" for each of four
+quantities — decided now, using only window-1 information, specifically so
+none of these thresholds can be tuned after window 2's numbers are seen.
+This entry is committed to git before any collector for window 2 runs, so
+its timestamp/hash is the record that the thresholds predate the data.
+
+**Explicit commitment, stated before anything else: if window 2 contradicts
+window 1 on any of the four quantities below, BOTH windows are reported
+side by side. Window 1's numbers in §8 are NOT retracted, revised, or
+merged with window 2's. A contradiction becomes a documented finding about
+temporal stability — a limitation to disclose — not a correction to make.**
+
+**The four pre-registered quantities, their exact source methodology
+(reused unmodified against window 2's database), and their reproduction
+thresholds:**
+
+1. **Commodity-touching cluster percentage.** Window 1: **62.8%**
+   (838/1,334 clusters touch a recurring `HostingProvider`/`ASN` hub —
+   final-state figure, §8 Spine 1, §6i). Methodology:
+   `analysis/final/spine1_neo4j_correct.py` — Neo4j multi-hop graph
+   traversal, not the Postgres-fingerprint approach (already shown wrong
+   for this exact question, §6i's spurious ~3× discrepancy) — run
+   unmodified against window 2's Neo4j instance.
+   **Threshold: reproduces if window 2's value falls in [52.8%, 72.8%]**
+   (±10 percentage points absolute). Basis: the two same-session
+   re-measurements of this exact metric already varied by 5.5 percentage
+   points (68.3% → 62.8%) from a data-pipeline refinement alone, not even a
+   new collection; a genuinely new collection window (different day,
+   different feed composition) is expected to add at least as much
+   variance again, so ±10pp is the pre-declared band.
+
+2. **Weighted-vs-unweighted BFS ARI delta (ThreatFox, scoped).** Window 1:
+   **-0.0008** point-estimate delta (0.1525 weighted vs. 0.1540
+   unweighted); this session's bootstrap (Task 1, above) found the 95%
+   pivotal CIs of these two rows overlap in every one of 6 configurations
+   tested — the actual finding is "no statistically distinguishable
+   difference," not a specific negative sign. Methodology:
+   `python -m app.evaluation.run_evaluation` for the point estimate;
+   for the CI, only the ThreatFox/scoped/`bfs_unweighted_reported_only`
+   and `bfs_weighted_reported_only` cells of
+   `python -m app.evaluation.run_bootstrap` need to be run against window
+   2's database (not the full 42-cell grid — that comparison is what's
+   pre-registered here, not the rest of the matrix).
+   **Threshold: reproduces if window 2's weighted and unweighted BFS
+   pivotal 95% CIs (ThreatFox, scoped) overlap** — i.e., the
+   flat/non-significant result replicates, regardless of which direction
+   the point-estimate delta points. **Does not reproduce if the CIs are
+   disjoint** (a statistically real difference emerges where none existed
+   in window 1).
+
+3. **BFS-vs-best-baseline ratio (ThreatFox, scoped).** Window 1: **~1.71×**
+   (BFS weighted 0.1525 / jaccard_v1 0.0891 — the exact pairing behind this
+   pre-registered ratio; the equivalent unweighted-BFS ratio is ~1.73×,
+   also cited as "~1.7×" elsewhere in §8's Spine 4). This session's
+   bootstrap (Task 1, question a) confirmed the ThreatFox-scoped
+   BFS-vs-jaccard_v1 CIs do not overlap — the one genuinely significant,
+   clearly-reproducible-so-far positive result in the whole evaluation.
+   **Threshold: reproduces if (a) BFS (weighted, scoped) and jaccard_v1
+   (scoped) 95% pivotal CIs remain disjoint in window 2** (the primary,
+   statistical-significance criterion — matches how window 1's result was
+   actually validated, not a raw point-estimate band) **and (b) the
+   point-estimate ratio stays above 1.0×** (BFS still wins) even if window
+   2's sample size turns out too small for CI separation to be achievable.
+   **Does not reproduce if jaccard_v1 matches or exceeds BFS, or if the
+   CIs overlap.**
+
+4. **Top-hub bridge count (Cloudflare).** Window 1: `Cloudflare, Inc.`
+   bridges **223** of 1,334 clusters (16.7%); `AS13335` bridges 255 (§8
+   Spine 1, `analysis/final/spine1_neo4j_correct.py`). A raw count is not
+   comparable across windows with different total collection volume and
+   different total cluster counts, so the pre-registered comparison is a
+   **share**, not the literal number 223 — both are reported for reference.
+   **Threshold: reproduces if (a) `Cloudflare, Inc.`/`AS13335` remains the
+   single largest hub by clusters-bridged in window 2** (identity claim:
+   is this specific commodity provider still dominant) **and (b) its share
+   of total clusters falls in [8%, 30%]** (window 1's 16.7%, roughly
+   halved/doubled — a wide band chosen because this figure is a function of
+   live, day-to-day CDN market share among collected indicators, not a
+   controlled quantity). **Does not reproduce if a different provider
+   dominates, or Cloudflare's share falls outside that band.**
+
+**Descriptive-only reporting, not gated on a threshold (task instruction:
+report without pre-registration since these are descriptive):** feed
+volume by source, indicator type distribution, and the overlap between the
+two windows' indicator sets (count of indicators, by canonical value,
+appearing in both collections). The overlap number is explicitly flagged
+as mattering on its own, independent of pre-registration: if the two
+windows turn out to be near-identical in membership, temporal stability is
+untested regardless of what any metric shows, and that has to be stated
+plainly if it turns out to be true.
+
+**Infrastructure commitment, so window 2 cannot contaminate window 1's
+already-cited numbers:** a separate Postgres database and a separate Neo4j
+instance/database, populated by a fresh `run_collectors()` call and the
+full documented pipeline (§6m — same parameters, same scope condition, same
+confidence filter, nothing changed), with a full Postgres+Neo4j dump taken
+before any analysis touches window 2's data (§7's persist-every-run rule).
+Window 1's existing `aletheia` Postgres database and Neo4j `neo4j` database
+are not read from, written to, or reset at any point in this task.
+
+---
+
 ## 7. Rules for this work
 
 - **Persist every run.** The previous evaluation was lost because nothing was saved
@@ -3732,8 +4096,10 @@ Commands added to §6m's table (above). Full test suite not affected
   confirm `which python` / `sys.prefix` points at the repo's `.venv`
   before trusting output from either.
 - **A silently-degenerate check reads exactly like a legitimate negative
-  result — check for this pattern specifically, it recurred eight times in
-  one work session.** Item 2.7 (rate-limited ASN API returning empty-body
+  result — check for this pattern specifically, it recurred ten times in
+  one work session (this bullet itself had drifted to "eight" after the
+  ninth instance, caught and corrected here rather than left stale).**
+  Item 2.7 (rate-limited ASN API returning empty-body
   200/429, indistinguishable from "genuinely no ASN" until logging was
   added); the venv defect (§6a: wrong interpreter ran silently instead of
   failing, because `2>/dev/null` masked the activation error); the
@@ -3759,8 +4125,18 @@ Commands added to §6m's table (above). Full test suite not affected
   instead — narrower than the other seven in that the command did fail
   loudly rather than exit clean, but the traceback itself read as an
   unrelated venv/packaging problem, not as a re-exec bug three files
-  away). In every case the command ran to completion (or, in the eighth
-  case, failed in a way that pointed at the wrong cause), returned or
+  away); `fp_weighted`'s `"org:AS13335"` lookup (§6m/§6n, 2026-07-24: a
+  `Counter`/`dict.get` miss silently returns `0`, indistinguishable by
+  inspection from a genuine zero-degree feature); and §6m's own
+  reproduction table never having been executed end-to-end as literally
+  documented (§8's Spine 5, 10th instance, 2026-07-24: six commands had
+  the wrong stated cwd, and a seventh — the determinism test — cited a
+  file that exists but contains no matching test, exit code 5, not a
+  clean run; found only by running each command, not by re-reading the
+  table, and this correction's own first draft then overclaimed the scope
+  of the cwd bug, caught the same way). In every case the command ran to
+  completion (or, in the eighth/tenth cases, failed in a way that pointed
+  at the wrong cause, or didn't run at all), returned or
   did a plausible-looking amount, and was believed until something else
   forced a second look. When a measurement
   comes back as a clean zero, a suspiciously round number, or a result
@@ -3782,6 +4158,86 @@ confirmation count so its evidentiary weight is visible at a glance.
 re-verified against final state" caveats that existed in the previous
 version of this ledger are resolved below, one way or the other, not left
 open.
+
+### Dataset & pipeline scale (final state) — cited in the paper's Methods section, Table 4
+
+**Graph composition, final state, 2026-07-24 — every node label and
+relationship type, not a subset:**
+
+| Node label | Count |
+|---|---|
+| Indicator | 23,135 |
+| Domain | 12,049 |
+| IP | 8,610 |
+| Hash | 6,946 |
+| Nameserver | 4,122 |
+| URL | 2,953 |
+| ASN | 736 |
+| HostingProvider | 693 |
+| Registrar | 490 |
+
+| Relationship type | Count |
+|---|---|
+| INDICATES | 23,140 |
+| USES_NS | 15,212 |
+| RESOLVES_TO_IP | 11,131 |
+| RESOLVES_TO_ASN | 8,320 |
+| HOSTED_BY | 8,157 |
+| REGISTERED_WITH | 8,104 |
+| HOSTS | 2,953 |
+
+`Indicator`/`IP`/`ASN`/`HostingProvider` node counts and `INDICATES`/
+`RESOLVES_TO_ASN`/`HOSTED_BY` edge counts were already cited (§6f's
+before/after rebuild table); `RESOLVES_TO_IP` was already cited (§6e,
+pre-rebuild, confirmed unchanged by §6f). **`Domain`, `Hash`, `URL` node
+counts and `HOSTS`, `REGISTERED_WITH`, `USES_NS` edge counts had never
+appeared as an absolute number anywhere in this document** — the source of
+Table 4's blank cells. All 16 numbers above were re-run together,
+2026-07-24, live against the current graph, and now have a single script of
+record: `analysis/final/graph_composition_final.py` (new this session,
+verified to reproduce every figure above exactly, including the ones
+already independently cited elsewhere in this document under different
+sections). Two plain Cypher queries, `MATCH (n) RETURN labels(n)[0] AS
+label, count(*) ORDER BY label` and the relationship-type equivalent — no
+filtering, no traversal depth, a full census of the graph as it stands.
+
+**Collection volume: 23,427 indicators/run across five feeds (2026-07-23
+default-config snapshot, §5's table).** ThreatFox 4,036, OTX 18,056,
+MalwareBazaar 100, OpenPhish 300, URLhaus 935; 23,045 (98.4%) usable-labelled.
+**No committed one-shot script** — this was a live run against real,
+rate-limited third-party APIs (`run_collectors()`,
+`app/ingestion/collectors/collector_runner.py`), not a deterministic query
+against already-ingested data, so re-running it will not reproduce this
+exact count (daily feed volume varies) even though the procedure is fixed.
+Reproduce the *procedure* with `python -c "from
+app.ingestion.collectors.collector_runner import run_collectors;
+run_collectors()"` from `backend/`, then read `FeedRun`/`Feed` for
+per-source counts — the number itself is a dated snapshot, not a
+repeatable constant, and should be cited as such in the paper.
+
+**Pipeline timings, two committed worker entrypoints, both confirmed to
+call the exact functions these figures cite:**
+
+| Stage | Timing | Source |
+|---|---|---|
+| Enrichment (22,642 indicators) | 18.3 min | §2.7/item 2.1's full-volume re-run, post-GeoLite2 fix |
+| Graph build (~22,637 indicators, pre-item-2.9) | 11.4 min | §2.1's "full-volume re-measurement" entry |
+| Full graph rebuild (23,135 indicators, post-item-2.9 IP-edge fix) | 20.5 min (1,230.7s) | §6f |
+
+`python -m app.workers.enrichment_worker` runs `run_enrichment_batch()`
+once (then loops on a 300s sleep — interrupt after the first batch) and is
+the exact function §2.7's 18.3 min figure timed. `python -m
+app.workers.graph_worker` runs `run_graph_build()` →
+`GraphBuilder.ingest_all_indicators()` once, the exact call both the 11.4
+min and 20.5 min figures timed at two different points in the graph's
+history (before/after item 2.9's IP-edge fix, hence the different
+durations at similar scale — not a performance regression, a different
+amount of work per indicator). Like collection volume, these are
+wall-clock timings from specific dated runs against live DNS/WHOIS/GeoLite2
+lookups (enrichment) or the then-current Postgres/Neo4j state (graph
+build) — the commands reproduce the *procedure* exactly; the durations
+will vary run to run with network conditions and data volume, and should
+be cited as measured, not as guaranteed constants.
 
 ### Spine 1 — commodity infrastructure is over-weighted (quantified)
 
@@ -3923,7 +4379,8 @@ open.
   ThreatFox (~1.7×); 0.0386–0.0390 vs. next-best (`group_by_hosting_provider`)
   0.0225 on OTX-with-outlier (~1.7×) — but this does NOT hold on
   OTX-without-outlier, where `GROUP BY resolved_ip` (0.1248) and
-  `Jaccard v1` (0.1223) both beat BFS (0.0874–0.0963), §6h.** **2 of 3
+  `Jaccard v1` (0.1223, stale — post-multi-membership-fix value is
+  **0.1225**, §6h/§6l) both beat BFS (0.0874–0.0963), §6h.** **2 of 3
   ground-truth configurations confirm; 1 contradicts.** Must be stated in
   the paper as scoped to ThreatFox and the dominant OTX pulse, not as a
   general claim about threat-intelligence ground truth — a reviewer with
@@ -3933,9 +4390,216 @@ open.
   valid: BFS is the paper's originally-claimed algorithm, and it does win
   on 2 of 3 ground truths tested, just not unconditionally).
 
+### Bootstrap 95% confidence intervals for the Spine 3/4 ARI figures — peer-review Task 1, 2026-07-24
+
+**Requested: every ARI in the paper is a point estimate; reviewers will ask
+whether the headline differences are significant. Bootstrap CIs, computed
+without touching any existing metric function, verified before running at
+scale, reported honestly including a diagnosed-and-corrected bias.**
+
+**Method.** `app/evaluation/bootstrap.py` (new), resampling **indicators**
+with replacement (not pairs — pairs of the same n indicators are not
+independent observations, since each indicator appears in n−1 pairs), ARI
+recomputed from scratch on each resample via a duplicated (not reused)
+contingency-table formula that can handle a value drawn more than once —
+`metrics.py`'s own `adjusted_rand_index()` cannot, since it is keyed on
+`value -> label` dicts. `metrics.py`, `run_evaluation.py`, and every other
+existing evaluation file are unmodified; `run_bootstrap.py` imports
+`run_evaluation.py`'s setup helpers and reproduces the identical
+clustering/fingerprint/confidence-filtering pipeline to build the same
+seven `__reported` (confidence-filtered, `>=40`) methods §8 already cites.
+10,000 iterations per cell, `seed=42` (recorded in every result and in the
+output JSON — CONTEXT.md's determinism rule, §7).
+
+**The verification step required before running at scale (task
+instruction) failed on the first attempt, was diagnosed rather than
+patched around, and is recorded as the 11th Spine 5 instance below.**
+Summary: the plain **percentile** bootstrap interval has a small, real,
+non-vanishing upward bias — confirmed on synthetic independent-label data
+at n=200 through n=60,000 (bias plateaus around +0.016, does not shrink
+with n, ruling out Monte Carlo noise —
+`analysis/final/bootstrap_bias_diagnostic.py`) and reproduced on real
+project data. Root cause: resampling indicators with replacement against a
+*fixed* external true-label/predicted-cluster assignment means a
+duplicated indicator trivially "agrees with itself" in both partitions
+every time it's drawn more than once, and ARI's chance-correction term does
+not fully cancel that out of the percentile bootstrap distribution. **Fix,
+per direction: report both intervals side by side** — the percentile
+interval as originally specified, and the **pivotal** (basic) interval,
+`[2·point − hi_percentile, 2·point − lo_percentile]`, which is centered on
+the point estimate rather than the biased resampled mean and is the
+standard correction for exactly this failure mode (Efron & Tibshirani).
+**The paper cites the pivotal interval; both are kept here so the choice is
+auditable, not silently swapped.**
+
+**A second, related calibration finding, disclosed rather than smoothed
+over: for 16 of the 42 (method × ground truth × scope) cells, the pivotal
+interval does not contain its own point estimate.** This is not a
+computation error — verified directly: in every one of these 16 cells the
+diagnosed bias is comparable to or larger than the bootstrap standard
+deviation (e.g. `random_baseline`/OTX-without-outlier/scoped: point
+`-0.0001`, `bootstrap_std=0.00099`, `bias=+0.0229` — bias is ~23× the
+spread), which is exactly the regime where a bias-reflected interval can
+land entirely to one side of the value it's supposed to bracket. It
+concentrates in two patterns: (a) `random_baseline` rows, where true ARI is
+essentially a constant near 0 with almost no real sampling variability, so
+even a small absolute bias dominates; and (b) OTX-without-outlier's
+full-population rows generally, which show a systematically larger bias
+(~0.009–0.016) than the equivalent ThreatFox/OTX-with-outlier cells
+(~0.001–0.004) — observed, not root-caused further here, consistent with
+this project's convention of flagging an unexplained pattern rather than
+speculating past what was checked. **Practical consequence, checked
+directly: this does not change the answer to any of the three questions
+below** — the overlap check between two methods' pivotal intervals is
+unaffected by whether either interval individually contains its own point,
+since both intervals are constructed the same biased-and-corrected way —
+but it is flagged inline wherever one of the three questions' four
+comparison rows is among the affected 16, rather than left for a reviewer
+to find by re-deriving the intervals independently.
+
+**Full table (point estimate, pivotal 95% CI, percentile 95% CI, measured
+bias — all 7 confidence-filtered methods × 3 ground truths × full/scoped,
+42 rows), script of record `python -m app.evaluation.run_bootstrap`
+(cwd `backend/`), output persisted to
+`evaluation_runs/bootstrap_ci_20260724T175706Z.json`:**
+
+**ThreatFox** (n=3,628 full / 2,169 scoped):
+
+| Method | Scope | ARI | Pivotal 95% CI | Percentile 95% CI |
+|---|---|---|---|---|
+| Random baseline | full | -0.0000 | [-0.0030, -0.0025] | [0.0025, 0.0030] |
+| Random baseline | scoped | -0.0001 | [-0.0042, -0.0033] | [0.0032, 0.0040] |
+| GROUP BY ASN | full | 0.0535 | [0.0409, 0.0609] | [0.0460, 0.0660] |
+| GROUP BY ASN | scoped | 0.0846 | [0.0649, 0.0977] | [0.0714, 0.1042] |
+| GROUP BY resolved IP | full | 0.0105 | [0.0041, 0.0109] | [0.0101, 0.0170] |
+| GROUP BY resolved IP | scoped | 0.0233 | [0.0117, 0.0266] | [0.0201, 0.0350] |
+| GROUP BY hosting_provider | full | 0.0534 | [0.0408, 0.0608] | [0.0460, 0.0660] |
+| GROUP BY hosting_provider | scoped | 0.0843 | [0.0647, 0.0974] | [0.0712, 0.1039] |
+| Jaccard fingerprint (v1) | full | 0.0409 | [0.0325, 0.0439] | [0.0380, 0.0494] |
+| Jaccard fingerprint (v1) | scoped | 0.0891 | [0.0755, 0.0957] | [0.0826, 0.1028] |
+| BFS d=2, unweighted | full | 0.0785 | [0.0640, 0.0876] | [0.0693, 0.0930] |
+| BFS d=2, unweighted | scoped | 0.1540 | [0.1314, 0.1695] | [0.1385, 0.1765] |
+| BFS + inverse-degree weighting | full | 0.0777 | [0.0631, 0.0868] | [0.0686, 0.0923] |
+| BFS + inverse-degree weighting | scoped | 0.1525 | [0.1299, 0.1681] | [0.1368, 0.1750] |
+
+**OTX with outlier** (n=17,199 full / 8,900 scoped):
+
+| Method | Scope | ARI | Pivotal 95% CI | Percentile 95% CI |
+|---|---|---|---|---|
+| Random baseline | full | 0.0000 | [-0.0015, -0.0014] | [0.0014, 0.0016] |
+| Random baseline | scoped | -0.0000 | [-0.0007, -0.0006] | [0.0006, 0.0007] |
+| GROUP BY ASN | full | 0.0729 | [0.0665, 0.0768] | [0.0691, 0.0793] |
+| GROUP BY ASN | scoped | 0.0218 | [0.0152, 0.0271] | [0.0165, 0.0284] |
+| GROUP BY resolved IP | full | 0.0025 | [0.0005, 0.0015] | [0.0035, 0.0045] |
+| GROUP BY resolved IP | scoped | 0.0021 | [0.0010, 0.0018] | [0.0024, 0.0032] |
+| GROUP BY hosting_provider | full | 0.0741 | [0.0677, 0.0779] | [0.0702, 0.0804] |
+| GROUP BY hosting_provider | scoped | 0.0225 | [0.0160, 0.0278] | [0.0172, 0.0291] |
+| Jaccard fingerprint (v1) | full | 0.0108 | [0.0078, 0.0108] | [0.0108, 0.0138] |
+| Jaccard fingerprint (v1) | scoped | 0.0076 | [0.0055, 0.0082] | [0.0069, 0.0097] |
+| BFS d=2, unweighted | full | 0.0849 | [0.0785, 0.0889] | [0.0809, 0.0913] |
+| BFS d=2, unweighted | scoped | 0.0390 | [0.0329, 0.0439] | [0.0340, 0.0451] |
+| BFS + inverse-degree weighting | full | 0.0843 | [0.0779, 0.0884] | [0.0803, 0.0907] |
+| BFS + inverse-degree weighting | scoped | 0.0386 | [0.0325, 0.0435] | [0.0337, 0.0447] |
+
+**OTX without outlier** (n=12,705 full / 4,492 scoped):
+
+| Method | Scope | ARI | Pivotal 95% CI | Percentile 95% CI |
+|---|---|---|---|---|
+| Random baseline | full | 0.0000 | [-0.0168, -0.0151] | [0.0152, 0.0168] |
+| Random baseline | scoped | -0.0001 | [-0.0250, -0.0211] | [0.0209, 0.0248] |
+| GROUP BY ASN | full | 0.0458 | [0.0299, 0.0435] | [0.0481, 0.0617] |
+| GROUP BY ASN | scoped | 0.0623 | [0.0466, 0.0676] | [0.0570, 0.0780] |
+| GROUP BY resolved IP | full | 0.0333 | [0.0098, 0.0234] | [0.0432, 0.0567] |
+| GROUP BY resolved IP | scoped | 0.1248 | [0.0811, 0.1264] | [0.1232, 0.1684] |
+| GROUP BY hosting_provider | full | 0.0461 | [0.0303, 0.0439] | [0.0484, 0.0620] |
+| GROUP BY hosting_provider | scoped | 0.0627 | [0.0472, 0.0680] | [0.0575, 0.0783] |
+| Jaccard fingerprint (v1) | full | 0.0378 | [0.0167, 0.0274] | [0.0483, 0.0590] |
+| Jaccard fingerprint (v1) | scoped | 0.1225 | [0.0893, 0.1215] | [0.1234, 0.1556] |
+| BFS d=2, unweighted | full | 0.0601 | [0.0424, 0.0576] | [0.0625, 0.0778] |
+| BFS d=2, unweighted | scoped | 0.0963 | [0.0777, 0.1023] | [0.0902, 0.1149] |
+| BFS + inverse-degree weighting | full | 0.0549 | [0.0373, 0.0522] | [0.0576, 0.0726] |
+| BFS + inverse-degree weighting | scoped | 0.0874 | [0.0688, 0.0934] | [0.0815, 0.1060] |
+
+**Question (a): do BFS unweighted and jaccard_v1 CIs overlap on ThreatFox
+scoped — the ~1.7× positive result?** **No — they do not overlap.**
+BFS unweighted (scoped) pivotal CI `[0.1314, 0.1695]`; jaccard_v1 (scoped)
+pivotal CI `[0.0755, 0.0957]`. The gap between the two intervals is
+`0.1314 − 0.0957 = 0.0357` — a real, non-trivial separation, not a near
+miss. **This is a positive finding for the paper: the ~1.7× BFS-vs-Jaccard
+margin on ThreatFox is not just a larger point estimate, it is a
+statistically clear separation at the 95% level, on the exact resampling
+scheme used throughout this table.** Neither row is among the 16
+point-estimate-exclusion cells, so this comparison carries no additional
+caveat.
+
+**Question (b): do BFS weighted and BFS unweighted CIs overlap — expected
+yes, since the point-estimate delta is -0.0008?** **Yes — they overlap in
+every one of the four configurations tested** (ThreatFox full/scoped, OTX-
+with-outlier full/scoped; OTX-without-outlier checked separately below
+since its own delta is larger, -0.0089, §8's Spine 3):
+
+| Config | Unweighted pivotal CI | Weighted pivotal CI | Overlap region |
+|---|---|---|---|
+| ThreatFox, full | [0.0640, 0.0876] | [0.0631, 0.0868] | [0.0640, 0.0868] |
+| ThreatFox, scoped | [0.1314, 0.1695] | [0.1299, 0.1681] | [0.1314, 0.1681] |
+| OTX+outlier, full | [0.0785, 0.0889] | [0.0779, 0.0884] | [0.0779, 0.0884]* |
+| OTX+outlier, scoped | [0.0329, 0.0439] | [0.0325, 0.0435] | [0.0325, 0.0435]* |
+| OTX-outlier, full | [0.0424, 0.0576] | [0.0373, 0.0522] | [0.0424, 0.0522] |
+| OTX-outlier, scoped | [0.0777, 0.1023] | [0.0688, 0.0934] | [0.0777, 0.0934] |
+
+(*near-total overlap; the two intervals are almost coincident.) **Per the
+task's own framing, this strengthens rather than weakens the non-result:**
+it is not just that the point estimates are close (Δ -0.0008 to -0.0098
+across configurations) — the confidence intervals substantially overlap in
+every single configuration tested, meaning the data cannot statistically
+distinguish weighted from unweighted BFS on ARI at all. Combined with §8's
+existing "6 independent confirmations, same direction every time" note,
+this is now also "0 of 6 configurations show a statistically distinguishable
+difference" — the flat-ARI non-result is on firmer ground after bootstrapping
+it, not shakier. `otx_without_outlier`'s two full-population rows are among
+the 16 point-estimate-exclusion cells (both, symmetrically, since the bias
+affects both at a similar magnitude ~0.0097-0.0098) — noted for
+completeness; it does not change the overlap conclusion, which compares
+interval to interval, not point to interval.
+
+**Question (c): on OTX-without-outlier, do jaccard_v1 and
+group_by_resolved_ip CIs separate from BFS — the "1 of 3 contradicts"
+case?** **No — none of the four pairings separate. Every one overlaps,
+scoped:**
+
+| Pairing | Interval 1 (pivotal) | Interval 2 (pivotal) | Overlap? |
+|---|---|---|---|
+| group_by_resolved_ip vs. BFS unweighted | [0.0811, 0.1264] | [0.0777, 0.1023] | Yes — [0.0811, 0.1023] |
+| group_by_resolved_ip vs. BFS weighted | [0.0811, 0.1264] | [0.0688, 0.0934] | Yes — [0.0811, 0.0934] |
+| jaccard_v1 vs. BFS unweighted | [0.0893, 0.1215] | [0.0777, 0.1023] | Yes — [0.0893, 0.1023] |
+| jaccard_v1 vs. BFS weighted | [0.0893, 0.1215] | [0.0688, 0.0934] | Yes — [0.0893, 0.0934] (narrow) |
+
+**This softens §4.4 as written and needs a change before it reaches a
+reviewer.** The point-estimate ordering (`group_by_resolved_ip` 0.1248 >
+`jaccard_v1` 0.1225 > BFS unweighted 0.0963 > BFS weighted 0.0874) is real
+and reproduces exactly what §8's Spine 4 already cites, but **none of these
+four differences clear statistical significance at the 95% level** — the
+sample here (n=4,492 scoped) is smaller than ThreatFox's or OTX-with-
+outlier's, and the resulting intervals are wide enough that "1 of 3 ground
+truths contradicts" should be restated as **"1 of 3 ground truths shows a
+point-estimate reversal that is not statistically distinguishable from the
+other two"** — a real but weaker claim than a clean contradiction. One of
+the four rows (`jaccard_v1` scoped) is among the 16 point-estimate-exclusion
+cells (point `0.1225` sits `0.0010` above its own pivotal upper bound
+`0.1215` — a marginal case, not a large one), noted for completeness; the
+overlap conclusion above is unaffected since it compares intervals, not the
+point to its own interval.
+
+**11th Spine 5 instance, this task.** See the Spine 5 list below for the
+full write-up (percentile-bootstrap bias, diagnosed via the task's own
+required verification step, caught before any CI was ever computed at
+scale or reported anywhere — different in kind from instances 1–10, all of
+which were caught after a wrong number had already been produced and
+believed for a while).
+
 ### Spine 5 — methodological findings (report as part of the paper's contribution, not just as caveats)
 
-- **9 instances of "confident wrong number from a silently-degenerate
+- **11 instances of "confident wrong number from a silently-degenerate
   check"** in one session: item 2.7 (rate-limited API, empty-body
   200/429 indistinguishable from "no ASN"), the venv defect (§6a),
   the ground-truth join-key bug (§6b, 18.6% of labels silently dropped),
@@ -3964,13 +4628,76 @@ open.
   name, and a `Counter`/`dict.get` miss on it returns `0` — indistinguishable
   by inspection from a genuine zero-degree feature — the same
   fingerprint-vs-graph-edge mismatch shape as instance 5, caught before
-  the speculated one-liner was ever reported as the answer, not after.
-  Same pattern as the other eight: a command that succeeded (or, in the
-  eighth case, failed for a reason other than the one its own traceback
-  suggested) while doing less than it appeared to. Each is a **fix or a
+  the speculated one-liner was ever reported as the answer, not after —
+  and **§6m's reproduction table never having been executed end-to-end as
+  literally documented, until a follow-up request asked for exactly
+  that (§6m, 2026-07-24).** Two independent bugs surfaced, both invisible
+  to inspection: six of the table's `analysis/final/*.py` rows documented
+  "repo root" as the cwd when every one of those scripts' own
+  `sys.path.insert(0, '.')` only resolves `from app...` if the cwd is
+  `backend/` (confirmed by running one: immediate
+  `ModuleNotFoundError: No module named 'app'` from repo root, clean run
+  from `backend/`); separately, the Spine 3 determinism row cited
+  `test_campaign_engine.py` — a real file, not a typo — but one with no
+  test matching `-k deterministic` (the actual determinism test lives in
+  `test_campaign_detector.py`), so the documented command collects 3
+  items, deselects all 3, and exits 5 (a genuine pytest failure code, not
+  a clean "nothing to do"). **Different in kind from the other nine,
+  worth distinguishing rather than folding in silently:** none of the
+  first nine were live instructions in this document — they were
+  measurements or fixes; this one is the reproduction table itself, whose
+  entire stated purpose is "so nobody has to guess which command produced
+  which number," turning out to contain commands that don't run,
+  discovered only because someone asked "did you actually run these"
+  rather than trusting that a table marking every row "a script of
+  record" meant every row had been executed as written. The correction
+  pass on this bug then, itself, overclaimed ("every command in the
+  table…had the wrong cwd" — false; the `pytest` rows never had a cwd
+  problem, caught only by then running those rows too) — a small,
+  self-referential instance of the exact failure mode it was in the
+  middle of documenting.
+  Same pattern as the other nine: a command, or this time a table of
+  commands, that looked complete and correct until someone actually ran
+  it. Each is a **fix or a
   caught-and-corrected measurement, verified once**, not a comparative
   statistic — done, not pending re-confirmation.
-- **Discipline point, now with a ninth instance to cite:** every one of
+- **11th instance, peer-review Task 1 (bootstrap CIs), 2026-07-24 —
+  different in kind from all ten before it.** Building
+  `app/evaluation/bootstrap.py` (percentile-method bootstrap CI for ARI,
+  resampling indicators with replacement), the task's own required
+  verification step — run the resampling at small scale first and confirm
+  the bootstrap mean lands within Monte Carlo error of the existing point
+  estimate before trusting it at 10,000 iterations — failed. A plausible,
+  correctly-coded-looking method (percentile bootstrap, the standard
+  textbook construction) produced a systematically wrong number: bootstrap
+  mean biased +0.0025 above the real point estimate (0.0785) on
+  `bfs_unweighted_reported_only`/ThreatFox at n=3,628, far outside Monte
+  Carlo noise (35× the standard error at 3,000 iterations). Diagnosed, not
+  dismissed: synthetic independent-random-label data at n=200 through
+  n=60,000 (`analysis/final/bootstrap_bias_diagnostic.py`) shows the same
+  bias, and critically it does **not** shrink with n — it plateaus around
+  +0.016 — which rules out both ordinary Monte Carlo noise and the
+  standard O(1/n) bootstrap bias textbooks warn about for smooth ratio
+  statistics. Root cause: resampling indicators with replacement against a
+  *fixed* external partition (true label and predicted cluster are both
+  deterministic per indicator, never re-derived from the resample) means a
+  duplicated indicator trivially "agrees with itself" in both partitions
+  every time it's drawn more than once, and ARI's chance-correction term
+  does not fully cancel that self-agreement artifact out of the percentile
+  bootstrap distribution. Fixed by reporting the **pivotal** (basic)
+  interval — `[2·point − hi_percentile, 2·point − lo_percentile]`, centered
+  on the point estimate rather than the biased resampled mean — alongside
+  the percentile interval, not by discarding the diagnosis; see §8's
+  bootstrap-CI subsection. **What makes this different from instances 1–10:
+  nothing wrong ever reached this ledger.** Every prior instance was caught
+  by a later re-run, an independent cross-check, or someone asking "did
+  this actually run" — after a number had already been produced and,
+  usually, already believed for a while. Here the required verification
+  step caught the problem on the very first attempt, before any bootstrap
+  CI was ever computed at scale or reported anywhere. The gate held on the
+  first try — worth recording as evidence the discipline works
+  prospectively, not only in hindsight.
+- **Discipline point, now with an eleventh instance to cite:** every one of
   the above was caught by re-running a result under changed conditions,
   cross-checking against an independent method, reproducing a prior
   number exactly and noticing when it didn't reproduce, or diffing an
@@ -3980,7 +4707,11 @@ open.
   paper's methodology section, and the Spine 1 catch (§6i) is the
   clearest self-contained illustration: a wrong number was produced,
   caught by its implausible magnitude, and corrected in the same task
-  before ever reaching this ledger.
+  before ever reaching this ledger. The 11th instance is the
+  complementary illustration, worth keeping alongside it rather than
+  merged in: a required, pre-declared verification *step* — not a
+  post-hoc re-run prompted by suspicion — caught the same class of
+  problem before a wrong number was ever produced at all.
 
 ### Explicitly not paper-ready / decided not to pursue further
 
