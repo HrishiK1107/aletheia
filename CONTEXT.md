@@ -3059,7 +3059,7 @@ these, not always against the original baseline.
 | B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **DONE** | **yes — see below** | `8858cf9` (wiring), `1a15b14` (verification) |
 | B2 (decide fate of `commodity_fp_rate()`/`size_band()`) | **DONE — deleted both** | yes — bit-identical output | `3d99363` |
 | B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **DONE — within scope, see caveat below** | yes, for everything this entrypoint computes; `_scoped` metrics and most of Spine 1/2/4 are out of this entrypoint's scope entirely, not a defect introduced by this fix sequence | n/a (no code change) |
-| C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **DONE** | yes — verified by exact dict equality, not size | pending commit |
+| C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **DONE** | yes — verified by exact dict equality, not size | `32b2d18` |
 
 **B1's current state, exactly:** the code change itself is additive-only
 as instructed — two new imports
