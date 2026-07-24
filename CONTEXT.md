@@ -3055,9 +3055,10 @@ these, not always against the original baseline.
 | Multi-membership + `PYTHONHASHSEED` determinism fix (found via A1's re-run, not on the original list) | **DONE** | yes, with disclosed exceptions — see below | `4f9859c` |
 | A2 (`ORDER BY id`, `ground_truth.py`) | **DONE** | yes — zero labels changed, zero numbers moved | `8801322` |
 | A3 (test for `adjusted_rand_index()`'s `denom==0` branch) | **DONE** | test-only, no source change | `275d2eb` |
-| B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **IN PROGRESS, uncommitted** | **not yet verified — blocked** | none |
+| `-m` re-exec fix, `hash_safety.py` (found while verifying B1, not on the original list) | **DONE** | yes — see below | pending commit |
+| B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **DONE** | **yes — see below** | `8858cf9` (wiring), verification pending commit |
 | B2 (decide fate of `commodity_fp_rate()`/`size_band()`) | **NOT STARTED** | — | — |
-| B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **NOT STARTED, blocked on same issue as B1** | — | — |
+| B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **NOT STARTED** | — | — |
 | C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **NOT STARTED** | — | — |
 
 **B1's current state, exactly:** the code change itself is additive-only
@@ -3084,13 +3085,98 @@ code or even `main()` runs, so it is very likely a pre-existing
 environment/invocation defect unrelated to the B1 diff itself — all of
 this session's other DB-touching scripts worked around the same class of
 problem with an explicit `sys.path.insert(0, '.')`, which
-`run_evaluation.py` itself does not have. **Not yet root-caused or
-fixed.** Do not assume it's the same "wrong venv" defect from §6a
-(interpreter was verified active); more likely a missing
-`app/__init__.py`, a `-m`/cwd interaction, or a project install
-(`pip install -e .`) that other entrypoints implicitly rely on. B1's
-"verify existing outputs are unchanged" step cannot proceed until this is
-resolved and the entrypoint runs at all.
+`run_evaluation.py` itself does not have.
+
+**Root-caused, 2026-07-24 — self-inflicted, not a venv/`__init__.py`/install
+defect.** `app/__init__.py` exists and `python -c "import app...` from
+`backend/` works fine; `which python`/`sys.prefix` both confirm the
+correct `.venv` is active (not a repeat of §6a). Confirmed instead, by
+inserting temporary debug prints around the failing import and diffing
+`sys.path`/`sys.modules`/`__spec__` before vs. after: **the module runs
+*twice*.** The first pass, launched correctly via `-m`, has
+`sys.path[0] == '.../backend'` and `'app' in sys.modules`, exactly as
+expected — then, before reaching the failing line a second time, it
+silently re-executes as a *different* process with
+`sys.path[0] == '.../backend/app/evaluation'` (the script's own
+directory) and `__package__ is None`. That second process is the one
+that actually throws. Cause: `app/core/hash_safety.py`'s
+`ensure_deterministic_hashing()` (wired into this file's `__main__` block
+by the determinism fix, `4f9859c`, §6j) re-execs the interpreter via
+`os.execve(sys.executable, [sys.executable] + sys.argv, env)` to pin
+`PYTHONHASHSEED=0`. Under `python -m app.evaluation.run_evaluation`,
+Python sets `sys.argv[0]` to the *resolved absolute file path* of the
+module, not `-m app.evaluation.run_evaluation` — so re-execing
+`[sys.executable] + sys.argv` verbatim silently drops module context.
+The re-exec'd child starts as a bare script, gets the script's own
+directory on `sys.path[0]` instead of the caller's cwd, and every
+absolute intra-package import (`from app.correlation...`) then fails
+with exactly this `ModuleNotFoundError`. This is why every `analysis/`
+script's re-exec was invisible: they're all invoked as plain scripts
+(`python analysis/final/foo.py`), where `argv[0]` was already a bare
+file path, so the re-exec was a no-op change of invocation style there —
+`run_evaluation.py`'s `-m` entrypoint is the only caller of
+`ensure_deterministic_hashing()` that was ever exposed to the defect,
+and it was never run successfully even once after `4f9859c` introduced
+it, right through §6j and A1/A2/A3 being marked done.
+
+**This means every number in this document credited as coming from "the
+`run_evaluation.py` harness" — including everything in the §8 ledger —
+was in fact produced exclusively by the ad hoc `analysis/` scripts (each
+with its own `sys.path.insert(0, '.')` workaround), never by the
+documented `python -m app.evaluation.run_evaluation` reproduction
+command itself. That command is cited in this file's own header
+(`Run with: python -m app.evaluation.run_evaluation`) and nowhere
+flagged as unverified until this session. Recorded below as an eighth
+instance of Spine 5's pattern** (§7's rule bullet and the Spine 5 list
+should both be updated from "seven" to "eight") **— the command exited
+nonzero and printed a traceback, so unlike the other seven it was never
+mistakable for a clean run; the degenerate part is narrower but still
+real: the traceback's own text ("No module named 'app'", pointing at
+line 18) reads exactly like a plain missing-package/bad-venv problem,
+and would have sent anyone debugging it looking at the environment
+first, not at a `os.execve` call three files away in a module the
+traceback never mentions.**
+
+**Fixed in `app/core/hash_safety.py`:** `ensure_deterministic_hashing()`
+now checks `sys.modules["__main__"].__spec__` — set only when the main
+module was located via `-m` — and if present, reconstructs the
+invocation explicitly as `[sys.executable, "-m", main_spec.name,
+*sys.argv[1:]]` instead of trusting `sys.argv[0]`; the plain-script path
+(`__spec__ is None`) is unchanged. Verified directly: `python -m
+app.evaluation.run_evaluation` now runs past the import (confirmed via
+debug prints showing a single pass, correct `sys.path`, before they were
+reverted), and a throwaway plain-script invocation calling the same
+function still re-execs correctly with `PYTHONHASHSEED=0` set. No other
+caller of `ensure_deterministic_hashing()` exists in `backend/` or
+`analysis/` (checked by grep), so this fix has no other blast radius.
+This fix is the `-m`/cwd-interaction prerequisite the previous version of
+this entry called for, not a new numbered audit item, per the note below
+— it doesn't need its own one-fix-at-a-time cycle, but the full
+measurement suite must still be re-run and diffed against
+`postfix_A2_20260723T172942Z/` before B1 can be called verified (next
+section).
+
+**B1 verified, 2026-07-24 — `python -m app.evaluation.run_evaluation` run
+end to end for the first time ever, output diffed programmatically
+against `evaluation_runs/postfix_A2_20260723T172942Z/evaluation_table.json`
+(the most recent verified snapshot), not by eye.** Wrote
+`evaluation_runs/item7_eval_20260724T083750Z.json`. Every method
+(`random_baseline`, `group_by_asn`, `group_by_resolved_ip`,
+`group_by_hosting_provider`, `jaccard_v1`, and all three BFS rows) ×
+every ground truth (`threatfox`, `otx_with_outlier`,
+`otx_without_outlier`) × every metric this entrypoint computes (`ari`,
+`precision`, `recall`, `n_clusters`) matches the snapshot's `_full`
+variant exactly (max absolute difference < 1e-9, checked
+programmatically, not rounded-eyeballed) — **zero cells moved.** (This
+entrypoint's `evaluate_method()` only ever computed the `_full` variant,
+never `_scoped` — see the B3 note below on what that means for "confirm
+§8 reproduces.") B1's own new `results["diagnostics"]` block was checked
+against the one number from this table with an independent prior
+citation: ThreatFox's unrestricted-connectivity (`threshold=None`)
+sweep ARI is **0.09619892509058318**, matching the final-state figure
+already in this ledger ("0.2194 → **0.0962**", line ~2015, §6c) to 4
+decimal places. **B1 is verified measurement-neutral: it added the
+`results["diagnostics"]` key and changed nothing else.**
 
 **BFS: confirmed zero movement across every fix applied so far.** Checked
 explicitly, not assumed, after the determinism fix: every BFS row
@@ -3185,23 +3271,24 @@ negligibly.** BFS weighted/unweighted scoped: 0.0874/0.0963 (unchanged).
 0.0373→0.0374). **The "2 of 3 confirm, 1 contradicts" framing does not
 need restating.**
 
-**Next step, exactly, for whoever resumes this:** do not touch A1/A2/A3
-or the determinism fix again — they are done, committed, and verified.
-First, root-cause and fix the `ModuleNotFoundError` blocking
-`python -m app.evaluation.run_evaluation` (check for a missing
-`app/__init__.py`, whether other entrypoints rely on an editable install,
-or a `-m`/cwd interaction) — this is a prerequisite for B1's own
-verification, not a new audit item, so fixing it doesn't need a separate
-one-fix-at-a-time cycle, but DO re-run the full measurement suite and
-diff against `evaluation_runs/postfix_A2_20260723T172942Z/` once the
-entrypoint runs, to confirm B1's wiring changed nothing outside the new
-`results["diagnostics"]` key. Only after B1 is verified: commit it, then
-proceed to B2 (decide `commodity_fp_rate()`/`size_band()` — wire or
-delete, checking `analysis/` for importers first), then B3 (confirm the
-now-working entrypoint reproduces §8's numbers end to end), then C1 (the
-N+1 fix, flagged as highest-risk — verify by exact dict equality, not
-size). Same protocol throughout: one fix at a time, diff programmatically,
-stop and report on any movement.
+**Next step, exactly, for whoever resumes this (updated 2026-07-24 —
+entrypoint fixed, B1 verified, resuming at B2):** do not touch A1/A2/A3,
+the determinism fix, the `-m` re-exec fix, or B1 again — all four are
+done, committed or pending-commit as noted in the table above, and
+verified. Proceed to B2 (decide `commodity_fp_rate()`/`size_band()` —
+wire or delete, checking `analysis/` for importers first: neither
+function has any caller anywhere in `backend/` or `analysis/` as of this
+writing, confirmed by grep — `run_evaluation.py` reimplements
+`commodity_fp_rate`'s logic inline instead of calling it, and
+`size_band`'s own `SIZE_BANDS` iteration is duplicated inline in
+`stratify_by_size()` rather than calling `size_band()` per item), then
+B3 (confirm the now-working entrypoint reproduces §8's numbers end to
+end — note while at it that this entrypoint's `evaluate_method()` only
+ever computes the `_full` metric variant, never `_scoped`, so "reproduces
+§8" needs to be judged against the right subset of citations, not all of
+them), then C1 (the N+1 fix, flagged as highest-risk — verify by exact
+dict equality, not size). Same protocol throughout: one fix at a time,
+diff programmatically, stop and report on any movement.
 
 ---
 
@@ -3228,7 +3315,7 @@ stop and report on any movement.
   confirm `which python` / `sys.prefix` points at the repo's `.venv`
   before trusting output from either.
 - **A silently-degenerate check reads exactly like a legitimate negative
-  result — check for this pattern specifically, it recurred seven times in
+  result — check for this pattern specifically, it recurred eight times in
   one work session.** Item 2.7 (rate-limited ASN API returning empty-body
   200/429, indistinguishable from "genuinely no ASN" until logging was
   added); the venv defect (§6a: wrong interpreter ran silently instead of
@@ -3240,11 +3327,23 @@ stop and report on any movement.
   `count=0`, indistinguishable from "node exists with zero edges" without
   an explicit `OPTIONAL MATCH ... IS NOT NULL` check); the Spine 1
   re-verification's Postgres-vs-Neo4j methodology mismatch (§6i, a
-  spurious ~3× discrepancy caught before being reported); and `git add
+  spurious ~3× discrepancy caught before being reported); `git add
   analysis/` silently dropping 17 `.log` files matched by `*.log` in
   `.gitignore` while exiting 0 and printing nothing wrong (§8's Spine 5,
   caught only by diffing the committed tree against the filesystem
-  afterward). In every case the command ran to completion, returned or
+  afterward); `build_predicted_labels()`'s overwrite-order dependency on
+  Python's per-process hash randomization (§6j: a fix expected to be a
+  complete no-op was re-measured anyway, and two runs of identical code
+  disagreed); and `run_evaluation.py`'s documented `python -m` entrypoint
+  never having run successfully even once since the determinism fix
+  introduced it (§6k, 2026-07-24: `hash_safety.py`'s re-exec silently
+  dropped `-m` module context, and every number credited to this harness
+  actually came from `analysis/` scripts' plain-script invocations
+  instead — narrower than the other seven in that the command did fail
+  loudly rather than exit clean, but the traceback itself read as an
+  unrelated venv/packaging problem, not as a re-exec bug three files
+  away). In every case the command ran to completion (or, in the eighth
+  case, failed in a way that pointed at the wrong cause), returned or
   did a plausible-looking amount, and was believed until something else
   forced a second look. When a measurement
   comes back as a clean zero, a suspiciously round number, or a result
@@ -3406,7 +3505,7 @@ open.
 
 ### Spine 5 — methodological findings (report as part of the paper's contribution, not just as caveats)
 
-- **7 instances of "confident wrong number from a silently-degenerate
+- **8 instances of "confident wrong number from a silently-degenerate
   check"** in one session: item 2.7 (rate-limited API, empty-body
   200/429 indistinguishable from "no ASN"), the venv defect (§6a),
   the ground-truth join-key bug (§6b, 18.6% of labels silently dropped),
@@ -3418,15 +3517,23 @@ open.
   `.log` files matched by the repo's own `*.log` gitignore rule —
   the command printed nothing wrong and exited 0, and the omission was
   only caught by diffing the committed tree against the filesystem
-  afterward — and `build_predicted_labels()`'s overwrite-order dependency
+  afterward — `build_predicted_labels()`'s overwrite-order dependency
   on Python's per-process hash randomization (§6j, 2026-07-23), found
   only because a fix expected to be a complete no-op was re-measured
-  anyway and two runs of identical code disagreed. Same pattern as the
-  other six: a command that succeeded while doing less than it appeared
-  to. Each is a **fix or a caught-and-corrected measurement, verified
-  once**, not a comparative statistic — done, not pending
-  re-confirmation.
-- **Discipline point, now with a seventh instance to cite:** every one of
+  anyway and two runs of identical code disagreed — and
+  `run_evaluation.py`'s documented `python -m` reproduction command never
+  having run successfully even once since the determinism fix introduced
+  it (§6k, 2026-07-24): `hash_safety.py`'s re-exec silently dropped `-m`
+  module context, so every number ever credited to "the evaluation
+  harness" in this document actually came from `analysis/`'s ad hoc
+  scripts, not from the documented entrypoint, and this went unnoticed
+  through §6j and A1/A2/A3 all being marked verified. Same pattern as the
+  other seven: a command that succeeded (or, in the eighth case, failed
+  for a reason other than the one its own traceback suggested) while
+  doing less than it appeared to. Each is a **fix or a caught-and-corrected
+  measurement, verified once**, not a comparative statistic — done, not
+  pending re-confirmation.
+- **Discipline point, now with an eighth instance to cite:** every one of
   the above was caught by re-running a result under changed conditions,
   cross-checking against an independent method, reproducing a prior
   number exactly and noticing when it didn't reproduce, or diffing an
