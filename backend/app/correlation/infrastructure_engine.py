@@ -88,19 +88,31 @@ class InfrastructureEngine:
 
         return features
 
+    def _indicator_values_by_id(self, db: Session) -> dict:
+        """
+        One batched query backing build_fingerprints()/build_weighted_fingerprints() --
+        both used to issue a separate `Indicator` lookup per enrichment row (N+1: one
+        query per row instead of one query total). `Indicator.id` is the primary key,
+        so this dict lookup is an exact substitute for the old
+        `db.query(Indicator).filter(Indicator.id == e.indicator_id).first()` per row,
+        not an approximation of it.
+        """
+        return dict(db.query(Indicator.id, Indicator.value).all())
+
     def build_weighted_fingerprints(self, db: Session) -> dict:
         """Same access pattern as build_fingerprints(), weighted_fingerprint() per indicator."""
         fingerprints = {}
 
+        values_by_id = self._indicator_values_by_id(db)
         enrichments = db.query(IndicatorEnrichment).all()
 
         for e in enrichments:
-            indicator = db.query(Indicator).filter(Indicator.id == e.indicator_id).first()
+            value = values_by_id.get(e.indicator_id)
 
-            if not indicator:
+            if value is None:
                 continue
 
-            fingerprints[indicator.value] = self.weighted_fingerprint(e)
+            fingerprints[value] = self.weighted_fingerprint(e)
 
         return fingerprints
 
@@ -151,16 +163,17 @@ class InfrastructureEngine:
 
         fingerprints = {}
 
+        values_by_id = self._indicator_values_by_id(db)
         enrichments = db.query(IndicatorEnrichment).all()
 
         for e in enrichments:
 
-            indicator = db.query(Indicator).filter(Indicator.id == e.indicator_id).first()
+            value = values_by_id.get(e.indicator_id)
 
-            if not indicator:
+            if value is None:
                 continue
 
-            fingerprints[indicator.value] = self.fingerprint(e)
+            fingerprints[value] = self.fingerprint(e)
 
         return fingerprints
 

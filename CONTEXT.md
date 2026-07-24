@@ -3059,7 +3059,7 @@ these, not always against the original baseline.
 | B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **DONE** | **yes — see below** | `8858cf9` (wiring), `1a15b14` (verification) |
 | B2 (decide fate of `commodity_fp_rate()`/`size_band()`) | **DONE — deleted both** | yes — bit-identical output | `3d99363` |
 | B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **DONE — within scope, see caveat below** | yes, for everything this entrypoint computes; `_scoped` metrics and most of Spine 1/2/4 are out of this entrypoint's scope entirely, not a defect introduced by this fix sequence | n/a (no code change) |
-| C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **NOT STARTED** | — | — |
+| C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **DONE** | yes — verified by exact dict equality, not size | pending commit |
 
 **B1's current state, exactly:** the code change itself is additive-only
 as instructed — two new imports
@@ -3350,21 +3350,51 @@ Marking B3 done on that basis: verified everything in this entrypoint's
 actual scope, and stated the boundary of that scope precisely rather
 than silently treating "ran without error" as "reproduces the paper."
 
-**Next step, exactly, for whoever resumes this (updated 2026-07-24 —
-entrypoint fixed, B1/B2/B3 verified, resuming at C1):** do not touch
-A1/A2/A3, the determinism fix, the `-m` re-exec fix, B1, B2, or B3 again
-— all six are done, committed or pending-commit as noted in the table
-above, and verified within their stated scope. Proceed to C1 (the N+1
-fix in `build_fingerprints()`/`build_weighted_fingerprints()`, flagged as
-highest-risk — verify by exact dict equality, not size, and re-run the
-full measurement suite/diff against
-`evaluation_runs/item7_eval_20260724T084442Z.json`, the latest verified
-snapshot, once applied). Same protocol throughout: one fix at a time,
-diff programmatically, stop and report on any movement. Separately worth
-raising with the project owner, not part of this fix sequence: whether
-`scoped_pr.py`'s restriction should be ported into `run_evaluation.py` so
-the documented entrypoint can eventually reproduce the numbers actually
-cited in the paper, instead of only their `_full` counterparts.
+**C1, 2026-07-24 — applied and verified, the way the audit item
+specifically required: exact dict equality, not size.** Both
+`build_fingerprints()` and `build_weighted_fingerprints()`
+(`infrastructure_engine.py`) issued one `db.query(Indicator).filter(
+Indicator.id == e.indicator_id).first()` per `IndicatorEnrichment` row
+inside their loop — a classic N+1: 22,637 enrichment rows meant 22,637
+individual round-trip queries, per function, every run. Fixed by adding
+one shared helper, `_indicator_values_by_id(db)`, that issues a single
+batched query (`db.query(Indicator.id, Indicator.value).all()`) into a
+`{id: value}` dict before the loop; both functions now do a dict lookup
+instead of a query per row. `Indicator.id` is the table's primary key
+(`indicator_models.py`), so this dict lookup is an *exact* substitute for
+the old per-row `.filter(...).first()`, not an approximation of it —
+same "skip if not found" semantics, same "last write wins on duplicate
+value" semantics, zero logic change, purely a query-batching fix.
+
+**Verification, per the audit's own instruction for this item
+specifically:** stashed the fix, dumped both functions' full output
+(`{indicator_value: sorted(feature_set)}` for all 22,637 indicators, both
+functions) to JSON on the pre-fix code, restored the fix, dumped again,
+and compared **by exact dict equality** (`==` on the full parsed JSON,
+not `len()`/count comparison) — **identical, both functions, every key,
+every value.** Full test suite: 155/155 pass. Re-ran `python -m
+app.evaluation.run_evaluation` end to end
+(`evaluation_runs/item7_eval_20260724T085214Z.json`) and diffed
+programmatically against the C1-eve snapshot
+(`item7_eval_20260724T084442Z.json`) — **bit-identical except for
+`generated_at`.** Concrete payoff, not just a correctness fix: this
+harness's own fingerprint-building step dropped from part of a 105–116s
+total run to a 64.8s total run (both functions combined measured
+separately at ~0.24s/~0.28s post-fix for all 22,637 indicators, one
+query each instead of 22,637).
+
+**Fix sequence complete, 2026-07-24 — A1, A2, A3, the determinism fix,
+the `-m` re-exec fix, B1, B2, B3, and C1 are all done, verified
+measurement-neutral (or, for B3, verified within an explicitly stated
+scope), and committed.** No number in the §8 ledger moved at any step
+that touched already-shipped code; the two numbers that *did* move
+(`jaccard_v1`/`group_by_resolved_ip` under the multi-membership fix) were
+pre-authorized, disclosed, and already reflected in this ledger before
+this session began. The one open item that is a genuine design decision
+rather than a bug — porting `scoped_pr.py`'s restriction into
+`run_evaluation.py` so the documented entrypoint can reproduce the
+`_scoped` numbers actually cited in the paper (B3, above) — is left for
+the project owner to decide, not resolved unilaterally here.
 
 ---
 
