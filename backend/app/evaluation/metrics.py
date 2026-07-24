@@ -123,13 +123,6 @@ def pairwise_precision_recall(true_labels: dict, pred_labels: dict) -> tuple[flo
     return precision, recall
 
 
-def size_band(size: int) -> str | None:
-    for label, lo, hi in SIZE_BANDS:
-        if lo <= size <= hi:
-            return label
-    return None
-
-
 def stratify_by_size(
     clusters: list[list[str]], true_labels: dict
 ) -> dict[str, dict]:
@@ -168,10 +161,3 @@ def stratify_by_size(
         }
 
     return results
-
-
-def commodity_fp_rate(clusters: list[list[str]], commodity_only_flags: list[bool]) -> float:
-    """Fraction of clusters flagged commodity-only (item 2.1's per-cluster classification)."""
-    if not clusters:
-        return 0.0
-    return sum(commodity_only_flags) / len(clusters)

@@ -2,7 +2,6 @@ from app.evaluation.metrics import (
     adjusted_rand_index,
     build_predicted_labels,
     pairwise_precision_recall,
-    size_band,
     stratify_by_size,
 )
 
@@ -135,16 +134,6 @@ def test_build_predicted_labels_multi_membership_is_order_independent():
     labels_3 = build_predicted_labels(clusters_order_3, universe)
 
     assert partition(labels_1) == partition(labels_2) == partition(labels_3)
-
-
-def test_size_band_boundaries():
-    assert size_band(3) == "3-5"
-    assert size_band(5) == "3-5"
-    assert size_band(6) == "6-10"
-    assert size_band(50) == "11-50"
-    assert size_band(51) == "50+"
-    assert size_band(10000) == "50+"
-    assert size_band(2) is None  # below MIN_CLUSTER, not a real band
 
 
 def test_stratify_by_size_isolates_bands():

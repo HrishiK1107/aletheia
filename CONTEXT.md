@@ -3055,9 +3055,9 @@ these, not always against the original baseline.
 | Multi-membership + `PYTHONHASHSEED` determinism fix (found via A1's re-run, not on the original list) | **DONE** | yes, with disclosed exceptions — see below | `4f9859c` |
 | A2 (`ORDER BY id`, `ground_truth.py`) | **DONE** | yes — zero labels changed, zero numbers moved | `8801322` |
 | A3 (test for `adjusted_rand_index()`'s `denom==0` branch) | **DONE** | test-only, no source change | `275d2eb` |
-| `-m` re-exec fix, `hash_safety.py` (found while verifying B1, not on the original list) | **DONE** | yes — see below | pending commit |
-| B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **DONE** | **yes — see below** | `8858cf9` (wiring), verification pending commit |
-| B2 (decide fate of `commodity_fp_rate()`/`size_band()`) | **NOT STARTED** | — | — |
+| `-m` re-exec fix, `hash_safety.py` (found while verifying B1, not on the original list) | **DONE** | yes — see below | `1a15b14` |
+| B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **DONE** | **yes — see below** | `8858cf9` (wiring), `1a15b14` (verification) |
+| B2 (decide fate of `commodity_fp_rate()`/`size_band()`) | **DONE — deleted both** | yes — bit-identical output | pending commit |
 | B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **NOT STARTED** | — | — |
 | C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **NOT STARTED** | — | — |
 
@@ -3271,24 +3271,54 @@ negligibly.** BFS weighted/unweighted scoped: 0.0874/0.0963 (unchanged).
 0.0373→0.0374). **The "2 of 3 confirm, 1 contradicts" framing does not
 need restating.**
 
+**B2 decided and applied, 2026-07-24: deleted both functions, wired
+neither.** Confirmed by grep before deciding: neither
+`commodity_fp_rate()` nor `size_band()` has any caller anywhere in
+`backend/` or `analysis/` — `run_evaluation.py` computes its
+`results["commodity_fp_rate"]` block with its own inline
+`sum(flags)/len(clusters)`-style arithmetic (three times over, once per
+BFS variant) rather than calling the dedicated function, and
+`stratify_by_size()` (`metrics.py`) filters clusters directly against
+`SIZE_BANDS`' `(label, lo, hi)` tuples rather than calling `size_band()`
+per item. `commodity_fp_rate()` had zero test coverage too;
+`size_band()` had a dedicated boundary test
+(`test_size_band_boundaries`) but no production caller. **Decision:
+delete rather than wire**, for three reasons — (1) wiring
+`commodity_fp_rate()` in would touch the already-verified
+`results["commodity_fp_rate"]` block in `run_evaluation.py` for zero
+behavioral gain (its formula is already correct where it stands); (2)
+wiring `size_band()` into `stratify_by_size()` would require restructuring
+that function's algorithm (grouping by classifier output instead of
+filtering by band bounds directly) — a bigger diff on a function whose
+output (`by_size_band`) is directly cited in the §8 ledger, for no
+measurable benefit; (3) deleting is strictly measurement-neutral by
+construction (nothing calls the deleted code, so nothing can move),
+which is the lowest-risk option available for an item whose entire
+purpose was cleanup, not a numeric fix. Removed
+`test_size_band_boundaries` and the now-unused `size_band` import
+alongside the function. **Full test suite: 155/155 pass.** Re-ran
+`python -m app.evaluation.run_evaluation` end to end
+(`evaluation_runs/item7_eval_20260724T084442Z.json`) and diffed
+programmatically against the B1-verified snapshot
+(`item7_eval_20260724T083750Z.json`) — **bit-identical except for the
+`generated_at` timestamp**, confirming the deletion touched nothing that
+runs.
+
 **Next step, exactly, for whoever resumes this (updated 2026-07-24 —
-entrypoint fixed, B1 verified, resuming at B2):** do not touch A1/A2/A3,
-the determinism fix, the `-m` re-exec fix, or B1 again — all four are
-done, committed or pending-commit as noted in the table above, and
-verified. Proceed to B2 (decide `commodity_fp_rate()`/`size_band()` —
-wire or delete, checking `analysis/` for importers first: neither
-function has any caller anywhere in `backend/` or `analysis/` as of this
-writing, confirmed by grep — `run_evaluation.py` reimplements
-`commodity_fp_rate`'s logic inline instead of calling it, and
-`size_band`'s own `SIZE_BANDS` iteration is duplicated inline in
-`stratify_by_size()` rather than calling `size_band()` per item), then
-B3 (confirm the now-working entrypoint reproduces §8's numbers end to
-end — note while at it that this entrypoint's `evaluate_method()` only
-ever computes the `_full` metric variant, never `_scoped`, so "reproduces
-§8" needs to be judged against the right subset of citations, not all of
-them), then C1 (the N+1 fix, flagged as highest-risk — verify by exact
-dict equality, not size). Same protocol throughout: one fix at a time,
-diff programmatically, stop and report on any movement.
+entrypoint fixed, B1 and B2 verified, resuming at B3):** do not touch
+A1/A2/A3, the determinism fix, the `-m` re-exec fix, B1, or B2 again —
+all five are done, committed or pending-commit as noted in the table
+above, and verified. Proceed to B3 (confirm the now-working entrypoint
+reproduces §8's numbers end to end — note while at it that this
+entrypoint's `evaluate_method()` only ever computes the `_full` metric
+variant, never `_scoped`, so "reproduces §8" needs to be judged against
+the right subset of citations, not all of them — most of Spine 3/4's
+headline numbers are cited *scoped*, and this entrypoint cannot currently
+reproduce those at all, which is itself worth stating plainly rather than
+silently judging B3 against a weaker bar than "reproduces §8" implies),
+then C1 (the N+1 fix, flagged as highest-risk — verify by exact dict
+equality, not size). Same protocol throughout: one fix at a time, diff
+programmatically, stop and report on any movement.
 
 ---
 
