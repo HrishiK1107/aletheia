@@ -3750,6 +3750,10 @@ not superseded, not duplicated by the entrypoint above:**
 | Dataset & pipeline scale: pipeline timings (enrichment 18.3 min, graph build 11.4 min / 20.5 min) | **No committed one-shot script — same caveat as collection volume.** `python -m app.workers.enrichment_worker` (interrupt after first batch) for enrichment; `python -m app.workers.graph_worker` (interrupt after first batch) for graph build, both from `backend/`. Timings are wall-clock from specific dated runs against live lookups/DB state, not guaranteed-reproducible constants. |
 | Bootstrap 95% CIs, all 7 methods x 3 ground truths x (full, scoped), point estimate + percentile + pivotal intervals | `python -m app.evaluation.run_bootstrap` (cwd `backend/`, venv active, containers up) — new, peer-review Task 1, 2026-07-24. Does not modify `run_evaluation.py`/`metrics.py`; imports their setup/helpers unmodified. Writes `evaluation_runs/bootstrap_ci_<timestamp>.json`. ~10,000 iterations per cell, seed=42 (recorded in every result and in the output file). Runs its own calibration gate first (`sanity_check_bias_magnitude()`) and exits without writing output if it fails. |
 | Bootstrap percentile-bias scaling diagnostic (n=200→60,000 plateau evidence, §8's Spine 5 11th instance) | `python ../analysis/final/bootstrap_bias_diagnostic.py` (cwd `backend/`) — new, peer-review Task 1, 2026-07-24. Purely synthetic, no DB/Neo4j required. |
+| Window 2 (second collection window, Task 2, §6p/§8): full pipeline (collect → ingest → enrich → graph build) into a separate database | `python ../analysis/final/window2_pipeline.py` (cwd `backend/`) with `POSTGRES_DSN`/`NEO4J_URI`/`NEO4J_USER`/`NEO4J_PASSWORD`/`REDIS_URL` env vars set to window-2's infrastructure (see §8's window-2 subsection for the exact values used) — new, 2026-07-24. **Not byte-for-bit reproducible, same caveat as window 1's own collection volume/timing rows** — live third-party APIs. Refuses to run (assertion) unless the env vars visibly point at window-2 infra, as a guard against accidentally targeting window 1. |
+| Window 2: commodity-touching cluster %, Cloudflare/AS13335 bridge counts | `python ../analysis/final/window2_spine1_neo4j.py` (cwd `backend/`, window-2 env vars set) — new, 2026-07-24. Identical query/logic to `spine1_neo4j_correct.py`, copied rather than edited in place so window 1's script and its (unrelated-session) output path stay untouched. |
+| Window 2: targeted bootstrap CIs (ThreatFox/scoped, the 3 cells §6p pre-registered) | `python ../analysis/final/window2_bootstrap_targeted.py` (cwd `backend/`, window-2 env vars set) — new, 2026-07-24. Deliberately narrower than `run_bootstrap.py`'s full 42-cell grid, per §6p's pre-registration (only 3 of those cells are gated on a threshold for window 2). |
+| Window 2: Postgres + Neo4j dumps (§7 persist-every-run) | `evaluation_runs/window2_dumps/postgres_20260724T185028Z.dump` (`pg_dump -F c`), `evaluation_runs/window2_dumps/neo4j_20260724T185028Z.dump` (`neo4j-admin database dump`, taken via a temporary container against the `aletheia_neo4j_window2_data` volume while `aletheia-neo4j-window2` was briefly stopped — Neo4j 5 Community Edition has no online per-database stop/start, unlike Enterprise). |
 
 **Everything in the left column above requires either genuine Neo4j
 multi-hop graph traversal (Spine 1) or is explicitly a one-time,
@@ -4717,7 +4721,141 @@ believed for a while).
   post-hoc re-run prompted by suspicion — caught the same class of
   problem before a wrong number was ever produced at all.
 
-### Explicitly not paper-ready / decided not to pursue further
+### Window 2 — second collection window (Task 2), 2026-07-24/25
+
+**Result up front: all four pre-registered quantities reproduce under the
+thresholds committed in §6p (commit `b316c83`), before this data existed.
+Read the overlap caveat below before treating this as a clean pass —
+it matters, and the task that requested this measurement said so in
+advance.**
+
+**Infrastructure.** Separate Postgres database (`aletheia_window2`, same
+container as window 1) and a fully separate Neo4j 5 Community Edition
+container (`aletheia-neo4j-window2`, ports 7475/7688, its own named volume)
+— not the existing `aletheia`/`aletheia-neo4j` window-1 infrastructure.
+Verified untouched throughout: window 1's `raw_indicators`/`indicators`
+row counts (22,721/22,642) were checked before window 2's collection
+started, after enrichment, and after graph build — bit-identical every
+time. Full pipeline (`analysis/final/window2_pipeline.py` — collection →
+ingestion → enrichment → graph build, same functions §6m already cites as
+the pipeline's script of record, no parameters changed): 49.5s collection,
+207.6s ingestion, 1,107.4s (18.5 min) enrichment, 779.9s (13.0 min) graph
+build — 2,144.4s (35.7 min) total, both stage timings close to window 1's
+own cited figures (18.3 min / 11.4–20.5 min). Postgres and Neo4j dumped
+(§7's persist-every-run rule) before any analysis touched the data —
+`evaluation_runs/window2_dumps/` (§6m).
+
+**The four pre-registered quantities, against the thresholds committed in
+§6p:**
+
+| Quantity | Window 1 | Window 2 | Threshold (declared in §6p) | Verdict |
+|---|---|---|---|---|
+| Commodity-touching cluster % | 62.8% (838/1,334) | **67.4% (939/1,393)** | [52.8%, 72.8%] | **Reproduces** |
+| Weighted-vs-unweighted BFS ARI delta (ThreatFox, scoped) | point Δ (as cited in §8) -0.0008; CIs overlap in 6/6 tested configs | point Δ **-0.0007** (0.1750 weighted vs. 0.1757 unweighted); pivotal CIs `[0.1479, 0.1965]` (weighted) vs. `[0.1486, 0.1972]` (unweighted) — **overlap almost entirely** | CIs overlap | **Reproduces** |
+| BFS-vs-best-baseline ratio (ThreatFox, scoped) | ~1.71× (0.1525/0.0891); CIs disjoint | **1.90×** (0.1750/0.0921); pivotal CIs `[0.1479, 0.1965]` (BFS weighted) vs. `[0.0769, 0.1016]` (jaccard_v1) — **disjoint** | CIs disjoint AND ratio > 1.0× | **Reproduces** |
+| Top-hub bridge share (Cloudflare/AS13335) | `Cloudflare, Inc.` 223/1,334 (16.7%), #1 HostingProvider; `AS13335` 255/1,334 (19.1%), #1 ASN | `Cloudflare, Inc.` **205/1,393 (14.7%)**, still #1 HostingProvider (next: Hostinger, 138); `AS13335` **313/1,393 (22.5%)**, still #1 ASN (next: AS47583, 139) | remains #1 by identity AND share in [8%, 30%] | **Reproduces** |
+
+Scripts of record: `analysis/final/window2_spine1_neo4j.py` (row 1 and row
+4), `python -m app.evaluation.run_evaluation` against window-2 env vars
+(row 2 and row 3 point estimates — cross-checked against an independent
+second computation inside `window2_bootstrap_targeted.py`, which rebuilds
+clusters/fingerprints from scratch rather than reusing any cached state:
+both report 0.1757/0.1750/0.0921 for the three ThreatFox-scoped point
+estimates, exact agreement), `analysis/final/window2_bootstrap_targeted.py`
+(row 2 and row 3 CIs — the pre-registered subset only, not the full
+42-cell grid, per §6p).
+
+**A pre-existing ledger inconsistency, noticed while pulling window 1's
+number for this comparison, flagged rather than fixed (hard constraint:
+no existing §8 figure may change).** §8's Spine 3 cites "0.1525 vs. 0.1540
+(reported, scoped) — Δ -0.0008" for window 1. The arithmetic difference of
+those two cited 4-decimal values is actually -0.0015, not -0.0008 (and the
+full-precision source values, 0.152464 vs. 0.153971 from
+`bootstrap_ci_20260724T175706Z.json`, give -0.001507 — confirms this
+isn't a rounding-direction artifact). This looks like a stale figure
+carried forward from an earlier, different pair in the same paragraph's
+list (e.g. "(3) post-graph-rebuild, §6f, Δ -0.0008" cites a different,
+full-population pair) rather than a re-derivation error introduced here —
+not investigated further, since it doesn't change any conclusion: the
+pre-registered reproduction criterion for this quantity was CI overlap,
+not a numeric match on the point-estimate delta, and both windows'
+weighted/unweighted CIs overlap heavily regardless of which delta value is
+correct. §8's existing entry is left exactly as committed, per the hard
+constraint; this paragraph is the disclosure.
+
+**Descriptive-only reporting (not gated on a threshold, per the task's own
+instruction), 2026-07-25:**
+
+*Feed volume by source, `raw_indicators` row counts (the like-for-like,
+post-`(value,source)`-dedup measurement basis for both windows):*
+
+| Feed | Window 1 | Window 2 |
+|---|---|---|
+| OTX | 17,259 | 17,325 |
+| ThreatFox | (not separately tabulated in §5/§8 at the `raw_indicators` level — closest existing figure is 4,108 *labelled*, a different, smaller population) | 3,833 |
+| URLhaus | 935 | 967 |
+| OpenPhish | 300–302 | 300 |
+| MalwareBazaar | 100 | 100 |
+| **Total `raw_indicators` rows** | **22,721** | **22,525** |
+| **Total collected (collector return value, before dedup)** | **23,427** (§5/§8) | **23,307** |
+
+*Indicator type distribution (`raw_indicators.type`, both windows):*
+
+| Type | Window 1 | Window 2 |
+|---|---|---|
+| domain | 11,086 | 10,240 |
+| hash | 6,946 | 6,974 |
+| url | 2,977 | 3,105 |
+| ip:port | 977 | 970 |
+| CVE | 231 | 249 |
+| ip | 224 | 272 |
+| sha256_hash | 111 | 268 |
+| md5_hash | 76 | 215 |
+| sha1_hash | 76 | 215 |
+| email | 13 | 13 |
+| YARA | 3 | 3 |
+| BitcoinAddress | 1 | 1 |
+
+Broadly stable composition — domain and hash remain the two largest types
+in both windows, in the same order, at similar relative shares.
+
+**Cross-window indicator overlap — the number the task explicitly flagged
+as mattering regardless of what the metrics show, and it matters here.**
+By raw string equality on `raw_indicators.value` (same convention §5's
+original cross-feed overlap analysis used, with the same acknowledged
+undercount caveat — normalization differences would only ever increase
+this number, never decrease it): **19,553 distinct values appear in both
+windows** — 86.1% of window 1's 22,718 distinct values, 86.8% of window
+2's 22,523. **This is a large, not incidental, overlap, and it materially
+qualifies every "reproduces" verdict above.** Root cause, not a bug:
+ThreatFox's collector uses a 7-day lookback window and OTX's collector
+pulls the 500 most-recently-modified subscribed pulses (§5) — with only a
+~1-day gap between window 1 (2026-07-23) and window 2 (2026-07-24/25),
+both feeds' own recency windows guarantee heavy re-fetching of the same
+underlying indicators, independent of anything about this pipeline. **The
+honest reading: this is a weak test of temporal stability, not a null
+one.** A ~13-14% genuinely new population per window, layered on an
+86%-shared core, is still capable of shifting a metric if a real
+day-to-day effect existed (and Spine 1's own commodity-touching % did move
+4.6 percentage points, 62.8%→67.4%, staying inside the pre-declared band
+but not staying static either) — but a collection design with less feed
+self-overlap (e.g. windows spaced further apart, or feeds queried for
+strictly non-overlapping date ranges) would be a materially stronger test
+if this measurement is ever repeated. Recorded as a limitation to disclose
+in the paper's temporal-stability discussion, per the explicit commitment
+in §6p — not a reason to discount the four reproduces-verdicts above, but
+a reason to state their strength precisely rather than oversell them.
+
+**What this means for the paper, stated plainly, per §6p's pre-registered
+commitment:** none of window 1's §8 figures are retracted or revised.
+Window 2 is reported here as an independent measurement that reproduced
+all four pre-registered quantities under thresholds fixed before the data
+existed, with the important caveat that the two collection windows share
+~86% of their indicators due to the feeds' own lookback/recency behavior —
+a genuine test of temporal stability against feeds with less inherent
+overlap remains a natural next step, not performed here.
+
+
 
 - `R(C)`'s formula defects (§2.2: `N(C)` per-run normalization, `R(C)`
   `/cluster_size` under-measurement, `D(C)` near-constant, `E(C)`
