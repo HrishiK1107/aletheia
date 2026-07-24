@@ -3609,6 +3609,26 @@ which number. As of §6n, every row in this table has a script of
 record; the two gaps this table used to document (Spine 1's AS13335
 global degree, Spine 2's nameserver-pool illustration) are closed.**
 
+**9th Spine 5 instance, found closing the AS13335 row above.** This
+table's own prior entry for that row speculated the fix was one line —
+`degrees["org:AS13335"]` via `ie.compute_feature_degrees(fp_weighted)`
+(Postgres). That line runs without error and returns `0`, silently,
+because `"org:AS13335"` is never a key in `fp_weighted` at all:
+`weighted_fingerprint()` prefers `hosting_provider` over the `asn`
+fallback whenever both are set, so a Cloudflare-fronted domain's ASN
+feature is recorded as `org:Cloudflare, Inc.`, not `org:AS13335`. A
+lookup miss on a `Counter`/`dict.get` returns `0` — indistinguishable,
+by inspection alone, from "this feature genuinely has degree zero." Same
+shape as §6i's Postgres-vs-Neo4j Spine 1 mismatch (Spine 5 instance 5):
+fingerprint-based and graph-edge-based counts are not interchangeable,
+and trusting the fingerprint-based one silently would have produced a
+wrong number with no error to catch it. **Not a one-off — a structural
+property of `fp_weighted`:** any feature-degree question about an ASN
+that resolved a `hosting_provider` name cannot be answered from
+`fp_weighted` at all, for any ASN, not just AS13335 — the feature the
+question is asking about simply never exists as a key in that
+dictionary. Recorded in §8's Spine 5 list as instance 9.
+
 ---
 
 ## 6n. Spine 1/2's remaining script-of-record gaps, closed, 2026-07-24
@@ -3801,6 +3821,19 @@ open.
   same way); the 1,849-cluster's own stability (above) means this specific
   illustration is unaffected by the final-state re-run even though it
   wasn't independently re-checked this round.
+- **Measured bound, §6n, 2026-07-24 — the illustration turned into a
+  population census, not just re-asserted.** Across all 1,334 clusters,
+  a type-level check classifies 670 (50.2%) as having "additional
+  non-org evidence." Of those 670, only **18/1,334 (1.3% of all
+  clusters)** have that additional evidence supplied *strictly* by
+  features whose global degree exceeds 100 — only **5/1,334 (0.4%)** at
+  a degree>500 threshold. Under the softer "at least one high-degree
+  feature" reading (not requiring every shared feature to be
+  commodity-scale): 15.4% at >100, 4.8% at >500. **The mechanism is
+  real and now precisely characterised, but this does NOT support a
+  population-level claim — tested explicitly, and the bound is small.**
+  Report Spine 2 as it already is: a mechanism-level illustration, now
+  with its generalisation limit measured rather than left open.
 
 ### Spine 3 — degree weighting suppresses commodity contribution mechanically, no accuracy gain (settled non-result)
 
@@ -3902,7 +3935,7 @@ open.
 
 ### Spine 5 — methodological findings (report as part of the paper's contribution, not just as caveats)
 
-- **8 instances of "confident wrong number from a silently-degenerate
+- **9 instances of "confident wrong number from a silently-degenerate
   check"** in one session: item 2.7 (rate-limited API, empty-body
   200/429 indistinguishable from "no ASN"), the venv defect (§6a),
   the ground-truth join-key bug (§6b, 18.6% of labels silently dropped),
@@ -3917,20 +3950,27 @@ open.
   afterward — `build_predicted_labels()`'s overwrite-order dependency
   on Python's per-process hash randomization (§6j, 2026-07-23), found
   only because a fix expected to be a complete no-op was re-measured
-  anyway and two runs of identical code disagreed — and
+  anyway and two runs of identical code disagreed — 
   `run_evaluation.py`'s documented `python -m` reproduction command never
   having run successfully even once since the determinism fix introduced
   it (§6k, 2026-07-24): `hash_safety.py`'s re-exec silently dropped `-m`
   module context, so every number ever credited to "the evaluation
   harness" in this document actually came from `analysis/`'s ad hoc
   scripts, not from the documented entrypoint, and this went unnoticed
-  through §6j and A1/A2/A3 all being marked verified. Same pattern as the
-  other seven: a command that succeeded (or, in the eighth case, failed
-  for a reason other than the one its own traceback suggested) while
-  doing less than it appeared to. Each is a **fix or a caught-and-corrected
-  measurement, verified once**, not a comparative statistic — done, not
-  pending re-confirmation.
-- **Discipline point, now with an eighth instance to cite:** every one of
+  through §6j and A1/A2/A3 all being marked verified — and `fp_weighted`'s
+  `"org:AS13335"` lookup (§6m/§6n, 2026-07-24): `weighted_fingerprint()`
+  prefers `hosting_provider` over the `asn` fallback, so that key never
+  exists in `fp_weighted` for any ASN that resolved a hosting-provider
+  name, and a `Counter`/`dict.get` miss on it returns `0` — indistinguishable
+  by inspection from a genuine zero-degree feature — the same
+  fingerprint-vs-graph-edge mismatch shape as instance 5, caught before
+  the speculated one-liner was ever reported as the answer, not after.
+  Same pattern as the other eight: a command that succeeded (or, in the
+  eighth case, failed for a reason other than the one its own traceback
+  suggested) while doing less than it appeared to. Each is a **fix or a
+  caught-and-corrected measurement, verified once**, not a comparative
+  statistic — done, not pending re-confirmation.
+- **Discipline point, now with a ninth instance to cite:** every one of
   the above was caught by re-running a result under changed conditions,
   cross-checking against an independent method, reproducing a prior
   number exactly and noticing when it didn't reproduce, or diffing an
