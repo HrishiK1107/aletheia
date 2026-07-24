@@ -3058,7 +3058,7 @@ these, not always against the original baseline.
 | `-m` re-exec fix, `hash_safety.py` (found while verifying B1, not on the original list) | **DONE** | yes — see below | `1a15b14` |
 | B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **DONE** | **yes — see below** | `8858cf9` (wiring), `1a15b14` (verification) |
 | B2 (decide fate of `commodity_fp_rate()`/`size_band()`) | **DONE — deleted both** | yes — bit-identical output | `3d99363` |
-| B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **NOT STARTED** | — | — |
+| B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **DONE — within scope, see caveat below** | yes, for everything this entrypoint computes; `_scoped` metrics and most of Spine 1/2/4 are out of this entrypoint's scope entirely, not a defect introduced by this fix sequence | n/a (no code change) |
 | C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **NOT STARTED** | — | — |
 
 **B1's current state, exactly:** the code change itself is additive-only
@@ -3304,21 +3304,67 @@ programmatically against the B1-verified snapshot
 `generated_at` timestamp**, confirming the deletion touched nothing that
 runs.
 
+**B3, 2026-07-24 — done, with an honest scope caveat rather than a clean
+"§8 reproduces" claim.** `run_evaluation.py`'s own docstring scopes it to
+"item 7: builds the §3 results table" — i.e. this harness was always the
+ARI/precision/recall/by-size-band/commodity-FP-rate table plus (as of B1)
+the connectivity diagnostics, not a re-implementation of every analysis
+in the §8 ledger. Checked what it *does* claim to reproduce against what
+it actually computes, method by method:
+
+- **Reproduces exactly:** every method's `_full`-variant ARI/precision/
+  recall, for all three ground truths (verified under B1/B2 above,
+  0 mismatches); the connectivity-threshold diagnostic sweep (B1;
+  ThreatFox `threshold=None` ARI 0.0962 matches the cited final-state
+  figure exactly); `by_size_band` stratification (structurally present,
+  no independent §8 citation to check it against); `commodity_fp_rate`
+  (present, no independent §8 citation to check it against either).
+- **Does NOT reproduce, and never has — confirmed by grep, `scoped` does
+  not appear anywhere in `run_evaluation.py` or `metrics.py`:** the
+  `_scoped` metric variant (restricting `true_labels` to indicators
+  present in `fp_weighted`, i.e. that have some infrastructure
+  connectivity at all) that `analysis/final/scoped_pr.py` computes
+  separately and that **is the variant actually cited for nearly every
+  headline claim in Spine 3 and Spine 4** — e.g. "0.1540 vs 0.1525,
+  reported, scoped", the "~1.7×" BFS-vs-baseline ratios, and the
+  OTX-without-outlier contradiction. Also out of scope for this harness
+  entirely: Spine 1's commodity-hub-bridging figures, Spine 2's
+  type-level exposure mechanism, the per-cluster `R(C)`
+  commodity-exposure-band gradient (61.9%/72.6%/80.3%), and Spine 4's
+  five-family achievable-vs-actual/`d`/`k`-sweep table — all of these
+  come exclusively from one-off `analysis/final/*.py` scripts (Neo4j
+  graph traversal, Postgres connectivity checks, population-intersection
+  correction) that were never ported into `run_evaluation.py` and are
+  not blocked by anything fixed in this session.
+
+**Net assessment: `run_evaluation.py` faithfully reproduces the specific
+numbers it was designed to compute, and reproduces them exactly — but
+"the documented entrypoint reproduces §8" would overclaim its actual
+coverage.** The paper's evidentiary base for most of Spine 1/2/4 and for
+the `_scoped` half of Spine 3 lives in `analysis/`'s ad hoc scripts, not
+in this harness, and stays that way unless someone deliberately decides
+to port `scoped_pr.py`'s restriction (and the graph-traversal-based
+analyses) into `run_evaluation.py` — a design decision and a real chunk
+of new work, not a bug fix, and out of scope for this fix sequence.
+Marking B3 done on that basis: verified everything in this entrypoint's
+actual scope, and stated the boundary of that scope precisely rather
+than silently treating "ran without error" as "reproduces the paper."
+
 **Next step, exactly, for whoever resumes this (updated 2026-07-24 —
-entrypoint fixed, B1 and B2 verified, resuming at B3):** do not touch
-A1/A2/A3, the determinism fix, the `-m` re-exec fix, B1, or B2 again —
-all five are done, committed or pending-commit as noted in the table
-above, and verified. Proceed to B3 (confirm the now-working entrypoint
-reproduces §8's numbers end to end — note while at it that this
-entrypoint's `evaluate_method()` only ever computes the `_full` metric
-variant, never `_scoped`, so "reproduces §8" needs to be judged against
-the right subset of citations, not all of them — most of Spine 3/4's
-headline numbers are cited *scoped*, and this entrypoint cannot currently
-reproduce those at all, which is itself worth stating plainly rather than
-silently judging B3 against a weaker bar than "reproduces §8" implies),
-then C1 (the N+1 fix, flagged as highest-risk — verify by exact dict
-equality, not size). Same protocol throughout: one fix at a time, diff
-programmatically, stop and report on any movement.
+entrypoint fixed, B1/B2/B3 verified, resuming at C1):** do not touch
+A1/A2/A3, the determinism fix, the `-m` re-exec fix, B1, B2, or B3 again
+— all six are done, committed or pending-commit as noted in the table
+above, and verified within their stated scope. Proceed to C1 (the N+1
+fix in `build_fingerprints()`/`build_weighted_fingerprints()`, flagged as
+highest-risk — verify by exact dict equality, not size, and re-run the
+full measurement suite/diff against
+`evaluation_runs/item7_eval_20260724T084442Z.json`, the latest verified
+snapshot, once applied). Same protocol throughout: one fix at a time,
+diff programmatically, stop and report on any movement. Separately worth
+raising with the project owner, not part of this fix sequence: whether
+`scoped_pr.py`'s restriction should be ported into `run_evaluation.py` so
+the documented entrypoint can eventually reproduce the numbers actually
+cited in the paper, instead of only their `_full` counterparts.
 
 ---
 
