@@ -3059,7 +3059,7 @@ these, not always against the original baseline.
 | B1 (wire `label_infra_cohesion()`/`connectivity_threshold_sweep()` into `run_evaluation.py`) | **DONE** | **yes — see below** | `8858cf9` (wiring), `1a15b14` (verification) |
 | B2 (decide fate of `commodity_fp_rate()`/`size_band()`) | **DONE — deleted both** | yes — bit-identical output | `3d99363` |
 | B3 (run `run_evaluation.py` end-to-end, confirm §8 reproduces) | **DONE — scope caveat below, later closed for `_scoped`/Spine 4 in §6l** | yes | n/a (no code change) |
-| `_scoped` metrics + Spine 4 achievable-vs-actual port (§6l, requested as a follow-up after B3) | **DONE** | yes — bit-identical to `scoped_pr.py` (exact `==`) and to §6g/§8's cited figures; regression-checked against the C1 snapshot, zero movement | pending commit |
+| `_scoped` metrics + Spine 4 achievable-vs-actual port (§6l, requested as a follow-up after B3) | **DONE** | yes — bit-identical to `scoped_pr.py` (exact `==`) and to §6g/§8's cited figures; regression-checked against the C1 snapshot, zero movement | `a6b5e3e` |
 | C1 (N+1 fix, `build_fingerprints()`/`build_weighted_fingerprints()`) | **DONE** | yes — verified by exact dict equality, not size | `32b2d18` |
 
 **B1's current state, exactly:** the code change itself is additive-only
