@@ -45,3 +45,7 @@ neo4j_data/
 # Redis dump
 dump.rdb
 data/*.mmdb
+
+# Obsolete pre-item-7 paper drafts (retracted/fabricated figures — see CONTEXT.md)
+Documentation/Aletheia_Paper_Revised.md
+Documentation/*.docx
