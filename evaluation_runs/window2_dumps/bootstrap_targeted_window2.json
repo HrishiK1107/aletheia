@@ -1,0 +1,61 @@
+{
+  "generated_at": "2026-07-24T19:02:42.239947+00:00",
+  "n_iterations": 10000,
+  "seed": 42,
+  "ci_level": 0.95,
+  "reported_ci": "pivotal",
+  "scope": "ThreatFox scoped only -- pre-registered subset, \u00a76p",
+  "cells": {
+    "bfs_unweighted_reported_only": {
+      "point_estimate": 0.17574042636192447,
+      "n_resampled_indicators": 2340,
+      "n_iterations": 10000,
+      "seed": 42,
+      "ci_level": 0.95,
+      "reported_ci": "pivotal",
+      "bootstrap_mean": 0.177857804131532,
+      "bootstrap_std": 0.012313730116523237,
+      "bias": 0.0021173777696075202,
+      "percentile_ci_lower": 0.1542350785877747,
+      "percentile_ci_upper": 0.2028399070893156,
+      "pivotal_ci_lower": 0.14864094563453334,
+      "pivotal_ci_upper": 0.19724577413607425,
+      "ci_lower": 0.14864094563453334,
+      "ci_upper": 0.19724577413607425
+    },
+    "bfs_weighted_reported_only": {
+      "point_estimate": 0.1749759427230251,
+      "n_resampled_indicators": 2340,
+      "n_iterations": 10000,
+      "seed": 42,
+      "ci_level": 0.95,
+      "reported_ci": "pivotal",
+      "bootstrap_mean": 0.17709848990426366,
+      "bootstrap_std": 0.012328323863230609,
+      "bias": 0.0021225471812385543,
+      "percentile_ci_lower": 0.1534723939847247,
+      "percentile_ci_upper": 0.2020395446904066,
+      "pivotal_ci_lower": 0.1479123407556436,
+      "pivotal_ci_upper": 0.1964794914613255,
+      "ci_lower": 0.1479123407556436,
+      "ci_upper": 0.1964794914613255
+    },
+    "jaccard_v1__reported": {
+      "point_estimate": 0.092121625960619,
+      "n_resampled_indicators": 2340,
+      "n_iterations": 10000,
+      "seed": 42,
+      "ci_level": 0.95,
+      "reported_ci": "pivotal",
+      "bootstrap_mean": 0.09448165649857046,
+      "bootstrap_std": 0.006273558285511443,
+      "bias": 0.0023600305379514602,
+      "percentile_ci_lower": 0.0826077688960692,
+      "percentile_ci_upper": 0.1073851279006595,
+      "pivotal_ci_lower": 0.0768581240205785,
+      "pivotal_ci_upper": 0.1016354830251688,
+      "ci_lower": 0.0768581240205785,
+      "ci_upper": 0.1016354830251688
+    }
+  }
+}

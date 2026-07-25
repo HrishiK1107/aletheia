@@ -1,0 +1,2316 @@
+{
+  "generated_at": "2026-07-24T19:00:06.992614+00:00",
+  "ground_truth": {
+    "threatfox": {
+      "random_baseline": {
+        "method": "random_baseline",
+        "n_clusters": 1393,
+        "n_members": 21953,
+        "ari": 0.0001045212981209741,
+        "precision": 0.14910163582729954,
+        "recall": 0.0007203864173473195,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "6-10": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "11-50": {
+            "n_clusters": 1393,
+            "n_labelled": 3342,
+            "ari": 0.0001045212981209741,
+            "precision": 0.14910163582729954,
+            "recall": 0.0007203864173473195
+          },
+          "50+": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 7.414155143299925e-05,
+          "precision_scoped": 0.24028077753779697,
+          "recall_scoped": 0.0007138754936970408
+        }
+      },
+      "group_by_asn": {
+        "method": "group_by_asn",
+        "n_clusters": 284,
+        "n_members": 8782,
+        "ari": 0.14670178178881682,
+        "precision": 0.36993951555652316,
+        "recall": 0.15191472490567604,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 128,
+            "n_labelled": 103,
+            "ari": 0.03434045380610446,
+            "precision": 0.34210526315789475,
+            "recall": 0.03278688524590164
+          },
+          "6-10": {
+            "n_clusters": 61,
+            "n_labelled": 76,
+            "ari": 0.08225557758268039,
+            "precision": 0.24444444444444444,
+            "recall": 0.0842911877394636
+          },
+          "11-50": {
+            "n_clusters": 73,
+            "n_labelled": 251,
+            "ari": 0.17862396881396606,
+            "precision": 0.42946887492861224,
+            "recall": 0.17063762196505558
+          },
+          "50+": {
+            "n_clusters": 22,
+            "n_labelled": 1134,
+            "ari": 0.24104376214914133,
+            "precision": 0.3696512011783229,
+            "recall": 0.7310502856425387
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.11321663082008354,
+          "precision_scoped": 0.36993951555652316,
+          "recall_scoped": 0.18809255676513337
+        }
+      },
+      "group_by_resolved_ip": {
+        "method": "group_by_resolved_ip",
+        "n_clusters": 571,
+        "n_members": 4249,
+        "ari": 0.01443954838414724,
+        "precision": 0.9969367437586154,
+        "recall": 0.008433444587254861,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 414,
+            "n_labelled": 255,
+            "ari": 0.04333271271816906,
+            "precision": 0.9718670076726342,
+            "recall": 0.033974072418417524
+          },
+          "6-10": {
+            "n_clusters": 88,
+            "n_labelled": 48,
+            "ari": 0.5218906311470803,
+            "precision": 0.9652777777777778,
+            "recall": 0.44126984126984126
+          },
+          "11-50": {
+            "n_clusters": 55,
+            "n_labelled": 86,
+            "ari": 0.2671510965636202,
+            "precision": 0.9925093632958801,
+            "recall": 0.2780692549842602
+          },
+          "50+": {
+            "n_clusters": 14,
+            "n_labelled": 105,
+            "ari": 1.0,
+            "precision": 1.0,
+            "recall": 1.0
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.01602074747342295,
+          "precision_scoped": 0.9969367437586154,
+          "recall_scoped": 0.010441832783087728
+        }
+      },
+      "group_by_hosting_provider": {
+        "method": "group_by_hosting_provider",
+        "n_clusters": 269,
+        "n_members": 8817,
+        "ari": 0.14690086178652378,
+        "precision": 0.3704211340775948,
+        "recall": 0.1519704382437083,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 121,
+            "n_labelled": 102,
+            "ari": 0.042126181124920566,
+            "precision": 0.33766233766233766,
+            "recall": 0.03773584905660377
+          },
+          "6-10": {
+            "n_clusters": 55,
+            "n_labelled": 62,
+            "ari": 0.09925430701979943,
+            "precision": 0.3114754098360656,
+            "recall": 0.09359605911330049
+          },
+          "11-50": {
+            "n_clusters": 68,
+            "n_labelled": 248,
+            "ari": 0.16060066838253503,
+            "precision": 0.401123595505618,
+            "recall": 0.16139240506329114
+          },
+          "50+": {
+            "n_clusters": 25,
+            "n_labelled": 1162,
+            "ari": 0.24887721398572174,
+            "precision": 0.37026692975181663,
+            "recall": 0.7152906081010576
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.11351709282228549,
+          "precision_scoped": 0.3704211340775948,
+          "recall_scoped": 0.1881615379926142
+        }
+      },
+      "jaccard_v1": {
+        "method": "jaccard_v1",
+        "n_clusters": 1314,
+        "n_members": 10956,
+        "ari": 0.10019626864907948,
+        "precision": 0.9338740720373935,
+        "recall": 0.0616098822505079,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 407,
+            "n_labelled": 292,
+            "ari": 0.04381285741489007,
+            "precision": 0.7989821882951654,
+            "recall": 0.03161816534085188
+          },
+          "6-10": {
+            "n_clusters": 156,
+            "n_labelled": 208,
+            "ari": 0.10275573255518664,
+            "precision": 0.8618705035971223,
+            "recall": 0.0854371701611753
+          },
+          "11-50": {
+            "n_clusters": 133,
+            "n_labelled": 596,
+            "ari": 0.2767785575494698,
+            "precision": 0.7171231987537323,
+            "recall": 0.21041404791833315
+          },
+          "50+": {
+            "n_clusters": 45,
+            "n_labelled": 808,
+            "ari": 0.09687363653444918,
+            "precision": 0.9767801121779637,
+            "recall": 0.17359955395233712
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.11044040637447156,
+          "precision_scoped": 0.9338740720373935,
+          "recall_scoped": 0.0762820080916584
+        }
+      },
+      "bfs_unweighted_all_clusters": {
+        "method": "bfs_unweighted_all_clusters",
+        "n_clusters": 1393,
+        "n_members": 13917,
+        "ari": 0.22450706893072875,
+        "precision": 0.6390958142418459,
+        "recall": 0.1709609125585638,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 1134,
+            "n_labelled": 307,
+            "ari": 0.009745175366107589,
+            "precision": 0.5449101796407185,
+            "recall": 0.008469055374592834
+          },
+          "6-10": {
+            "n_clusters": 135,
+            "n_labelled": 175,
+            "ari": 0.05097774840518355,
+            "precision": 0.9055944055944056,
+            "recall": 0.04457064188607813
+          },
+          "11-50": {
+            "n_clusters": 97,
+            "n_labelled": 271,
+            "ari": 0.3307079788825516,
+            "precision": 0.5098328416912488,
+            "recall": 0.29979762937265103
+          },
+          "50+": {
+            "n_clusters": 27,
+            "n_labelled": 1424,
+            "ari": 0.18051313537185573,
+            "precision": 0.6400882461085917,
+            "recall": 0.2971356525459602
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.23060627313975945,
+          "precision_scoped": 0.6388965624197308,
+          "recall_scoped": 0.21148040131032247
+        }
+      },
+      "bfs_unweighted_reported_only": {
+        "method": "bfs_unweighted_reported_only",
+        "n_clusters": 701,
+        "n_members": 10305,
+        "ari": 0.17588018039666603,
+        "precision": 0.5840329273717223,
+        "recall": 0.1343935279240433,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 498,
+            "n_labelled": 203,
+            "ari": 0.02439277581368876,
+            "precision": 0.4666666666666667,
+            "recall": 0.019119878603945373
+          },
+          "6-10": {
+            "n_clusters": 111,
+            "n_labelled": 167,
+            "ari": 0.04735572781042312,
+            "precision": 0.9233576642335767,
+            "recall": 0.043628211760648385
+          },
+          "11-50": {
+            "n_clusters": 72,
+            "n_labelled": 198,
+            "ari": 0.3070898347488692,
+            "precision": 0.4308176100628931,
+            "recall": 0.32634587898999523
+          },
+          "50+": {
+            "n_clusters": 20,
+            "n_labelled": 1033,
+            "ari": 0.37106452384199456,
+            "precision": 0.58498097993212,
+            "recall": 0.5751454310301388
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.17574042636192447,
+          "precision_scoped": 0.5840329273717223,
+          "recall_scoped": 0.1663987628297062
+        }
+      },
+      "bfs_weighted_reported_only": {
+        "method": "bfs_weighted_reported_only",
+        "n_clusters": 341,
+        "n_members": 8190,
+        "ari": 0.17518318474987088,
+        "precision": 0.5833883928823532,
+        "recall": 0.13385064679298478,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 231,
+            "n_labelled": 130,
+            "ari": 0.0042472836497418065,
+            "precision": 0.30985915492957744,
+            "recall": 0.010628019323671498
+          },
+          "6-10": {
+            "n_clusters": 40,
+            "n_labelled": 30,
+            "ari": 0.6809446970808273,
+            "precision": 0.6595744680851063,
+            "recall": 0.775
+          },
+          "11-50": {
+            "n_clusters": 53,
+            "n_labelled": 159,
+            "ari": 0.2903528784372963,
+            "precision": 0.3861671469740634,
+            "recall": 0.3582887700534759
+          },
+          "50+": {
+            "n_clusters": 17,
+            "n_labelled": 1023,
+            "ari": 0.3680698632456196,
+            "precision": 0.5850377331624662,
+            "recall": 0.5781457550037148
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.1749759427230251,
+          "precision_scoped": 0.5833883928823532,
+          "recall_scoped": 0.1657265969154162
+        }
+      },
+      "random_baseline__reported": {
+        "method": "random_baseline__reported",
+        "n_clusters": 1393,
+        "n_members": 21953,
+        "ari": 0.0001045212981209741,
+        "precision": 0.14910163582729954,
+        "recall": 0.0007203864173473195,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "6-10": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "11-50": {
+            "n_clusters": 1393,
+            "n_labelled": 3342,
+            "ari": 0.0001045212981209741,
+            "precision": 0.14910163582729954,
+            "recall": 0.0007203864173473195
+          },
+          "50+": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 7.414155143299925e-05,
+          "precision_scoped": 0.24028077753779697,
+          "recall_scoped": 0.0007138754936970408
+        }
+      },
+      "group_by_asn__reported": {
+        "method": "group_by_asn__reported",
+        "n_clusters": 265,
+        "n_members": 8371,
+        "ari": 0.14668338605014242,
+        "precision": 0.3699628844114528,
+        "recall": 0.15187974211202787,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 124,
+            "n_labelled": 102,
+            "ari": 0.0338215613946194,
+            "precision": 0.34210526315789475,
+            "recall": 0.03278688524590164
+          },
+          "6-10": {
+            "n_clusters": 54,
+            "n_labelled": 64,
+            "ari": 0.10219675262655205,
+            "precision": 0.31746031746031744,
+            "recall": 0.09433962264150944
+          },
+          "11-50": {
+            "n_clusters": 67,
+            "n_labelled": 239,
+            "ari": 0.1991867303214984,
+            "precision": 0.4314540059347181,
+            "recall": 0.19116486983960032
+          },
+          "50+": {
+            "n_clusters": 20,
+            "n_labelled": 1134,
+            "ari": 0.24104376214914133,
+            "precision": 0.3696512011783229,
+            "recall": 0.7310502856425387
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.11320921755866313,
+          "precision_scoped": 0.3699628844114528,
+          "recall_scoped": 0.18804924297113376
+        }
+      },
+      "group_by_resolved_ip__reported": {
+        "method": "group_by_resolved_ip__reported",
+        "n_clusters": 539,
+        "n_members": 3835,
+        "ari": 0.01440425125174096,
+        "precision": 0.9969292184861047,
+        "recall": 0.008412714042870766,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 405,
+            "n_labelled": 246,
+            "ari": 0.04413569969943035,
+            "precision": 0.9706666666666667,
+            "recall": 0.03475272102348673
+          },
+          "6-10": {
+            "n_clusters": 78,
+            "n_labelled": 47,
+            "ari": 0.5440487442957181,
+            "precision": 0.9652777777777778,
+            "recall": 0.4633333333333333
+          },
+          "11-50": {
+            "n_clusters": 42,
+            "n_labelled": 86,
+            "ari": 0.2671510965636202,
+            "precision": 0.9925093632958801,
+            "recall": 0.2780692549842602
+          },
+          "50+": {
+            "n_clusters": 14,
+            "n_labelled": 105,
+            "ari": 1.0,
+            "precision": 1.0,
+            "recall": 1.0
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.015981552652882366,
+          "precision_scoped": 0.9969292184861047,
+          "recall_scoped": 0.010416165349606486
+        }
+      },
+      "group_by_hosting_provider__reported": {
+        "method": "group_by_hosting_provider__reported",
+        "n_clusters": 254,
+        "n_members": 8505,
+        "ari": 0.1468784408678289,
+        "precision": 0.37042641033821583,
+        "recall": 0.15193804676810813,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 117,
+            "n_labelled": 101,
+            "ari": 0.04159647269651698,
+            "precision": 0.33766233766233766,
+            "recall": 0.03773584905660377
+          },
+          "6-10": {
+            "n_clusters": 50,
+            "n_labelled": 57,
+            "ari": 0.10666673842725899,
+            "precision": 0.34545454545454546,
+            "recall": 0.09947643979057591
+          },
+          "11-50": {
+            "n_clusters": 64,
+            "n_labelled": 236,
+            "ari": 0.18016675547087008,
+            "precision": 0.40198366394399065,
+            "recall": 0.18141126908899421
+          },
+          "50+": {
+            "n_clusters": 23,
+            "n_labelled": 1162,
+            "ari": 0.24887721398572174,
+            "precision": 0.37026692975181663,
+            "recall": 0.7152906081010576
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.11350107010463165,
+          "precision_scoped": 0.37042641033821583,
+          "recall_scoped": 0.18812143262779976
+        }
+      },
+      "jaccard_v1__reported": {
+        "method": "jaccard_v1__reported",
+        "n_clusters": 1181,
+        "n_members": 7904,
+        "ari": 0.08353059766681181,
+        "precision": 0.9407959364592567,
+        "recall": 0.050875347236618434,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 388,
+            "n_labelled": 282,
+            "ari": 0.043802839570628214,
+            "precision": 0.8188976377952756,
+            "recall": 0.03195084485407066
+          },
+          "6-10": {
+            "n_clusters": 126,
+            "n_labelled": 159,
+            "ari": 0.09951216282058639,
+            "precision": 0.9405594405594405,
+            "recall": 0.09583184894905593
+          },
+          "11-50": {
+            "n_clusters": 67,
+            "n_labelled": 326,
+            "ari": 0.32026439418881336,
+            "precision": 0.6411546610169492,
+            "recall": 0.2780202112999541
+          },
+          "50+": {
+            "n_clusters": 27,
+            "n_labelled": 668,
+            "ari": 0.15947764042440624,
+            "precision": 0.9735638715263685,
+            "recall": 0.238727142440086
+          }
+        },
+        "scoped": {
+          "n_scoped": 2340,
+          "ari_scoped": 0.092121625960619,
+          "precision_scoped": 0.9407959364592567,
+          "recall_scoped": 0.06299109019215282
+        }
+      }
+    },
+    "otx_with_outlier": {
+      "random_baseline": {
+        "method": "random_baseline",
+        "n_clusters": 1393,
+        "n_members": 21953,
+        "ari": -5.386159844836679e-06,
+        "precision": 0.07229252325256477,
+        "recall": 0.0006696536077125903,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "6-10": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "11-50": {
+            "n_clusters": 1393,
+            "n_labelled": 17254,
+            "ari": -2.089573064683552e-06,
+            "precision": 0.07229252325256477,
+            "recall": 0.0006721725304688367
+          },
+          "50+": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": -5.0706694295357165e-06,
+          "precision_scoped": 0.24892687702387228,
+          "recall_scoped": 0.0006725007026620184
+        }
+      },
+      "group_by_asn": {
+        "method": "group_by_asn",
+        "n_clusters": 284,
+        "n_members": 8782,
+        "ari": 0.07383431009353941,
+        "precision": 0.3153408144388616,
+        "recall": 0.05512134790806739,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 128,
+            "n_labelled": 359,
+            "ari": 0.04517279776309766,
+            "precision": 0.6973094170403588,
+            "recall": 0.030191243568585574
+          },
+          "6-10": {
+            "n_clusters": 61,
+            "n_labelled": 388,
+            "ari": 0.036824659045081205,
+            "precision": 0.6792294807370184,
+            "recall": 0.03466997264021888
+          },
+          "11-50": {
+            "n_clusters": 73,
+            "n_labelled": 1347,
+            "ari": 0.058221209848907475,
+            "precision": 0.6803175403225806,
+            "recall": 0.047638165237992296
+          },
+          "50+": {
+            "n_clusters": 22,
+            "n_labelled": 4678,
+            "ari": -0.058417120303464805,
+            "precision": 0.3119257387029361,
+            "recall": 0.13902652856570166
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.022977003970147184,
+          "precision_scoped": 0.3153408144388616,
+          "recall_scoped": 0.06065598267753749
+        }
+      },
+      "group_by_resolved_ip": {
+        "method": "group_by_resolved_ip",
+        "n_clusters": 571,
+        "n_members": 4249,
+        "ari": 0.0025343754627915474,
+        "precision": 0.8680962039988409,
+        "recall": 0.0013846964922593719,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 414,
+            "n_labelled": 790,
+            "ari": 0.01587999895954676,
+            "precision": 0.904950495049505,
+            "recall": 0.011227811559486519
+          },
+          "6-10": {
+            "n_clusters": 88,
+            "n_labelled": 371,
+            "ari": 0.13734113720562144,
+            "precision": 0.8443017656500803,
+            "recall": 0.09179755671902269
+          },
+          "11-50": {
+            "n_clusters": 55,
+            "n_labelled": 462,
+            "ari": 0.5043275661647424,
+            "precision": 0.9257510729613734,
+            "recall": 0.37637410574070845
+          },
+          "50+": {
+            "n_clusters": 14,
+            "n_labelled": 243,
+            "ari": 0.42696960462762806,
+            "precision": 0.84051682576415,
+            "recall": 0.5571035981338276
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.0021683987852304763,
+          "precision_scoped": 0.8680962039988409,
+          "recall_scoped": 0.001523731360637479
+        }
+      },
+      "group_by_hosting_provider": {
+        "method": "group_by_hosting_provider",
+        "n_clusters": 269,
+        "n_members": 8817,
+        "ari": 0.07512070980955694,
+        "precision": 0.3169938004383845,
+        "recall": 0.05608275010577735,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 121,
+            "n_labelled": 340,
+            "ari": 0.05226735087050916,
+            "precision": 0.6912442396313364,
+            "recall": 0.034578146611341634
+          },
+          "6-10": {
+            "n_clusters": 55,
+            "n_labelled": 342,
+            "ari": 0.03778202245683593,
+            "precision": 0.6605058365758755,
+            "recall": 0.03691019786910198
+          },
+          "11-50": {
+            "n_clusters": 68,
+            "n_labelled": 1256,
+            "ari": 0.0712863343557388,
+            "precision": 0.6991390414209206,
+            "recall": 0.05587370040687626
+          },
+          "50+": {
+            "n_clusters": 25,
+            "n_labelled": 4859,
+            "ari": -0.05462069137451673,
+            "precision": 0.31375155983878855,
+            "recall": 0.1308628483673712
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.023817606726020946,
+          "precision_scoped": 0.3169938004383845,
+          "recall_scoped": 0.06171391752970584
+        }
+      },
+      "jaccard_v1": {
+        "method": "jaccard_v1",
+        "n_clusters": 1314,
+        "n_members": 10956,
+        "ari": 0.012393423625669493,
+        "precision": 0.5782457135605998,
+        "recall": 0.007161244620192053,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 407,
+            "n_labelled": 1137,
+            "ari": 0.012457743008111803,
+            "precision": 0.8553162853297442,
+            "recall": 0.00856353591160221
+          },
+          "6-10": {
+            "n_clusters": 156,
+            "n_labelled": 810,
+            "ari": 0.052767040340906124,
+            "precision": 0.813391442155309,
+            "recall": 0.03480959001661636
+          },
+          "11-50": {
+            "n_clusters": 133,
+            "n_labelled": 1513,
+            "ari": 0.11773036861051338,
+            "precision": 0.7861531639956927,
+            "recall": 0.07679218898885025
+          },
+          "50+": {
+            "n_clusters": 45,
+            "n_labelled": 2022,
+            "ari": 0.13611023180017126,
+            "precision": 0.5439759507198276,
+            "recall": 0.13340918970058044
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.008889649142097465,
+          "precision_scoped": 0.5782457135605998,
+          "recall_scoped": 0.00788029223008903
+        }
+      },
+      "bfs_unweighted_all_clusters": {
+        "method": "bfs_unweighted_all_clusters",
+        "n_clusters": 1393,
+        "n_members": 13917,
+        "ari": 0.08669221425048093,
+        "precision": 0.372805255040533,
+        "recall": 0.06140475836773505,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 1134,
+            "n_labelled": 1312,
+            "ari": 0.006528044899133446,
+            "precision": 0.8082627118644068,
+            "recall": 0.004372167116489889
+          },
+          "6-10": {
+            "n_clusters": 135,
+            "n_labelled": 493,
+            "ari": 0.0796399431821888,
+            "precision": 0.7876506024096386,
+            "recall": 0.052554891222428776
+          },
+          "11-50": {
+            "n_clusters": 97,
+            "n_labelled": 1424,
+            "ari": 0.08232595522994167,
+            "precision": 0.6238626830999549,
+            "recall": 0.05909860566901602
+          },
+          "50+": {
+            "n_clusters": 27,
+            "n_labelled": 5213,
+            "ari": 0.033099101844914956,
+            "precision": 0.37005431445923354,
+            "recall": 0.14875157520058885
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.040850310627383514,
+          "precision_scoped": 0.372781164722245,
+          "recall_scoped": 0.06756297484363163
+        }
+      },
+      "bfs_unweighted_reported_only": {
+        "method": "bfs_unweighted_reported_only",
+        "n_clusters": 701,
+        "n_members": 10305,
+        "ari": 0.08639535767980984,
+        "precision": 0.37623245285086593,
+        "recall": 0.06093413350345222,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 498,
+            "n_labelled": 945,
+            "ari": 0.00776777273447415,
+            "precision": 0.8210116731517509,
+            "recall": 0.005625616551577039
+          },
+          "6-10": {
+            "n_clusters": 111,
+            "n_labelled": 429,
+            "ari": 0.08323305015599876,
+            "precision": 0.8223740392826644,
+            "recall": 0.05615160349854227
+          },
+          "11-50": {
+            "n_clusters": 72,
+            "n_labelled": 1141,
+            "ari": 0.08697973922392929,
+            "precision": 0.7028002196250687,
+            "recall": 0.065436805281685
+          },
+          "50+": {
+            "n_clusters": 20,
+            "n_labelled": 4689,
+            "ari": -0.0051403021553735224,
+            "precision": 0.3733378690994029,
+            "recall": 0.15523938086245564
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.041351364794219865,
+          "precision_scoped": 0.37622341060077047,
+          "recall_scoped": 0.06704977471582496
+        }
+      },
+      "bfs_weighted_reported_only": {
+        "method": "bfs_weighted_reported_only",
+        "n_clusters": 341,
+        "n_members": 8190,
+        "ari": 0.08569780723034669,
+        "precision": 0.3759664694450343,
+        "recall": 0.06039214301449323,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 231,
+            "n_labelled": 452,
+            "ari": 0.03295644407996623,
+            "precision": 0.7519582245430809,
+            "recall": 0.020562616021704984
+          },
+          "6-10": {
+            "n_clusters": 40,
+            "n_labelled": 218,
+            "ari": 0.16747344410365061,
+            "precision": 0.680672268907563,
+            "recall": 0.11936339522546419
+          },
+          "11-50": {
+            "n_clusters": 53,
+            "n_labelled": 942,
+            "ari": 0.11241750158720641,
+            "precision": 0.6640752124389803,
+            "recall": 0.08560773802587111
+          },
+          "50+": {
+            "n_clusters": 17,
+            "n_labelled": 4427,
+            "ari": -0.02741167675296406,
+            "precision": 0.37393102337217393,
+            "recall": 0.1613448492196871
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.04095720409016219,
+          "precision_scoped": 0.3759664694450343,
+          "recall_scoped": 0.06645600878004548
+        }
+      },
+      "random_baseline__reported": {
+        "method": "random_baseline__reported",
+        "n_clusters": 1393,
+        "n_members": 21953,
+        "ari": -5.386159844836679e-06,
+        "precision": 0.07229252325256477,
+        "recall": 0.0006696536077125903,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "6-10": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "11-50": {
+            "n_clusters": 1393,
+            "n_labelled": 17254,
+            "ari": -2.089573064683552e-06,
+            "precision": 0.07229252325256477,
+            "recall": 0.0006721725304688367
+          },
+          "50+": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": -5.0706694295357165e-06,
+          "precision_scoped": 0.24892687702387228,
+          "recall_scoped": 0.0006725007026620184
+        }
+      },
+      "group_by_asn__reported": {
+        "method": "group_by_asn__reported",
+        "n_clusters": 265,
+        "n_members": 8371,
+        "ari": 0.07284157430663714,
+        "precision": 0.3128619348454904,
+        "recall": 0.054482754986742356,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 124,
+            "n_labelled": 340,
+            "ari": 0.04833517571045981,
+            "precision": 0.697560975609756,
+            "recall": 0.03204840878529807
+          },
+          "6-10": {
+            "n_clusters": 54,
+            "n_labelled": 346,
+            "ari": 0.03661957022535186,
+            "precision": 0.6372269705603039,
+            "recall": 0.036350831572674575
+          },
+          "11-50": {
+            "n_clusters": 67,
+            "n_labelled": 1251,
+            "ari": 0.050336758241343885,
+            "precision": 0.6724207145724609,
+            "recall": 0.045006314318725316
+          },
+          "50+": {
+            "n_clusters": 20,
+            "n_labelled": 4568,
+            "ari": -0.07576482192311175,
+            "precision": 0.30971677046573026,
+            "recall": 0.13784373823222382
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.02203135995862578,
+          "precision_scoped": 0.3128619348454904,
+          "recall_scoped": 0.059953269796885665
+        }
+      },
+      "group_by_resolved_ip__reported": {
+        "method": "group_by_resolved_ip__reported",
+        "n_clusters": 539,
+        "n_members": 3835,
+        "ari": 0.002462135463438774,
+        "precision": 0.8651925820256776,
+        "recall": 0.0013455933067178995,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 405,
+            "n_labelled": 769,
+            "ari": 0.015823418295526893,
+            "precision": 0.90992835209826,
+            "recall": 0.011265856471214405
+          },
+          "6-10": {
+            "n_clusters": 78,
+            "n_labelled": 337,
+            "ari": 0.19694159632538302,
+            "precision": 0.8258527827648114,
+            "recall": 0.12974192638555915
+          },
+          "11-50": {
+            "n_clusters": 42,
+            "n_labelled": 438,
+            "ari": 0.48477759028755213,
+            "precision": 0.9210766423357665,
+            "recall": 0.36098694797067765
+          },
+          "50+": {
+            "n_clusters": 14,
+            "n_labelled": 243,
+            "ari": 0.42696960462762806,
+            "precision": 0.84051682576415,
+            "recall": 0.5571035981338276
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.002104352182180222,
+          "precision_scoped": 0.8651925820256776,
+          "recall_scoped": 0.0014807018950156316
+        }
+      },
+      "group_by_hosting_provider__reported": {
+        "method": "group_by_hosting_provider__reported",
+        "n_clusters": 254,
+        "n_members": 8505,
+        "ari": 0.07395725409366191,
+        "precision": 0.3141057395217625,
+        "recall": 0.055334243029348744,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 117,
+            "n_labelled": 321,
+            "ari": 0.056480926088271634,
+            "precision": 0.6909547738693468,
+            "recall": 0.03706699016039897
+          },
+          "6-10": {
+            "n_clusters": 50,
+            "n_labelled": 327,
+            "ari": 0.03622429478396096,
+            "precision": 0.6506024096385542,
+            "recall": 0.037155963302752296
+          },
+          "11-50": {
+            "n_clusters": 64,
+            "n_labelled": 1212,
+            "ari": 0.06702401920875078,
+            "precision": 0.6939147504206393,
+            "recall": 0.054266838455001506
+          },
+          "50+": {
+            "n_clusters": 23,
+            "n_labelled": 4735,
+            "ari": -0.07263148326419477,
+            "precision": 0.3109826106372149,
+            "recall": 0.12944953241408505
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.022704066990417007,
+          "precision_scoped": 0.3141057395217625,
+          "recall_scoped": 0.06089025421258977
+        }
+      },
+      "jaccard_v1__reported": {
+        "method": "jaccard_v1__reported",
+        "n_clusters": 1181,
+        "n_members": 7904,
+        "ari": 0.011518583856447252,
+        "precision": 0.5631830867335007,
+        "recall": 0.006678417343399831,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 388,
+            "n_labelled": 1071,
+            "ari": 0.012553218334178388,
+            "precision": 0.8712230215827338,
+            "recall": 0.008734978865823223
+          },
+          "6-10": {
+            "n_clusters": 126,
+            "n_labelled": 648,
+            "ari": 0.053974470954613295,
+            "precision": 0.8232016210739616,
+            "recall": 0.037112319006075
+          },
+          "11-50": {
+            "n_clusters": 67,
+            "n_labelled": 945,
+            "ari": 0.14769840284575825,
+            "precision": 0.6968511833132772,
+            "recall": 0.10391649593994406
+          },
+          "50+": {
+            "n_clusters": 27,
+            "n_labelled": 1959,
+            "ari": 0.1575320213208771,
+            "precision": 0.5427769985974754,
+            "recall": 0.15112200943011816
+          }
+        },
+        "scoped": {
+          "n_scoped": 8871,
+          "ari_scoped": 0.008123910866374552,
+          "precision_scoped": 0.5631830867335007,
+          "recall_scoped": 0.007348985140389481
+        }
+      }
+    },
+    "otx_without_outlier": {
+      "random_baseline": {
+        "method": "random_baseline",
+        "n_clusters": 1393,
+        "n_members": 21953,
+        "ari": 1.9968424371076527e-05,
+        "precision": 0.008992576108567572,
+        "recall": 0.0006830506455036424,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "6-10": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "11-50": {
+            "n_clusters": 1393,
+            "n_labelled": 12769,
+            "ari": 1.981749125703707e-05,
+            "precision": 0.008992576108567572,
+            "recall": 0.0006831803221895029
+          },
+          "50+": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 8.852300093442228e-06,
+          "precision_scoped": 0.017991446689278868,
+          "recall_scoped": 0.0006813663069946161
+        }
+      },
+      "group_by_asn": {
+        "method": "group_by_asn",
+        "n_clusters": 284,
+        "n_members": 8782,
+        "ari": 0.056096657622094946,
+        "precision": 0.06747355189629796,
+        "recall": 0.06091066030076396,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 128,
+            "n_labelled": 218,
+            "ari": 0.46374970086142225,
+            "precision": 0.6724137931034483,
+            "recall": 0.3619489559164733
+          },
+          "6-10": {
+            "n_clusters": 61,
+            "n_labelled": 174,
+            "ari": 0.4184519813727683,
+            "precision": 0.5269320843091335,
+            "recall": 0.37437603993344426
+          },
+          "11-50": {
+            "n_clusters": 73,
+            "n_labelled": 691,
+            "ari": 0.40693913800957643,
+            "precision": 0.5990566037735849,
+            "recall": 0.3328823877568276
+          },
+          "50+": {
+            "n_clusters": 22,
+            "n_labelled": 1796,
+            "ari": 0.05799783042553683,
+            "precision": 0.061529221142027045,
+            "recall": 0.7670652426282796
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.08006561363180643,
+          "precision_scoped": 0.06747355189629796,
+          "recall_scoped": 0.24553202421642875
+        }
+      },
+      "group_by_resolved_ip": {
+        "method": "group_by_resolved_ip",
+        "n_clusters": 571,
+        "n_members": 4249,
+        "ari": 0.033931123150760786,
+        "precision": 0.9288138093832989,
+        "recall": 0.017444808676544344,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 414,
+            "n_labelled": 390,
+            "ari": 0.41368295720640735,
+            "precision": 0.9123173277661796,
+            "recall": 0.2722741433021807
+          },
+          "6-10": {
+            "n_clusters": 88,
+            "n_labelled": 225,
+            "ari": 0.7521058300422547,
+            "precision": 0.8678414096916299,
+            "recall": 0.6754285714285714
+          },
+          "11-50": {
+            "n_clusters": 55,
+            "n_labelled": 359,
+            "ari": 0.6990338583847735,
+            "precision": 0.9744645799011532,
+            "recall": 0.5715896279594137
+          },
+          "50+": {
+            "n_clusters": 14,
+            "n_labelled": 205,
+            "ari": 0.314050041084772,
+            "precision": 0.9152581087254454,
+            "recall": 0.5362687366167024
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.1285501264521952,
+          "precision_scoped": 0.9288138093832989,
+          "recall_scoped": 0.07032035386368206
+        }
+      },
+      "group_by_hosting_provider": {
+        "method": "group_by_hosting_provider",
+        "n_clusters": 269,
+        "n_members": 8817,
+        "ari": 0.058543148122766855,
+        "precision": 0.0696946407198362,
+        "recall": 0.06357358796944144,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 121,
+            "n_labelled": 211,
+            "ari": 0.45719638953739095,
+            "precision": 0.6637168141592921,
+            "recall": 0.35714285714285715
+          },
+          "6-10": {
+            "n_clusters": 55,
+            "n_labelled": 152,
+            "ari": 0.40293121308669155,
+            "precision": 0.4613333333333333,
+            "recall": 0.3922902494331066
+          },
+          "11-50": {
+            "n_clusters": 68,
+            "n_labelled": 664,
+            "ari": 0.4797226197847547,
+            "precision": 0.6088323353293413,
+            "recall": 0.4218442070324655
+          },
+          "50+": {
+            "n_clusters": 25,
+            "n_labelled": 1861,
+            "ari": 0.060075717090062195,
+            "precision": 0.06373149068256204,
+            "recall": 0.7256400391717963
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.08384314554243119,
+          "precision_scoped": 0.0696946407198362,
+          "recall_scoped": 0.2562663360364587
+        }
+      },
+      "jaccard_v1": {
+        "method": "jaccard_v1",
+        "n_clusters": 1314,
+        "n_members": 10956,
+        "ari": 0.05389435034131889,
+        "precision": 0.3582196101869376,
+        "recall": 0.029894896101484977,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 407,
+            "n_labelled": 597,
+            "ari": 0.3359996116277943,
+            "precision": 0.8340080971659919,
+            "recall": 0.213840830449827
+          },
+          "6-10": {
+            "n_clusters": 156,
+            "n_labelled": 474,
+            "ari": 0.5255581002354796,
+            "precision": 0.767571329157968,
+            "recall": 0.40882134914751667
+          },
+          "11-50": {
+            "n_clusters": 133,
+            "n_labelled": 979,
+            "ari": 0.48228518091324407,
+            "precision": 0.7497381102032264,
+            "recall": 0.3706945667374527
+          },
+          "50+": {
+            "n_clusters": 45,
+            "n_labelled": 1071,
+            "ari": 0.35173916129252836,
+            "precision": 0.2597088382480665,
+            "recall": 0.7142694648239777
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.17290366737765536,
+          "precision_scoped": 0.3582196101869376,
+          "recall_scoped": 0.12050689185264615
+        }
+      },
+      "bfs_unweighted_all_clusters": {
+        "method": "bfs_unweighted_all_clusters",
+        "n_clusters": 1393,
+        "n_members": 13917,
+        "ari": 0.06474047327449722,
+        "precision": 0.08670914524994283,
+        "recall": 0.060936984767832054,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 1134,
+            "n_labelled": 735,
+            "ari": 0.09231530815498717,
+            "precision": 0.803030303030303,
+            "recall": 0.050857622646035744
+          },
+          "6-10": {
+            "n_clusters": 135,
+            "n_labelled": 298,
+            "ari": 0.6519003752643104,
+            "precision": 0.758575197889182,
+            "recall": 0.5819838056680162
+          },
+          "11-50": {
+            "n_clusters": 97,
+            "n_labelled": 869,
+            "ari": 0.49391988918589674,
+            "precision": 0.5645161290322581,
+            "recall": 0.4580965909090909
+          },
+          "50+": {
+            "n_clusters": 27,
+            "n_labelled": 2272,
+            "ari": 0.09633972507994502,
+            "precision": 0.07725242593663646,
+            "recall": 0.5912695972948048
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.10431882860824263,
+          "precision_scoped": 0.08658034265388172,
+          "recall_scoped": 0.24523602082076715
+        }
+      },
+      "bfs_unweighted_reported_only": {
+        "method": "bfs_unweighted_reported_only",
+        "n_clusters": 701,
+        "n_members": 10305,
+        "ari": 0.05938074884161325,
+        "precision": 0.08242969889905823,
+        "recall": 0.055104037064849634,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 498,
+            "n_labelled": 483,
+            "ari": 0.08971640570762891,
+            "precision": 0.8133333333333334,
+            "recall": 0.0505804311774461
+          },
+          "6-10": {
+            "n_clusters": 111,
+            "n_labelled": 248,
+            "ari": 0.6718178658673709,
+            "precision": 0.8022151898734177,
+            "recall": 0.5895348837209302
+          },
+          "11-50": {
+            "n_clusters": 72,
+            "n_labelled": 631,
+            "ari": 0.5928584904103846,
+            "precision": 0.6740511763695689,
+            "recall": 0.5504136867199552
+          },
+          "50+": {
+            "n_clusters": 20,
+            "n_labelled": 1814,
+            "ari": 0.08691991134123142,
+            "precision": 0.07365462320199467,
+            "recall": 0.7502944640753828
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.09661699548949323,
+          "precision_scoped": 0.0823802516218625,
+          "recall_scoped": 0.2219802068672788
+        }
+      },
+      "bfs_weighted_reported_only": {
+        "method": "bfs_weighted_reported_only",
+        "n_clusters": 341,
+        "n_members": 8190,
+        "ari": 0.053976227444616,
+        "precision": 0.0764037841596258,
+        "recall": 0.05024093814858638,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 231,
+            "n_labelled": 315,
+            "ari": 0.06714976405187673,
+            "precision": 0.7727272727272727,
+            "recall": 0.03987206823027718
+          },
+          "6-10": {
+            "n_clusters": 40,
+            "n_labelled": 140,
+            "ari": 0.6485927514354641,
+            "precision": 0.6820652173913043,
+            "recall": 0.6435897435897436
+          },
+          "11-50": {
+            "n_clusters": 53,
+            "n_labelled": 541,
+            "ari": 0.590585797710249,
+            "precision": 0.6345703125,
+            "recall": 0.5791443850267379
+          },
+          "50+": {
+            "n_clusters": 17,
+            "n_labelled": 1612,
+            "ari": 0.0778339363209543,
+            "precision": 0.06947406585906842,
+            "recall": 0.8455767833039144
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.08726436641261955,
+          "precision_scoped": 0.0764037841596258,
+          "recall_scoped": 0.20252217232982597
+        }
+      },
+      "random_baseline__reported": {
+        "method": "random_baseline__reported",
+        "n_clusters": 1393,
+        "n_members": 21953,
+        "ari": 1.9968424371076527e-05,
+        "precision": 0.008992576108567572,
+        "recall": 0.0006830506455036424,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "6-10": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          },
+          "11-50": {
+            "n_clusters": 1393,
+            "n_labelled": 12769,
+            "ari": 1.981749125703707e-05,
+            "precision": 0.008992576108567572,
+            "recall": 0.0006831803221895029
+          },
+          "50+": {
+            "n_clusters": 0,
+            "n_labelled": 0,
+            "ari": null,
+            "precision": null,
+            "recall": null
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 8.852300093442228e-06,
+          "precision_scoped": 0.017991446689278868,
+          "recall_scoped": 0.0006813663069946161
+        }
+      },
+      "group_by_asn__reported": {
+        "method": "group_by_asn__reported",
+        "n_clusters": 265,
+        "n_members": 8371,
+        "ari": 0.04643998470714322,
+        "precision": 0.05765791200455443,
+        "recall": 0.05149758507652107,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 124,
+            "n_labelled": 209,
+            "ari": 0.47638986920948734,
+            "precision": 0.6990740740740741,
+            "recall": 0.3691931540342298
+          },
+          "6-10": {
+            "n_clusters": 54,
+            "n_labelled": 156,
+            "ari": 0.3773304071140542,
+            "precision": 0.46684350132625996,
+            "recall": 0.3492063492063492
+          },
+          "11-50": {
+            "n_clusters": 67,
+            "n_labelled": 598,
+            "ari": 0.3693150509603133,
+            "precision": 0.5579444153120083,
+            "recall": 0.306216423637759
+          },
+          "50+": {
+            "n_clusters": 20,
+            "n_labelled": 1686,
+            "ari": 0.042813718652202806,
+            "precision": 0.052715432227379753,
+            "recall": 0.7602973406538783
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.06406963037001509,
+          "precision_scoped": 0.05765791200455443,
+          "recall_scoped": 0.20758773987444987
+        }
+      },
+      "group_by_resolved_ip__reported": {
+        "method": "group_by_resolved_ip__reported",
+        "n_clusters": 539,
+        "n_members": 3835,
+        "ari": 0.033151586410215775,
+        "precision": 0.9275154623623473,
+        "recall": 0.017037472186122296,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 405,
+            "n_labelled": 375,
+            "ari": 0.42466706095585305,
+            "precision": 0.9168490153172867,
+            "recall": 0.28120805369127516
+          },
+          "6-10": {
+            "n_clusters": 78,
+            "n_labelled": 225,
+            "ari": 0.7521058300422547,
+            "precision": 0.8678414096916299,
+            "recall": 0.6754285714285714
+          },
+          "11-50": {
+            "n_clusters": 42,
+            "n_labelled": 335,
+            "ari": 0.6793269228096576,
+            "precision": 0.9723707664884136,
+            "recall": 0.5516602056295298
+          },
+          "50+": {
+            "n_clusters": 14,
+            "n_labelled": 205,
+            "ari": 0.314050041084772,
+            "precision": 0.9152581087254454,
+            "recall": 0.5362687366167024
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.1257330843766457,
+          "precision_scoped": 0.9275154623623473,
+          "recall_scoped": 0.06867837276321963
+        }
+      },
+      "group_by_hosting_provider__reported": {
+        "method": "group_by_hosting_provider__reported",
+        "n_clusters": 254,
+        "n_members": 8505,
+        "ari": 0.04713551602364903,
+        "precision": 0.05815966882773383,
+        "recall": 0.052400929946436636,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 117,
+            "n_labelled": 202,
+            "ari": 0.4697931511628594,
+            "precision": 0.6904761904761905,
+            "recall": 0.36432160804020103
+          },
+          "6-10": {
+            "n_clusters": 50,
+            "n_labelled": 142,
+            "ari": 0.3690983975641976,
+            "precision": 0.43059490084985835,
+            "recall": 0.3619047619047619
+          },
+          "11-50": {
+            "n_clusters": 64,
+            "n_labelled": 623,
+            "ari": 0.4505323061924469,
+            "precision": 0.5831206126356094,
+            "recall": 0.3960342398959801
+          },
+          "50+": {
+            "n_clusters": 23,
+            "n_labelled": 1737,
+            "ari": 0.04122007796570876,
+            "precision": 0.05263534147156411,
+            "recall": 0.7063988653902307
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.06500388404316908,
+          "precision_scoped": 0.05815966882773383,
+          "recall_scoped": 0.21122914013806046
+        }
+      },
+      "jaccard_v1__reported": {
+        "method": "jaccard_v1__reported",
+        "n_clusters": 1181,
+        "n_members": 7904,
+        "ari": 0.04525566155100419,
+        "precision": 0.3209392304415732,
+        "recall": 0.02505396515748959,
+        "by_size_band": {
+          "3-5": {
+            "n_clusters": 388,
+            "n_labelled": 549,
+            "ari": 0.3394842025308289,
+            "precision": 0.8466076696165191,
+            "recall": 0.2160331200602183
+          },
+          "6-10": {
+            "n_clusters": 126,
+            "n_labelled": 356,
+            "ari": 0.6895924092195923,
+            "precision": 0.7700934579439253,
+            "recall": 0.6338461538461538
+          },
+          "11-50": {
+            "n_clusters": 67,
+            "n_labelled": 607,
+            "ari": 0.46994375915278286,
+            "precision": 0.6509308510638298,
+            "recall": 0.39483766888485583
+          },
+          "50+": {
+            "n_clusters": 27,
+            "n_labelled": 1070,
+            "ari": 0.3517039756200286,
+            "precision": 0.2597088382480665,
+            "recall": 0.714391353811149
+          }
+        },
+        "scoped": {
+          "n_scoped": 4477,
+          "ari_scoped": 0.14633603755978516,
+          "precision_scoped": 0.3209392304415732,
+          "recall_scoped": 0.10099300761789871
+        }
+      }
+    }
+  },
+  "diagnostics": {
+    "threatfox": {
+      "label_infra_cohesion": [
+        {
+          "label": "js.clearfake",
+          "n_total": 1031,
+          "n_enriched": 942,
+          "n_cohesive": 937,
+          "enriched_fraction": 0.9136760426770126,
+          "cohesion_among_enriched": 0.994692144373673,
+          "cohesion_overall": 0.9088263821532493
+        },
+        {
+          "label": "unknown",
+          "n_total": 564,
+          "n_enriched": 541,
+          "n_cohesive": 483,
+          "enriched_fraction": 0.9592198581560284,
+          "cohesion_among_enriched": 0.8927911275415896,
+          "cohesion_overall": 0.8563829787234043
+        },
+        {
+          "label": "win.vidar",
+          "n_total": 281,
+          "n_enriched": 183,
+          "n_cohesive": 169,
+          "enriched_fraction": 0.6512455516014235,
+          "cohesion_among_enriched": 0.9234972677595629,
+          "cohesion_overall": 0.6014234875444839
+        },
+        {
+          "label": "elf.mozi",
+          "n_total": 128,
+          "n_enriched": 0,
+          "n_cohesive": 0,
+          "enriched_fraction": 0.0,
+          "cohesion_among_enriched": 0.0,
+          "cohesion_overall": 0.0
+        },
+        {
+          "label": "js.kongtuke",
+          "n_total": 126,
+          "n_enriched": 126,
+          "n_cohesive": 126,
+          "enriched_fraction": 1.0,
+          "cohesion_among_enriched": 1.0,
+          "cohesion_overall": 1.0
+        },
+        {
+          "label": "elf.kuiper",
+          "n_total": 111,
+          "n_enriched": 0,
+          "n_cohesive": 0,
+          "enriched_fraction": 0.0,
+          "cohesion_among_enriched": 0.0,
+          "cohesion_overall": 0.0
+        },
+        {
+          "label": "win.cobalt_strike",
+          "n_total": 98,
+          "n_enriched": 98,
+          "n_cohesive": 73,
+          "enriched_fraction": 1.0,
+          "cohesion_among_enriched": 0.7448979591836735,
+          "cohesion_overall": 0.7448979591836735
+        },
+        {
+          "label": "py.venus_stealer",
+          "n_total": 90,
+          "n_enriched": 0,
+          "n_cohesive": 0,
+          "enriched_fraction": 0.0,
+          "cohesion_among_enriched": 0.0,
+          "cohesion_overall": 0.0
+        },
+        {
+          "label": "elf.mirai",
+          "n_total": 65,
+          "n_enriched": 12,
+          "n_cohesive": 6,
+          "enriched_fraction": 0.18461538461538463,
+          "cohesion_among_enriched": 0.5,
+          "cohesion_overall": 0.09230769230769231
+        },
+        {
+          "label": "js.iclickfix",
+          "n_total": 57,
+          "n_enriched": 57,
+          "n_cohesive": 31,
+          "enriched_fraction": 1.0,
+          "cohesion_among_enriched": 0.543859649122807,
+          "cohesion_overall": 0.543859649122807
+        }
+      ],
+      "connectivity_sweep": [
+        {
+          "threshold": 1,
+          "n_components": 0,
+          "largest_component": 0,
+          "ari": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        {
+          "threshold": 2,
+          "n_components": 992,
+          "largest_component": 94,
+          "ari": 9.8722647999495e-05,
+          "precision": 0.46956521739130436,
+          "recall": 6.99655872963224e-05
+        },
+        {
+          "threshold": 3,
+          "n_components": 1160,
+          "largest_component": 167,
+          "ari": 0.00027514679936772803,
+          "precision": 0.6,
+          "recall": 0.0001788009453128239
+        },
+        {
+          "threshold": 5,
+          "n_components": 1054,
+          "largest_component": 850,
+          "ari": 0.0011700552010014186,
+          "precision": 0.22311576585000936,
+          "recall": 0.0015457212156391228
+        },
+        {
+          "threshold": 10,
+          "n_components": 836,
+          "largest_component": 2537,
+          "ari": 0.007542066577000436,
+          "precision": 0.2066623033695186,
+          "recall": 0.011864349682822671
+        },
+        {
+          "threshold": 20,
+          "n_components": 634,
+          "largest_component": 4175,
+          "ari": 0.02103125509225646,
+          "precision": 0.2108263020541475,
+          "recall": 0.034122476056221235
+        },
+        {
+          "threshold": 50,
+          "n_components": 472,
+          "largest_component": 5904,
+          "ari": 0.03017535024870935,
+          "precision": 0.18026101795399738,
+          "recall": 0.08745698412040301
+        },
+        {
+          "threshold": 100,
+          "n_components": 374,
+          "largest_component": 7057,
+          "ari": 0.027611871853131208,
+          "precision": 0.16699171650959835,
+          "recall": 0.12292046726647042
+        },
+        {
+          "threshold": 500,
+          "n_components": 145,
+          "largest_component": 10120,
+          "ari": 0.10166644125183577,
+          "precision": 0.20208483918846593,
+          "recall": 0.37963068535179734
+        },
+        {
+          "threshold": null,
+          "n_components": 94,
+          "largest_component": 11185,
+          "ari": 0.22101405802883792,
+          "precision": 0.254875477098416,
+          "recall": 0.7679591297317467
+        }
+      ]
+    },
+    "otx_with_outlier": {
+      "label_infra_cohesion": [
+        {
+          "label": "6a0d971608b49dfc89267777",
+          "n_total": 4494,
+          "n_enriched": 4394,
+          "n_cohesive": 4307,
+          "enriched_fraction": 0.9777481085892301,
+          "cohesion_among_enriched": 0.9802002730996814,
+          "cohesion_overall": 0.9583889630618603
+        },
+        {
+          "label": "6a512b20f12a5adf6bf2c1b3",
+          "n_total": 575,
+          "n_enriched": 378,
+          "n_cohesive": 377,
+          "enriched_fraction": 0.6573913043478261,
+          "cohesion_among_enriched": 0.9973544973544973,
+          "cohesion_overall": 0.6556521739130434
+        },
+        {
+          "label": "69e8c2ea19756cc9d2899dea",
+          "n_total": 566,
+          "n_enriched": 8,
+          "n_cohesive": 7,
+          "enriched_fraction": 0.014134275618374558,
+          "cohesion_among_enriched": 0.875,
+          "cohesion_overall": 0.012367491166077738
+        },
+        {
+          "label": "6a2c7a1d041f52879495ac3e",
+          "n_total": 240,
+          "n_enriched": 67,
+          "n_cohesive": 65,
+          "enriched_fraction": 0.2791666666666667,
+          "cohesion_among_enriched": 0.9701492537313433,
+          "cohesion_overall": 0.2708333333333333
+        },
+        {
+          "label": "6a2ac312c98386d398eab284",
+          "n_total": 226,
+          "n_enriched": 27,
+          "n_cohesive": 21,
+          "enriched_fraction": 0.11946902654867257,
+          "cohesion_among_enriched": 0.7777777777777778,
+          "cohesion_overall": 0.09292035398230089
+        },
+        {
+          "label": "6a3447ad5cdebd92116d1c01",
+          "n_total": 211,
+          "n_enriched": 186,
+          "n_cohesive": 186,
+          "enriched_fraction": 0.8815165876777251,
+          "cohesion_among_enriched": 1.0,
+          "cohesion_overall": 0.8815165876777251
+        },
+        {
+          "label": "6a57b1d61379f5309f46131d",
+          "n_total": 211,
+          "n_enriched": 209,
+          "n_cohesive": 207,
+          "enriched_fraction": 0.990521327014218,
+          "cohesion_among_enriched": 0.9904306220095693,
+          "cohesion_overall": 0.981042654028436
+        },
+        {
+          "label": "69c59f7c558966eff3015d95",
+          "n_total": 172,
+          "n_enriched": 30,
+          "n_cohesive": 26,
+          "enriched_fraction": 0.1744186046511628,
+          "cohesion_among_enriched": 0.8666666666666667,
+          "cohesion_overall": 0.1511627906976744
+        },
+        {
+          "label": "6a4d89812b006d2839a4dc49",
+          "n_total": 165,
+          "n_enriched": 4,
+          "n_cohesive": 4,
+          "enriched_fraction": 0.024242424242424242,
+          "cohesion_among_enriched": 1.0,
+          "cohesion_overall": 0.024242424242424242
+        },
+        {
+          "label": "6a42d46fe5317e409adbaaa3",
+          "n_total": 141,
+          "n_enriched": 106,
+          "n_cohesive": 106,
+          "enriched_fraction": 0.75177304964539,
+          "cohesion_among_enriched": 1.0,
+          "cohesion_overall": 0.75177304964539
+        }
+      ],
+      "connectivity_sweep": [
+        {
+          "threshold": 1,
+          "n_components": 0,
+          "largest_component": 0,
+          "ari": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        {
+          "threshold": 2,
+          "n_components": 992,
+          "largest_component": 94,
+          "ari": 0.0008589502688144443,
+          "precision": 0.9506895900245608,
+          "recall": 0.000465170755661203
+        },
+        {
+          "threshold": 3,
+          "n_components": 1160,
+          "largest_component": 167,
+          "ari": 0.002373831124924284,
+          "precision": 0.9184707508060801,
+          "recall": 0.0012903126803495769
+        },
+        {
+          "threshold": 5,
+          "n_components": 1054,
+          "largest_component": 850,
+          "ari": 0.011706642507200596,
+          "precision": 0.2989724243303626,
+          "recall": 0.007904759800594092
+        },
+        {
+          "threshold": 10,
+          "n_components": 836,
+          "largest_component": 2537,
+          "ari": 0.08339644576575866,
+          "precision": 0.3134102551739384,
+          "recall": 0.06369363513843683
+        },
+        {
+          "threshold": 20,
+          "n_components": 634,
+          "largest_component": 4175,
+          "ari": 0.2211502985870228,
+          "precision": 0.3661157937783729,
+          "recall": 0.20342614161657746
+        },
+        {
+          "threshold": 50,
+          "n_components": 472,
+          "largest_component": 5904,
+          "ari": 0.27018359967273853,
+          "precision": 0.31397885390771557,
+          "recall": 0.33686747246345355
+        },
+        {
+          "threshold": 100,
+          "n_components": 374,
+          "largest_component": 7057,
+          "ari": 0.28175824359597806,
+          "precision": 0.28621759119131013,
+          "recall": 0.432619526097124
+        },
+        {
+          "threshold": 500,
+          "n_components": 145,
+          "largest_component": 10120,
+          "ari": 0.3170842309871388,
+          "precision": 0.2617931990936532,
+          "recall": 0.7731794300974169
+        },
+        {
+          "threshold": null,
+          "n_components": 94,
+          "largest_component": 11185,
+          "ari": 0.3150672707366944,
+          "precision": 0.25367128625787616,
+          "recall": 0.8608472930010936
+        }
+      ]
+    },
+    "otx_without_outlier": {
+      "label_infra_cohesion": [
+        {
+          "label": "6a512b20f12a5adf6bf2c1b3",
+          "n_total": 575,
+          "n_enriched": 378,
+          "n_cohesive": 377,
+          "enriched_fraction": 0.6573913043478261,
+          "cohesion_among_enriched": 0.9973544973544973,
+          "cohesion_overall": 0.6556521739130434
+        },
+        {
+          "label": "69e8c2ea19756cc9d2899dea",
+          "n_total": 566,
+          "n_enriched": 8,
+          "n_cohesive": 7,
+          "enriched_fraction": 0.014134275618374558,
+          "cohesion_among_enriched": 0.875,
+          "cohesion_overall": 0.012367491166077738
+        },
+        {
+          "label": "6a2c7a1d041f52879495ac3e",
+          "n_total": 240,
+          "n_enriched": 67,
+          "n_cohesive": 65,
+          "enriched_fraction": 0.2791666666666667,
+          "cohesion_among_enriched": 0.9701492537313433,
+          "cohesion_overall": 0.2708333333333333
+        },
+        {
+          "label": "6a2ac312c98386d398eab284",
+          "n_total": 226,
+          "n_enriched": 27,
+          "n_cohesive": 21,
+          "enriched_fraction": 0.11946902654867257,
+          "cohesion_among_enriched": 0.7777777777777778,
+          "cohesion_overall": 0.09292035398230089
+        },
+        {
+          "label": "6a3447ad5cdebd92116d1c01",
+          "n_total": 211,
+          "n_enriched": 186,
+          "n_cohesive": 186,
+          "enriched_fraction": 0.8815165876777251,
+          "cohesion_among_enriched": 1.0,
+          "cohesion_overall": 0.8815165876777251
+        },
+        {
+          "label": "6a57b1d61379f5309f46131d",
+          "n_total": 211,
+          "n_enriched": 209,
+          "n_cohesive": 207,
+          "enriched_fraction": 0.990521327014218,
+          "cohesion_among_enriched": 0.9904306220095693,
+          "cohesion_overall": 0.981042654028436
+        },
+        {
+          "label": "69c59f7c558966eff3015d95",
+          "n_total": 172,
+          "n_enriched": 30,
+          "n_cohesive": 26,
+          "enriched_fraction": 0.1744186046511628,
+          "cohesion_among_enriched": 0.8666666666666667,
+          "cohesion_overall": 0.1511627906976744
+        },
+        {
+          "label": "6a4d89812b006d2839a4dc49",
+          "n_total": 165,
+          "n_enriched": 4,
+          "n_cohesive": 4,
+          "enriched_fraction": 0.024242424242424242,
+          "cohesion_among_enriched": 1.0,
+          "cohesion_overall": 0.024242424242424242
+        },
+        {
+          "label": "6a42d46fe5317e409adbaaa3",
+          "n_total": 141,
+          "n_enriched": 106,
+          "n_cohesive": 106,
+          "enriched_fraction": 0.75177304964539,
+          "cohesion_among_enriched": 1.0,
+          "cohesion_overall": 0.75177304964539
+        },
+        {
+          "label": "69fb97e43f09a3b9ae3a39b9",
+          "n_total": 140,
+          "n_enriched": 117,
+          "n_cohesive": 114,
+          "enriched_fraction": 0.8357142857142857,
+          "cohesion_among_enriched": 0.9743589743589743,
+          "cohesion_overall": 0.8142857142857143
+        }
+      ],
+      "connectivity_sweep": [
+        {
+          "threshold": 1,
+          "n_components": 0,
+          "largest_component": 0,
+          "ari": 0.0,
+          "precision": 0.0,
+          "recall": 0.0
+        },
+        {
+          "threshold": 2,
+          "n_components": 992,
+          "largest_component": 94,
+          "ari": 0.0007892913949168731,
+          "precision": 0.8421052631578947,
+          "recall": 0.0003990235008216005
+        },
+        {
+          "threshold": 3,
+          "n_components": 1160,
+          "largest_component": 167,
+          "ari": 0.001448557511319036,
+          "precision": 0.6160092807424594,
+          "recall": 0.0007356995796398259
+        },
+        {
+          "threshold": 5,
+          "n_components": 1054,
+          "largest_component": 850,
+          "ari": 0.00865929686116846,
+          "precision": 0.05620922245058416,
+          "recall": 0.005645905436972298
+        },
+        {
+          "threshold": 10,
+          "n_components": 836,
+          "largest_component": 2537,
+          "ari": 0.01412690865680252,
+          "precision": 0.027468210317014897,
+          "recall": 0.016613509716499344
+        },
+        {
+          "threshold": 20,
+          "n_components": 634,
+          "largest_component": 4175,
+          "ari": 0.016095732133125602,
+          "precision": 0.022851758424867682,
+          "recall": 0.030173381253100054
+        },
+        {
+          "threshold": 50,
+          "n_components": 472,
+          "largest_component": 5904,
+          "ari": 0.01655599832760429,
+          "precision": 0.019602435528515563,
+          "recall": 0.061942856509486506
+        },
+        {
+          "threshold": 100,
+          "n_components": 374,
+          "largest_component": 7057,
+          "ari": 0.020070816714248943,
+          "precision": 0.020719843628850043,
+          "recall": 0.1034094341347979
+        },
+        {
+          "threshold": 500,
+          "n_components": 145,
+          "largest_component": 10120,
+          "ari": 0.02003580298182194,
+          "precision": 0.01962316768969545,
+          "recall": 0.21108758842942688
+        },
+        {
+          "threshold": null,
+          "n_components": 94,
+          "largest_component": 11185,
+          "ari": 0.01854977257876558,
+          "precision": 0.018688635802418883,
+          "recall": 0.23855093507278022
+        }
+      ]
+    }
+  },
+  "spine4_achievable_vs_actual": {
+    "postgres_population": 11570,
+    "neo4j_population": 13917,
+    "intersection_population": 11025,
+    "families": {
+      "unknown": {
+        "n_labelled": 564,
+        "n_labelled_intersection": 466,
+        "achievable_full": 0.7578637743597496,
+        "actual_full": 0.036021566330322614,
+        "achievable_intersection": 0.8754995615856754,
+        "actual_intersection": 0.05278508468318797,
+        "gap_intersection": 0.8227144769024874
+      },
+      "js.clearfake": {
+        "n_labelled": 1031,
+        "n_labelled_intersection": 941,
+        "achievable_full": 0.8329550912018683,
+        "actual_full": 0.17814356878513649,
+        "achievable_intersection": 0.997874601487779,
+        "actual_intersection": 0.21386935582336583,
+        "gap_intersection": 0.7840052456644131
+      },
+      "win.cobalt_strike": {
+        "n_labelled": 98,
+        "n_labelled_intersection": 84,
+        "achievable_full": 0.6351777824531875,
+        "actual_full": 0.14432989690721648,
+        "achievable_intersection": 0.8006310958118187,
+        "actual_intersection": 0.19678714859437751,
+        "gap_intersection": 0.6038439472174412
+      },
+      "win.vidar": {
+        "n_labelled": 281,
+        "n_labelled_intersection": 160,
+        "achievable_full": 0.40953228266395525,
+        "actual_full": 0.01771733604473818,
+        "achievable_intersection": 0.962814465408805,
+        "actual_intersection": 0.05479559748427673,
+        "gap_intersection": 0.9080188679245282
+      },
+      "win.adaptix_c2": {
+        "n_labelled": 22,
+        "n_labelled_intersection": 18,
+        "achievable_full": 0.341991341991342,
+        "actual_full": 0.008658008658008658,
+        "achievable_intersection": 0.5163398692810458,
+        "actual_intersection": 0.013071895424836602,
+        "gap_intersection": 0.5032679738562092
+      }
+    }
+  },
+  "commodity_fp_rate": {
+    "bfs_all_clusters": 0.05384063173007897,
+    "bfs_unweighted_reported": 0.09985734664764621,
+    "bfs_weighted_reported": 0.08504398826979472,
+    "n_reported_unweighted": 701,
+    "n_reported_weighted": 341
+  }
+}

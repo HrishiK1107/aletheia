@@ -1,0 +1,89 @@
+{
+  "n_clusters": 1393,
+  "touching": 939,
+  "hosting_top": [
+    [
+      "Cloudflare, Inc.",
+      205
+    ],
+    [
+      "Hostinger International Limited",
+      138
+    ],
+    [
+      "Cloudflare Pages",
+      108
+    ],
+    [
+      "Amazon.com, Inc.",
+      44
+    ],
+    [
+      "IONOS SE",
+      40
+    ],
+    [
+      "Unified Layer",
+      18
+    ],
+    [
+      "Oracle Corporation",
+      14
+    ],
+    [
+      "WHG Hosting Services Ltd",
+      14
+    ],
+    [
+      "OVH SAS",
+      11
+    ],
+    [
+      "Google LLC",
+      11
+    ]
+  ],
+  "asn_top": [
+    [
+      "AS13335",
+      313
+    ],
+    [
+      "AS47583",
+      139
+    ],
+    [
+      "AS8560",
+      41
+    ],
+    [
+      "AS16509",
+      39
+    ],
+    [
+      "AS46606",
+      18
+    ],
+    [
+      "AS31898",
+      14
+    ],
+    [
+      "AS16276",
+      11
+    ],
+    [
+      "AS63949",
+      11
+    ],
+    [
+      "AS19871",
+      10
+    ],
+    [
+      "AS14618",
+      10
+    ]
+  ],
+  "collinearity_violations": 1
+}
